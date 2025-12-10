@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Receipt, Clock, AlertTriangle, CheckCircle, ChevronRight } from "lucide-react";
+import { FileText, Clock, AlertTriangle, CheckCircle, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
@@ -61,7 +61,7 @@ const InvoiceWidget = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Receipt className="h-5 w-5 text-primary" />
+                <FileText className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>

@@ -23,8 +23,8 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
         <div className="p-4 pb-3 border-b border-border/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${accent ? 'bg-primary text-primary-foreground' : 'bg-primary/10'}`}>
-                <Icon className={`h-5 w-5 ${accent ? '' : 'text-primary'}`} />
+              <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-primary/10">
+                <Icon className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h4 className="font-semibold text-foreground text-sm">{title}</h4>
@@ -59,7 +59,7 @@ export function QuickActions() {
       subValue: "0,85 ₺/kWh • " + (language === "tr" ? "Sabit Fiyat" : "Fixed Price"),
       delay: "0.1s",
       to: "/tarifeler",
-      accent: true,
+      accent: false,
     },
     {
       icon: TrendingUp,
