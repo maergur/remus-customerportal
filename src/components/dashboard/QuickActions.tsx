@@ -5,11 +5,10 @@ interface QuickActionCardProps {
   title: string;
   description: string;
   value?: string;
-  trend?: React.ReactNode;
   delay?: string;
 }
 
-function QuickActionCard({ icon: Icon, title, description, value, trend, delay = "0s" }: QuickActionCardProps) {
+function QuickActionCard({ icon: Icon, title, description, value, delay = "0s" }: QuickActionCardProps) {
   return (
     <div 
       className="bg-card rounded-2xl p-5 border border-border card-hover cursor-pointer animate-fade-in"
@@ -25,41 +24,7 @@ function QuickActionCard({ icon: Icon, title, description, value, trend, delay =
       </div>
       <h4 className="font-semibold text-foreground mb-1">{title}</h4>
       <p className="text-sm text-muted-foreground">{description}</p>
-      {trend && <div className="mt-3">{trend}</div>}
     </div>
-  );
-}
-
-// Mini Sparkline Component
-function MiniSparkline() {
-  const data = [30, 45, 35, 55, 40, 60, 45, 70, 55, 65];
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min;
-  
-  const points = data.map((value, i) => {
-    const x = (i / (data.length - 1)) * 100;
-    const y = 100 - ((value - min) / range) * 100;
-    return `${x},${y}`;
-  }).join(' ');
-
-  return (
-    <svg viewBox="0 0 100 40" className="w-full h-10">
-      <defs>
-        <linearGradient id="sparklineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="hsl(142 71% 45%)" />
-          <stop offset="100%" stopColor="hsl(199 89% 48%)" />
-        </linearGradient>
-      </defs>
-      <polyline
-        points={points}
-        fill="none"
-        stroke="url(#sparklineGradient)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -76,8 +41,7 @@ export function QuickActions() {
       <QuickActionCard
         icon={TrendingUp}
         title="Tüketim Analizi"
-        description="Bu ayki tüketiminiz"
-        trend={<MiniSparkline />}
+        description="Bu ayki tüketiminiz: 245 kWh"
         delay="0.2s"
       />
       <QuickActionCard

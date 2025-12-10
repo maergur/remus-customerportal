@@ -21,8 +21,8 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border">
-        <img src={remusLogo} alt="Remus Enerji" className="h-8 w-auto" />
+      <div className="h-16 px-6 flex items-center border-b border-sidebar-border">
+        <img src={remusLogo} alt="Remus Enerji" className="h-7 w-auto" />
       </div>
 
       {/* User Profile */}
@@ -32,7 +32,7 @@ export function Sidebar() {
             <User className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground truncate">Ahmet Yılmaz</p>
+            <p className="text-sm font-semibold text-sidebar-foreground truncate">Ahmet Yılmaz</p>
             <p className="text-xs text-muted-foreground">Tesisat No: 1234567</p>
           </div>
         </div>
@@ -47,15 +47,12 @@ export function Sidebar() {
             className={cn(
               "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
               item.active
-                ? "bg-primary/10 text-primary border border-primary/20"
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
+                ? "bg-primary text-primary-foreground"
+                : "text-sidebar-foreground hover:bg-sidebar-accent"
             )}
           >
-            <item.icon className={cn("h-5 w-5", item.active && "text-primary")} />
+            <item.icon className="h-5 w-5" />
             <span>{item.label}</span>
-            {item.active && (
-              <div className="ml-auto h-2 w-2 rounded-full bg-primary animate-pulse" />
-            )}
           </a>
         ))}
       </nav>
