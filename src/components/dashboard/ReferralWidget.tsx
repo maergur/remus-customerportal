@@ -28,11 +28,6 @@ export function ReferralWidget() {
         className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col relative ring-2 ring-primary/20 ring-offset-2 ring-offset-background"
         style={{ animationDelay: "0s" }}
       >
-        {/* Highlight badge */}
-        <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
-          🎁 BONUS
-        </div>
-        
         <div className="p-4 pb-3 border-b border-primary/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
