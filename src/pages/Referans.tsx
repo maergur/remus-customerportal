@@ -129,7 +129,7 @@ const Referans = () => {
             <div className="bg-card rounded-2xl p-6 border border-border">
               <h2 className="text-lg font-semibold text-foreground mb-4">Davet Kodun</h2>
               
-              <div className="bg-gradient-to-r from-primary/5 to-energy-blue/5 rounded-xl p-5 border border-primary/10 mb-5">
+              <div className="bg-white dark:bg-card rounded-xl p-5 border border-primary/20 shadow-sm mb-5">
                 <div className="flex items-center justify-between gap-3">
                   <code className="text-2xl font-bold text-foreground tracking-[0.2em]">
                     {inviteCode}
@@ -232,7 +232,7 @@ const Referans = () => {
                         <Medal className="h-5 w-5 text-gray-400 mb-1" />
                         <p className="text-sm font-medium text-foreground">{leaderboard[1].name}</p>
                         <p className="text-xs text-muted-foreground">{leaderboard[1].referrals} davet</p>
-                        <div className="mt-2 h-16 w-20 bg-gray-200 dark:bg-gray-700 rounded-t-lg flex items-center justify-center">
+                        <div className="mt-2 h-16 w-20 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-t-lg flex items-center justify-center shadow-sm">
                           <span className="text-lg font-bold text-gray-500">2</span>
                         </div>
                       </div>
@@ -245,7 +245,7 @@ const Referans = () => {
                         <Crown className="h-6 w-6 text-yellow-500 mb-1" />
                         <p className="text-sm font-medium text-foreground">{leaderboard[0].name}</p>
                         <p className="text-xs text-muted-foreground">{leaderboard[0].referrals} davet</p>
-                        <div className="mt-2 h-20 w-20 bg-yellow-400/20 dark:bg-yellow-400/10 rounded-t-lg flex items-center justify-center border-2 border-yellow-400/30">
+                        <div className="mt-2 h-20 w-20 bg-white dark:bg-card rounded-t-lg flex items-center justify-center border-2 border-yellow-400/50 shadow-sm">
                           <span className="text-xl font-bold text-yellow-500">1</span>
                         </div>
                       </div>
@@ -258,7 +258,7 @@ const Referans = () => {
                         <Award className="h-5 w-5 text-amber-600 mb-1" />
                         <p className="text-sm font-medium text-foreground">{leaderboard[2].name}</p>
                         <p className="text-xs text-muted-foreground">{leaderboard[2].referrals} davet</p>
-                        <div className="mt-2 h-12 w-20 bg-amber-100 dark:bg-amber-900/20 rounded-t-lg flex items-center justify-center">
+                        <div className="mt-2 h-12 w-20 bg-white dark:bg-card border border-amber-200 dark:border-border rounded-t-lg flex items-center justify-center shadow-sm">
                           <span className="text-lg font-bold text-amber-600">3</span>
                         </div>
                       </div>
