@@ -76,10 +76,9 @@ export function Sidebar() {
         <div className="p-4 border-t border-sidebar-border space-y-3">
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sidebar-accent hover:bg-sidebar-accent/80 transition-colors text-sidebar-foreground text-sm font-medium"
+            className="w-full flex items-center justify-center p-2.5 rounded-xl bg-sidebar-accent hover:bg-sidebar-accent/80 transition-colors text-sidebar-foreground"
           >
-            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-            <span>{theme === "light" ? "Koyu Mod" : "Açık Mod"}</span>
+            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
           </button>
           <div className="text-xs text-muted-foreground text-center">
             © 2026 Remus Enerji

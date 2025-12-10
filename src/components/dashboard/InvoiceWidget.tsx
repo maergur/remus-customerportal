@@ -11,11 +11,11 @@ const InvoiceWidget = () => {
   const [showPayPanel, setShowPayPanel] = useState(false);
   
   const invoice = {
-    month: "Aralık 2024",
-    monthEn: "December 2024",
+    month: "Aralık 2026",
+    monthEn: "December 2026",
     amount: 847.50,
-    dueDate: "15 Aralık 2024",
-    dueDateEn: "December 15, 2024",
+    dueDate: "15 Aralık 2026",
+    dueDateEn: "December 15, 2026",
     daysLeft: 5,
     consumption: 312,
     previousConsumption: 285,

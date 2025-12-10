@@ -59,7 +59,7 @@ const TuketimAnalizi = () => {
               <span className="text-xs lg:text-sm text-muted-foreground">Geçen Ay</span>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-foreground">278 kWh</p>
-            <p className="text-xs text-muted-foreground mt-1">Kasım 2024</p>
+            <p className="text-xs text-muted-foreground mt-1">Kasım 2026</p>
           </div>
           <div className="bg-card rounded-2xl p-4 lg:p-5 border border-border">
             <div className="flex items-center gap-2 lg:gap-3 mb-3">
@@ -69,7 +69,7 @@ const TuketimAnalizi = () => {
               <span className="text-xs lg:text-sm text-muted-foreground">Yıllık</span>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-foreground">3,100 kWh</p>
-            <p className="text-xs text-muted-foreground mt-1">2024 yılı</p>
+            <p className="text-xs text-muted-foreground mt-1">2026 yılı</p>
           </div>
           <div className="bg-card rounded-2xl p-4 lg:p-5 border border-border">
             <div className="flex items-center gap-2 lg:gap-3 mb-3">

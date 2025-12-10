@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function ReferralWidget() {
   const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
-  const inviteCode = "REMUS2024";
+  const inviteCode = "REMUS2026";
   const earned = 200;
   const referralCount = 4;
   const rank = 42;
