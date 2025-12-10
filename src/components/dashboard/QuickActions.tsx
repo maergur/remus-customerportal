@@ -16,7 +16,7 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
   return (
     <Link to={to}>
       <div 
-        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full"
+        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col"
         style={{ animationDelay: delay }}
       >
         <div className="p-4 pb-3 border-b border-border/50">
@@ -34,9 +34,11 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
           </div>
         </div>
         {value && (
-          <div className="p-4 pt-3">
-            <p className="text-2xl font-bold text-foreground">{value}</p>
-            {subValue && <p className="text-xs text-muted-foreground mt-1">{subValue}</p>}
+          <div className="p-4 pt-3 flex-1 flex flex-col justify-between">
+            <div>
+              <p className="text-2xl font-bold text-foreground">{value}</p>
+              {subValue && <p className="text-xs text-muted-foreground mt-0.5">{subValue}</p>}
+            </div>
           </div>
         )}
       </div>

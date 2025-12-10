@@ -1,14 +1,29 @@
-import { Gift, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { Gift, Copy, Check, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function ReferralWidget() {
+  const [copied, setCopied] = useState(false);
+  const inviteCode = "REMUS2024";
   const earned = 200;
   const referralCount = 4;
+  const rank = 42;
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await navigator.clipboard.writeText(inviteCode);
+    setCopied(true);
+    toast.success("Davet kodu kopyalandı!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Link to="/referans">
       <div 
-        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full"
+        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col"
         style={{ animationDelay: "0s" }}
       >
         <div className="p-4 pb-3 border-b border-border/50">
@@ -22,12 +37,31 @@ export function ReferralWidget() {
                 <p className="text-xs text-muted-foreground">Kazan & Kazandır</p>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-1 text-amber-500">
+              <Trophy className="h-4 w-4" />
+              <span className="text-xs font-bold">#{rank}</span>
+            </div>
           </div>
         </div>
-        <div className="p-4 pt-3">
-          <p className="text-2xl font-bold text-foreground">{earned} ₺ <span className="text-base font-normal text-primary">Kazanıldı</span></p>
-          <p className="text-xs text-muted-foreground mt-1">{referralCount} arkadaş davet edildi</p>
+        <div className="p-4 pt-3 flex-1 flex flex-col justify-between">
+          <div>
+            <p className="text-2xl font-bold text-foreground">{earned} ₺</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{referralCount} arkadaş davet edildi</p>
+          </div>
+          
+          <div className="mt-3 bg-white dark:bg-background/50 rounded-lg p-2.5 border border-border/50">
+            <div className="flex items-center justify-between gap-2">
+              <code className="text-sm font-bold text-foreground tracking-wider">{inviteCode}</code>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopy}
+                className="h-7 px-2 text-xs"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </Link>
