@@ -1,8 +1,61 @@
-import { Search, Bell, User, ChevronDown } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const notifications = [
+  {
+    id: 1,
+    icon: FileText,
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-500/10",
+    title: "Yeni fatura oluşturuldu",
+    description: "Aralık 2024 faturanız hazır",
+    time: "2 saat önce",
+    unread: true,
+  },
+  {
+    id: 2,
+    icon: Gift,
+    iconColor: "text-primary",
+    iconBg: "bg-primary/10",
+    title: "Referans bonusu kazandınız!",
+    description: "50 TL hesabınıza tanımlandı",
+    time: "1 gün önce",
+    unread: true,
+  },
+  {
+    id: 3,
+    icon: AlertTriangle,
+    iconColor: "text-orange-500",
+    iconBg: "bg-orange-500/10",
+    title: "Planlı bakım bildirimi",
+    description: "25 Ara 2024, 02:00-06:00",
+    time: "2 gün önce",
+    unread: false,
+  },
+  {
+    id: 4,
+    icon: Zap,
+    iconColor: "text-purple-500",
+    iconBg: "bg-purple-500/10",
+    title: "Enerji tasarruf ipucu",
+    description: "Bu ay %12 daha az tüketim",
+    time: "3 gün önce",
+    unread: false,
+  },
+];
 
 export function TopBar() {
+  const unreadCount = notifications.filter(n => n.unread).length;
+
   return (
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-6 sticky top-0 z-30">
       {/* Search */}
@@ -16,11 +69,56 @@ export function TopBar() {
 
       {/* Right Section */}
       <div className="flex items-center gap-4">
-        {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-primary animate-pulse" />
-        </Button>
+        {/* Notifications Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+                  {unreadCount}
+                </span>
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80 bg-card border-border shadow-lg z-50">
+            <DropdownMenuLabel className="flex items-center justify-between py-3">
+              <span className="text-base font-semibold">Bildirimler</span>
+              <Button variant="ghost" size="sm" className="text-xs text-primary h-auto py-1 px-2">
+                Tümünü okundu işaretle
+              </Button>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="max-h-80 overflow-y-auto">
+              {notifications.map((notification) => (
+                <DropdownMenuItem 
+                  key={notification.id} 
+                  className={`flex items-start gap-3 p-3 cursor-pointer focus:bg-secondary ${notification.unread ? 'bg-primary/5' : ''}`}
+                >
+                  <div className={`h-10 w-10 rounded-xl ${notification.iconBg} flex items-center justify-center shrink-0`}>
+                    <notification.icon className={`h-5 w-5 ${notification.iconColor}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground truncate">{notification.title}</p>
+                      {notification.unread && (
+                        <span className="h-2 w-2 rounded-full bg-primary shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate">{notification.description}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </div>
+            <DropdownMenuSeparator />
+            <div className="p-2">
+              <Button variant="ghost" className="w-full text-sm text-primary">
+                Tüm bildirimleri görüntüle
+              </Button>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* User Profile */}
         <div className="flex items-center gap-3 pl-4 border-l border-border">
