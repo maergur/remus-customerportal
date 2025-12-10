@@ -9,37 +9,37 @@
 
 @layer base {
   :root {
-    /* Deep Navy Blue Base */
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    /* Clean White Background */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    /* Card surfaces - slightly lighter navy */
-    --card: 222 47% 14%;
-    --card-foreground: 210 40% 98%;
+    /* Card surfaces - light gray */
+    --card: 210 20% 98%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 222 47% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
     /* Electric Green Primary */
     --primary: 142 71% 45%;
-    --primary-foreground: 222 47% 11%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Muted Navy */
-    --secondary: 222 47% 18%;
-    --secondary-foreground: 210 40% 98%;
+    /* Light Gray Secondary */
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 222 30% 22%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 210 15% 93%;
+    --muted-foreground: 215 16% 47%;
 
-    /* Accent Green Glow */
+    /* Accent Green */
     --accent: 142 71% 45%;
-    --accent-foreground: 222 47% 11%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 222 30% 20%;
-    --input: 222 30% 20%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 142 71% 45%;
 
     --radius: 0.75rem;
@@ -51,17 +51,7 @@
     --energy-navy: 222 47% 11%;
     --energy-navy-light: 222 47% 18%;
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(199 89% 48%) 100%);
-    --gradient-glass: linear-gradient(135deg, hsla(142, 71%, 45%, 0.15) 0%, hsla(199, 89%, 48%, 0.1) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(222 47% 16%) 0%, hsl(222 47% 12%) 100%);
-
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsla(142, 71%, 45%, 0.3);
-    --shadow-card: 0 4px 24px hsla(0, 0%, 0%, 0.2);
-    --shadow-hover: 0 8px 32px hsla(0, 0%, 0%, 0.3);
-
-    /* Sidebar */
+    /* Sidebar - Keep dark navy */
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 85%;
     --sidebar-primary: 142 71% 45%;
@@ -150,7 +140,7 @@
 
   .card-hover:hover {
     @apply scale-[1.02];
-    box-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.3), 0 0 20px hsla(142, 71%, 45%, 0.1);
+    box-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.08), 0 0 20px hsla(142, 71%, 45%, 0.08);
   }
 
   /* Progress Bar Glow */
