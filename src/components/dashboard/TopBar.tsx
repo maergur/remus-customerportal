@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useSidebarContext } from "@/contexts/SidebarContext";
-
+import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const notifications = [
@@ -59,6 +59,7 @@ const notifications = [
 
 export function TopBar() {
   const { toggle } = useSidebarContext();
+  const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const unreadCount = notifications.filter(n => n.unread).length;
 
@@ -105,6 +106,11 @@ export function TopBar() {
         {/* Mobile Search Button */}
         <Button variant="ghost" size="icon" className="sm:hidden">
           <Search className="h-5 w-5" />
+        </Button>
+
+        {/* Theme Toggle */}
+        <Button variant="ghost" size="icon" onClick={toggleTheme}>
+          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
         </Button>
 
         {/* Language Toggle */}
