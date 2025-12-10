@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Sun, Moon, Globe } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useSidebarContext } from "@/contexts/SidebarContext";
-import { useTheme } from "@/contexts/ThemeContext";
+
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const notifications = [
@@ -59,7 +59,6 @@ const notifications = [
 
 export function TopBar() {
   const { toggle } = useSidebarContext();
-  const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const unreadCount = notifications.filter(n => n.unread).length;
 
@@ -71,9 +70,14 @@ export function TopBar() {
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
       {/* Left Section */}
       <div className="flex items-center gap-3">
-        {/* Theme Toggle - moved to left */}
-        <Button variant="ghost" size="icon" onClick={toggleTheme}>
-          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        {/* Mobile Menu Button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="lg:hidden"
+          onClick={toggle}
+        >
+          <Menu className="h-5 w-5" />
         </Button>
 
         {/* Mobile Menu Button */}
