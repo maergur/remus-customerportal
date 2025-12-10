@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useSidebarContext } from "@/contexts/SidebarContext";
 
 const notifications = [
   {
@@ -55,6 +56,7 @@ const notifications = [
 ];
 
 export function TopBar() {
+  const { toggle } = useSidebarContext();
   const unreadCount = notifications.filter(n => n.unread).length;
 
   const handleLogout = () => {
@@ -62,18 +64,36 @@ export function TopBar() {
   };
 
   return (
-    <header className="h-16 bg-background border-b border-border flex items-center justify-between px-6 sticky top-0 z-30">
-      {/* Search */}
-      <div className="relative w-full max-w-md">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="İşlem veya Sayfa Ara..."
-          className="pl-11 bg-secondary/50 border-transparent focus:border-primary/30"
-        />
+    <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+      {/* Left Section */}
+      <div className="flex items-center gap-4">
+        {/* Mobile Menu Button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="lg:hidden"
+          onClick={toggle}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Search */}
+        <div className="relative w-full max-w-md hidden sm:block">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="İşlem veya Sayfa Ara..."
+            className="pl-11 bg-secondary/50 border-transparent focus:border-primary/30"
+          />
+        </div>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 lg:gap-4">
+        {/* Mobile Search Button */}
+        <Button variant="ghost" size="icon" className="sm:hidden">
+          <Search className="h-5 w-5" />
+        </Button>
+
         {/* Notifications Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -128,15 +148,15 @@ export function TopBar() {
         {/* User Profile Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-3 pl-4 border-l border-border hover:bg-secondary/50 rounded-lg px-3 py-2 transition-colors cursor-pointer">
+            <button className="flex items-center gap-2 lg:gap-3 lg:pl-4 lg:border-l border-border hover:bg-secondary/50 rounded-lg px-2 lg:px-3 py-2 transition-colors cursor-pointer">
               <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
                 <User className="h-4 w-4 text-primary" />
               </div>
-              <div className="hidden md:block text-left">
+              <div className="hidden lg:block text-left">
                 <p className="text-sm font-semibold text-foreground">Ahmet Yılmaz</p>
                 <p className="text-xs text-muted-foreground">Tesisat No: 1234567</p>
               </div>
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <ChevronDown className="h-4 w-4 text-muted-foreground hidden lg:block" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 bg-card border-border shadow-lg z-50">
