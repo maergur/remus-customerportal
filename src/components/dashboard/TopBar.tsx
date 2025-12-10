@@ -72,15 +72,6 @@ export function TopBar() {
       {/* Left Section */}
       <div className="flex items-center gap-3">
         {/* Mobile Menu Button */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="lg:hidden"
-          onClick={toggle}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-
         {/* Mobile Menu Button */}
         <Button 
           variant="ghost" 
