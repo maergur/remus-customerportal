@@ -25,14 +25,19 @@ export function ReferralWidget() {
   return (
     <Link to="/referans">
       <div 
-        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col"
+        className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col relative ring-2 ring-primary/20 ring-offset-2 ring-offset-background"
         style={{ animationDelay: "0s" }}
       >
-        <div className="p-4 pb-3 border-b border-border/50">
+        {/* Highlight badge */}
+        <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+          🎁 BONUS
+        </div>
+        
+        <div className="p-4 pb-3 border-b border-primary/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-energy-blue flex items-center justify-center">
-                <Gift className="h-5 w-5 text-white" />
+              <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Gift className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h4 className="font-semibold text-foreground text-sm">{t("referFriends")}</h4>
