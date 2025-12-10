@@ -1,4 +1,4 @@
-import { Home, BarChart3, FileText, AlertTriangle, Zap, X, Gift } from "lucide-react";
+import { Home, BarChart3, FileText, AlertTriangle, Zap, X, Gift, Sun, Moon } from "lucide-react";
 import remusLogo from "@/assets/remus-logo.svg";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/NavLink";
@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
 ];
 export function Sidebar() {
   const { isOpen, close } = useSidebarContext();
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <>
@@ -73,9 +73,16 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-sidebar-border">
+        <div className="p-4 border-t border-sidebar-border space-y-3">
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sidebar-accent hover:bg-sidebar-accent/80 transition-colors text-sidebar-foreground text-sm font-medium"
+          >
+            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <span>{theme === "light" ? "Koyu Mod" : "Açık Mod"}</span>
+          </button>
           <div className="text-xs text-muted-foreground text-center">
-            © 2024 Remus Enerji
+            © 2026 Remus Enerji
           </div>
         </div>
       </aside>
