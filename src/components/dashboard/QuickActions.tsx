@@ -1,5 +1,6 @@
 import { TrendingUp, AlertCircle, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface QuickActionCardProps {
   icon: React.ElementType;
@@ -47,36 +48,46 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
 }
 
 export function QuickActions() {
+  const { language } = useLanguage();
+  
+  const actions = [
+    {
+      icon: Zap,
+      title: language === "tr" ? "Aktif Tarife" : "Active Tariff",
+      description: language === "tr" ? "Mevcut paketiniz" : "Your current plan",
+      value: language === "tr" ? "Yeşil Enerji Pro" : "Green Energy Pro",
+      subValue: "0,85 ₺/kWh • " + (language === "tr" ? "Sabit Fiyat" : "Fixed Price"),
+      delay: "0.1s",
+      to: "/tarifeler",
+      accent: true,
+    },
+    {
+      icon: TrendingUp,
+      title: language === "tr" ? "Tüketim Analizi" : "Consumption Analysis",
+      description: language === "tr" ? "Bu ayki tüketiminiz" : "This month's consumption",
+      value: "245 kWh",
+      subValue: language === "tr" ? "Geçen aya göre %9 artış" : "9% increase from last month",
+      delay: "0.2s",
+      to: "/tuketim-analizi",
+      accent: false,
+    },
+    {
+      icon: AlertCircle,
+      title: language === "tr" ? "Arıza Bildir" : "Report Issue",
+      description: language === "tr" ? "7/24 destek hattı" : "24/7 support line",
+      value: language === "tr" ? "Aktif Destek" : "Active Support",
+      subValue: language === "tr" ? "Ortalama yanıt: 15 dk" : "Avg response: 15 min",
+      delay: "0.3s",
+      to: "/ariza-destek",
+      accent: false,
+    },
+  ];
+
   return (
     <>
-      <QuickActionCard
-        icon={Zap}
-        title="Aktif Tarife"
-        description="Mevcut paketiniz"
-        value="Yeşil Enerji Pro"
-        subValue="0,85 ₺/kWh • Sabit Fiyat"
-        delay="0.1s"
-        to="/tarifeler"
-        accent
-      />
-      <QuickActionCard
-        icon={TrendingUp}
-        title="Tüketim Analizi"
-        description="Bu ayki tüketiminiz"
-        value="245 kWh"
-        subValue="Geçen aya göre %9 artış"
-        delay="0.2s"
-        to="/tuketim-analizi"
-      />
-      <QuickActionCard
-        icon={AlertCircle}
-        title="Arıza Bildir"
-        description="7/24 destek hattı"
-        value="Aktif Destek"
-        subValue="Ortalama yanıt: 15 dk"
-        delay="0.3s"
-        to="/ariza-destek"
-      />
+      {actions.map((action, index) => (
+        <QuickActionCard key={index} {...action} />
+      ))}
     </>
   );
 }

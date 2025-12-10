@@ -3,8 +3,10 @@ import { Gift, Copy, Check, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function ReferralWidget() {
+  const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const inviteCode = "REMUS2024";
   const earned = 200;
@@ -16,7 +18,7 @@ export function ReferralWidget() {
     e.stopPropagation();
     await navigator.clipboard.writeText(inviteCode);
     setCopied(true);
-    toast.success("Davet kodu kopyalandı!");
+    toast.success(t("copied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -33,8 +35,8 @@ export function ReferralWidget() {
                 <Gift className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h4 className="font-semibold text-foreground text-sm">Arkadaşını Getir</h4>
-                <p className="text-xs text-muted-foreground">Kazan & Kazandır</p>
+                <h4 className="font-semibold text-foreground text-sm">{t("referFriends")}</h4>
+                <p className="text-xs text-muted-foreground">{t("referralDesc")}</p>
               </div>
             </div>
             <div className="flex items-center gap-1 text-amber-500">
@@ -46,10 +48,12 @@ export function ReferralWidget() {
         <div className="p-4 pt-3 flex-1 flex flex-col justify-between">
           <div>
             <p className="text-2xl font-bold text-foreground">{earned} ₺</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{referralCount} arkadaş davet edildi</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {referralCount} {language === "tr" ? "arkadaş davet edildi" : "friends invited"}
+            </p>
           </div>
           
-          <div className="mt-3 bg-white dark:bg-background/50 rounded-lg p-2.5 border border-border/50">
+          <div className="mt-3 bg-secondary/50 dark:bg-secondary/30 rounded-lg p-2.5 border border-border/50">
             <div className="flex items-center justify-between gap-2">
               <code className="text-sm font-bold text-foreground tracking-wider">{inviteCode}</code>
               <Button
