@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 const notifications = [
   {
@@ -55,6 +56,10 @@ const notifications = [
 
 export function TopBar() {
   const unreadCount = notifications.filter(n => n.unread).length;
+
+  const handleLogout = () => {
+    toast.success("Başarıyla çıkış yapıldı");
+  };
 
   return (
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-6 sticky top-0 z-30">
@@ -120,17 +125,51 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* User Profile */}
-        <div className="flex items-center gap-3 pl-4 border-l border-border">
-          <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
-            <User className="h-4 w-4 text-primary" />
-          </div>
-          <div className="hidden md:block">
-            <p className="text-sm font-semibold text-foreground">Ahmet Yılmaz</p>
-            <p className="text-xs text-muted-foreground">Tesisat No: 1234567</p>
-          </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </div>
+        {/* User Profile Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-3 pl-4 border-l border-border hover:bg-secondary/50 rounded-lg px-3 py-2 transition-colors cursor-pointer">
+              <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="h-4 w-4 text-primary" />
+              </div>
+              <div className="hidden md:block text-left">
+                <p className="text-sm font-semibold text-foreground">Ahmet Yılmaz</p>
+                <p className="text-xs text-muted-foreground">Tesisat No: 1234567</p>
+              </div>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 bg-card border-border shadow-lg z-50">
+            <DropdownMenuLabel className="py-3">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <User className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Ahmet Yılmaz</p>
+                  <p className="text-xs text-muted-foreground">ahmet@email.com</p>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary">
+              <UserCircle className="h-4 w-4 text-muted-foreground" />
+              <span>Profilim</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary">
+              <Settings className="h-4 w-4 text-muted-foreground" />
+              <span>Ayarlar</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary text-red-500 focus:text-red-500"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Çıkış Yap</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
