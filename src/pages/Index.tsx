@@ -13,23 +13,19 @@ const Index = () => {
             <HeroSection />
           </div>
           <div className="lg:col-span-1">
-            <ReferralWidget />
+            <InvoiceWidget />
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-          <div className="lg:col-span-1">
-            <InvoiceWidget />
+        <section>
+          <h3 className="text-lg font-semibold text-foreground mb-4">
+            Hızlı İşlemler
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <ReferralWidget />
+            <QuickActions />
           </div>
-          <div className="lg:col-span-2">
-            <section>
-              <h3 className="text-lg font-semibold text-foreground mb-4">
-                Hızlı İşlemler
-              </h3>
-              <QuickActions />
-            </section>
-          </div>
-        </div>
+        </section>
       </div>
     </DashboardLayout>
   );

@@ -46,7 +46,7 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <>
       <QuickActionCard
         icon={Zap}
         title="Aktif Tarife"
@@ -75,6 +75,6 @@ export function QuickActions() {
         delay="0.3s"
         to="/ariza-destek"
       />
-    </div>
+    </>
   );
 }
