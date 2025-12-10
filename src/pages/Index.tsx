@@ -7,27 +7,18 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Sidebar */}
       <Sidebar />
-
-      {/* Main Content */}
       <main className="ml-64">
         <TopBar />
-        
         <div className="p-6 space-y-6">
-          {/* Hero + Referral Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-            <div className="lg:col-span-2 flex">
-              <div className="w-full">
-                <HeroSection />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <HeroSection />
             </div>
             <div className="lg:col-span-1">
               <ReferralWidget />
             </div>
           </div>
-
-          {/* Quick Actions */}
           <section>
             <h3 className="text-lg font-semibold text-foreground mb-4">
               Hızlı İşlemler
