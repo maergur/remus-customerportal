@@ -3,6 +3,7 @@ import remusLogo from "@/assets/remus-logo.svg";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/NavLink";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface NavItem {
   icon: React.ElementType;
@@ -20,6 +21,7 @@ const navItems: NavItem[] = [
 ];
 export function Sidebar() {
   const { isOpen, close } = useSidebarContext();
+  const { theme } = useTheme();
 
   return (
     <>
@@ -41,7 +43,11 @@ export function Sidebar() {
       >
         {/* Logo & Close Button */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-sidebar-border">
-          <img src={remusLogo} alt="Remus Enerji" className="h-7 w-auto" />
+          <img 
+            src={remusLogo} 
+            alt="Remus Enerji" 
+            className={cn("h-7 w-auto", theme === "dark" && "brightness-0 invert")} 
+          />
           <button 
             onClick={close}
             className="lg:hidden p-2 rounded-lg hover:bg-sidebar-accent transition-colors"

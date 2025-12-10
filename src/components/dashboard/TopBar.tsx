@@ -70,7 +70,12 @@ export function TopBar() {
   return (
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
       {/* Left Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
+        {/* Theme Toggle - moved to left */}
+        <Button variant="ghost" size="icon" onClick={toggleTheme}>
+          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        </Button>
+
         {/* Mobile Menu Button */}
         <Button 
           variant="ghost" 
@@ -109,11 +114,6 @@ export function TopBar() {
           <span className="absolute -bottom-0.5 -right-0.5 text-[10px] font-bold text-primary">
             {language.toUpperCase()}
           </span>
-        </Button>
-
-        {/* Theme Toggle */}
-        <Button variant="ghost" size="icon" onClick={toggleTheme}>
-          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
         </Button>
 
         {/* Notifications Dropdown */}
