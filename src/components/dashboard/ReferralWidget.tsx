@@ -43,13 +43,8 @@ export function ReferralWidget() {
               Enerjini Bedavaya Getir!
             </p>
           </div>
-          <div className="relative">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/30 to-energy-blue/30 flex items-center justify-center animate-float">
-              <Gift className="h-7 w-7 text-primary" />
-            </div>
-            <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
-              🎁
-            </div>
+          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/30 to-energy-blue/30 flex items-center justify-center animate-float">
+            <Gift className="h-7 w-7 text-primary" />
           </div>
         </div>
 

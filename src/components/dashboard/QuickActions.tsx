@@ -1,5 +1,4 @@
-import { CreditCard, TrendingUp, Camera, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CreditCard, TrendingUp, AlertCircle } from "lucide-react";
 
 interface QuickActionCardProps {
   icon: React.ElementType;
@@ -66,7 +65,7 @@ function MiniSparkline() {
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <QuickActionCard
         icon={CreditCard}
         title="Fatura Öde"
@@ -82,16 +81,10 @@ export function QuickActions() {
         delay="0.2s"
       />
       <QuickActionCard
-        icon={Camera}
-        title="Endeks Bildir"
-        description="Son bildirim: 3 gün önce"
-        delay="0.3s"
-      />
-      <QuickActionCard
         icon={AlertCircle}
         title="Arıza Bildir"
         description="7/24 destek hattı"
-        delay="0.4s"
+        delay="0.3s"
       />
     </div>
   );
