@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe, Sun, Moon } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe, Sun, Moon, Languages } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -113,18 +113,6 @@ export function TopBar() {
           {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
         </Button>
 
-        {/* Language Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setLanguage(language === "tr" ? "en" : "tr")}
-          className="relative"
-        >
-          <Globe className="h-5 w-5" />
-          <span className="absolute -bottom-0.5 -right-0.5 text-[10px] font-bold text-primary">
-            {language.toUpperCase()}
-          </span>
-        </Button>
 
         {/* Notifications Dropdown */}
         <DropdownMenu>
@@ -211,6 +199,18 @@ export function TopBar() {
             <DropdownMenuItem className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary">
               <Settings className="h-4 w-4 text-muted-foreground" />
               <span>{language === "tr" ? "Ayarlar" : "Settings"}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              className="flex items-center justify-between py-3 cursor-pointer focus:bg-secondary"
+              onClick={() => setLanguage(language === "tr" ? "en" : "tr")}
+            >
+              <div className="flex items-center gap-3">
+                <Languages className="h-4 w-4 text-muted-foreground" />
+                <span>{language === "tr" ? "Dil" : "Language"}</span>
+              </div>
+              <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">
+                {language === "tr" ? "TR" : "EN"}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
