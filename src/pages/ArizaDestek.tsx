@@ -5,9 +5,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 const recentTickets = [
-  { id: "ARZ-2024-045", type: "Elektrik Kesintisi", status: "resolved", date: "15 Ara 2024", description: "Bölgede planlı bakım çalışması" },
-  { id: "ARZ-2024-032", type: "Sayaç Arızası", status: "resolved", date: "28 Kas 2024", description: "Sayaç değişimi yapıldı" },
-  { id: "ARZ-2024-018", type: "Voltaj Düşüklüğü", status: "resolved", date: "10 Kas 2024", description: "Trafo bakımı tamamlandı" },
+  { id: "ARZ-2026-045", type: "Elektrik Kesintisi", status: "resolved", date: "15 Ara 2026", description: "Bölgede planlı bakım çalışması" },
+  { id: "ARZ-2026-032", type: "Sayaç Arızası", status: "resolved", date: "28 Kas 2026", description: "Sayaç değişimi yapıldı" },
+  { id: "ARZ-2026-018", type: "Voltaj Düşüklüğü", status: "resolved", date: "10 Kas 2026", description: "Trafo bakımı tamamlandı" },
 ];
 
 const ArizaDestek = () => {

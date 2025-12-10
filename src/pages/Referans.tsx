@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Referans = () => {
   const [copied, setCopied] = useState(false);
-  const inviteCode = "REMUS2024";
+  const inviteCode = "REMUS2026";
   const earned = 200;
   const goal = 500;
   const progress = (earned / goal) * 100;
