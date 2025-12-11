@@ -1,7 +1,7 @@
 import { useOnboarding, ApplicationStatus } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, CheckCircle2, XCircle, AlertCircle, PartyPopper } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, AlertCircle, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -132,35 +132,23 @@ export const ApplicationStatusStep = () => {
   if (status === 'ACCEPTED') {
     return (
       <div className="relative">
-        {/* Celebration confetti effect */}
+        {/* Celebration glow effect */}
         {showCelebration && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute animate-confetti"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                  animationDuration: `${2 + Math.random() * 2}s`,
-                }}
-              >
-                <div 
-                  className="w-3 h-3 rounded-full"
-                  style={{
-                    backgroundColor: ['#22C55E', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6'][Math.floor(Math.random() * 5)]
-                  }}
-                />
-              </div>
-            ))}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
           </div>
         )}
 
-        <Card className="w-full max-w-md mx-auto animate-scale-in">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 animate-bounce-slow">
+        <Card className="w-full max-w-md mx-auto animate-scale-in relative overflow-hidden">
+          {/* Shimmer overlay on celebration */}
+          {showCelebration && (
+            <div className="absolute inset-0 animate-shimmer pointer-events-none" />
+          )}
+          
+          <CardHeader className="text-center relative">
+            <div className={`mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 ${showCelebration ? 'animate-bounce-slow ring-4 ring-primary/30 ring-offset-2' : ''}`}>
               {showCelebration ? (
-                <PartyPopper className="w-10 h-10 text-primary" />
+                <Sparkles className="w-10 h-10 text-primary" />
               ) : (
                 <CheckCircle2 className="w-10 h-10 text-primary" />
               )}
