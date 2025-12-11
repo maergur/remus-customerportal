@@ -23,30 +23,28 @@ const OnboardingContent = () => {
   // Special case for industrial subscribers
   if (data.step === 99) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4">
+      <div className="h-screen flex flex-col bg-background overflow-hidden">
+        <header className="border-b bg-card flex-shrink-0">
+          <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-center lg:justify-start">
               <img 
                 src={remusLogo} 
                 alt="Remus Enerji" 
-                className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+                className={`h-8 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
               />
             </div>
           </div>
         </header>
-        <div className="flex min-h-[calc(100vh-73px)]">
-          {/* Form Section */}
-          <div className="flex-1 lg:w-1/2">
-            <div className="container mx-auto px-4 py-6 lg:max-w-xl">
+        <div className="flex flex-1 overflow-hidden">
+          <div className="flex-1 lg:w-1/2 overflow-y-auto">
+            <div className="px-4 py-4 lg:px-8 lg:py-6 lg:max-w-xl mx-auto">
               <AnimatedStepWrapper stepKey={99}>
                 <IndustrialContactStep />
               </AnimatedStepWrapper>
             </div>
           </div>
-          {/* Illustration Section - Hidden on mobile */}
-          <div className="hidden lg:block lg:w-1/2 p-6">
-            <OnboardingIllustration step={99} className="h-full min-h-[500px]" />
+          <div className="hidden lg:flex lg:w-1/2 p-4 items-center justify-center">
+            <OnboardingIllustration step={99} className="w-full h-full max-h-[calc(100vh-80px)]" />
           </div>
         </div>
       </div>
@@ -77,28 +75,28 @@ const OnboardingContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
       {/* Header */}
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b bg-card flex-shrink-0">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-center lg:justify-start">
             <img 
               src={remusLogo} 
               alt="Remus Enerji" 
-              className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+              className={`h-8 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
             />
           </div>
         </div>
       </header>
 
       {/* Main Content - Split Layout */}
-      <div className="flex min-h-[calc(100vh-73px)]">
+      <div className="flex flex-1 overflow-hidden">
         {/* Form Section */}
         <div className="flex-1 lg:w-1/2 overflow-y-auto">
-          <div className="container mx-auto px-4 py-6 lg:max-w-xl">
+          <div className="px-4 py-4 lg:px-8 lg:py-6 lg:max-w-xl mx-auto">
             {/* Progress - Only show for steps 1-7 */}
             {data.step <= TOTAL_STEPS && (
-              <div className="mb-6">
+              <div className="mb-4">
                 <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
               </div>
             )}
@@ -111,8 +109,8 @@ const OnboardingContent = () => {
         </div>
 
         {/* Illustration Section - Hidden on mobile */}
-        <div className="hidden lg:block lg:w-1/2 p-6 sticky top-0 h-screen">
-          <OnboardingIllustration step={data.step} className="h-full min-h-[500px]" />
+        <div className="hidden lg:flex lg:w-1/2 p-4 items-center justify-center">
+          <OnboardingIllustration step={data.step} className="w-full h-full max-h-[calc(100vh-80px)]" />
         </div>
       </div>
     </div>
