@@ -74,6 +74,22 @@ const translations: Translations = {
   // Theme
   lightMode: { tr: "Açık Mod", en: "Light Mode" },
   darkMode: { tr: "Koyu Mod", en: "Dark Mode" },
+  
+  // Onboarding Status Widget
+  continueApplication: { tr: "Başvuruya Devam Et", en: "Continue Application" },
+  completeYourApplication: { tr: "Başvurunuzu Tamamlayın", en: "Complete Your Application" },
+  applicationProgress: { tr: "İlerleme", en: "Progress" },
+  stepsCompleted: { tr: "adım tamamlandı", en: "steps completed" },
+  progress: { tr: "İlerleme", en: "Progress" },
+  underReview: { tr: "İnceleniyor", en: "Under Review" },
+  applicationUnderReview: { tr: "Başvurunuz İnceleniyor", en: "Application Under Review" },
+  applicationUnderReviewDesc: { tr: "Başvurunuz ekibimiz tarafından incelenmektedir. En kısa sürede size dönüş yapacağız.", en: "Your application is being reviewed by our team. We will get back to you soon." },
+  estimatedReviewTime: { tr: "Tahmini süre", en: "Estimated time" },
+  businessDays: { tr: "iş günü", en: "business days" },
+  applicationRejected: { tr: "Başvuru Reddedildi", en: "Application Rejected" },
+  applicationNeedsCorrection: { tr: "Başvurunuz Düzeltme Gerektiriyor", en: "Your Application Needs Correction" },
+  reason: { tr: "Sebep", en: "Reason" },
+  correctAndResubmit: { tr: "Düzelt ve Tekrar Gönder", en: "Correct and Resubmit" },
 };
 
 interface LanguageContextType {
