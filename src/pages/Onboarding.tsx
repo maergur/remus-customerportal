@@ -3,17 +3,16 @@ import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress';
 import { PersonalInfoStep } from '@/components/onboarding/steps/PersonalInfoStep';
 import { PhoneVerificationStep } from '@/components/onboarding/steps/PhoneVerificationStep';
 import { TariffSelectionStep } from '@/components/onboarding/steps/TariffSelectionStep';
-import { IdentityStep } from '@/components/onboarding/steps/IdentityStep';
-import { EtsoCodeStep } from '@/components/onboarding/steps/EtsoCodeStep';
-import { AddressConfirmStep } from '@/components/onboarding/steps/AddressConfirmStep';
+import { IdentityEtsoStep } from '@/components/onboarding/steps/IdentityEtsoStep';
 import { CorporateInfoStep } from '@/components/onboarding/steps/CorporateInfoStep';
 import { DocumentUploadStep } from '@/components/onboarding/steps/DocumentUploadStep';
 import { ContractStep } from '@/components/onboarding/steps/ContractStep';
 import { ApplicationStatusStep } from '@/components/onboarding/steps/ApplicationStatusStep';
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
-import { Zap } from 'lucide-react';
+import remusLogo from '@/assets/remus-logo.svg';
+import { useTheme } from '@/contexts/ThemeContext';
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 7;
 
 const OnboardingContent = () => {
   const { data } = useOnboarding();
@@ -32,34 +31,33 @@ const OnboardingContent = () => {
       case 3:
         return <TariffSelectionStep />;
       case 4:
-        return <IdentityStep />;
+        return <IdentityEtsoStep />;
       case 5:
-        return <EtsoCodeStep />;
-      case 6:
-        return <AddressConfirmStep />;
-      case 7:
         return <CorporateInfoStep />;
-      case 8:
+      case 6:
         return <DocumentUploadStep />;
-      case 9:
+      case 7:
         return <ContractStep />;
-      case 10:
+      case 8:
         return <ApplicationStatusStep />;
       default:
         return <PersonalInfoStep />;
     }
   };
 
+  const { theme } = useTheme();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Zap className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">Remus Enerji</span>
+          <div className="flex items-center justify-center">
+            <img 
+              src={remusLogo} 
+              alt="Remus Enerji" 
+              className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+            />
           </div>
         </div>
       </header>
