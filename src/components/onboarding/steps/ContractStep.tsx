@@ -19,9 +19,9 @@ export const ContractStep = () => {
     
     updateData({ 
       contractAccepted: true,
-      applicationStatus: 'UNDER_REVIEW'
+      applicationStatus: 'UNDER_REVIEW',
+      step: 8
     });
-    nextStep();
   };
 
   const contractText = `
