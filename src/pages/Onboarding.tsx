@@ -67,8 +67,8 @@ const OnboardingContent = () => {
         <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
       </div>
 
-      {/* Content */}
-      <main className="container mx-auto px-4 pb-12">
+      {/* Content with animation */}
+      <main className="container mx-auto px-4 pb-12 animate-fade-in">
         {renderStep()}
       </main>
     </div>
