@@ -9,6 +9,7 @@ import Faturalar from "./pages/Faturalar";
 import ArizaDestek from "./pages/ArizaDestek";
 import Tarifeler from "./pages/Tarifeler";
 import Referans from "./pages/Referans";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/" element={<Index />} />
           <Route path="/tuketim-analizi" element={<TuketimAnalizi />} />
           <Route path="/faturalar" element={<Faturalar />} />
