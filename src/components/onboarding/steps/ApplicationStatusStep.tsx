@@ -1,17 +1,48 @@
 import { useOnboarding, ApplicationStatus } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, CheckCircle2, XCircle, AlertCircle, Sparkles } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import confetti from 'canvas-confetti';
 
 export const ApplicationStatusStep = () => {
   const { data, updateData, resetOnboarding, goToStep } = useOnboarding();
   const [status, setStatus] = useState<ApplicationStatus>(data.applicationStatus);
-  const [showCelebration, setShowCelebration] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Fire confetti celebration
+  const fireConfetti = useCallback(() => {
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        colors: ['#22C55E', '#10B981', '#059669', '#34D399', '#6EE7B7'],
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        colors: ['#22C55E', '#10B981', '#059669', '#34D399', '#6EE7B7'],
+      });
+    }, 250);
+  }, []);
 
   // Mock status check - in real app, poll backend
   useEffect(() => {
@@ -30,12 +61,12 @@ export const ApplicationStatusStep = () => {
 
       // Trigger celebration for accepted status
       if (randomStatus === 'ACCEPTED') {
-        setShowCelebration(true);
+        fireConfetti();
       }
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [fireConfetti]);
 
   const handleRetry = () => {
     resetOnboarding();
@@ -131,64 +162,46 @@ export const ApplicationStatusStep = () => {
 
   if (status === 'ACCEPTED') {
     return (
-      <div className="relative">
-        {/* Celebration glow effect */}
-        {showCelebration && (
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
+      <Card className="w-full max-w-md mx-auto animate-scale-in">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle2 className="w-10 h-10 text-primary" />
           </div>
-        )}
-
-        <Card className="w-full max-w-md mx-auto animate-scale-in relative overflow-hidden">
-          {/* Shimmer overlay on celebration */}
-          {showCelebration && (
-            <div className="absolute inset-0 animate-shimmer pointer-events-none" />
-          )}
-          
-          <CardHeader className="text-center relative">
-            <div className={`mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 ${showCelebration ? 'animate-bounce-slow ring-4 ring-primary/30 ring-offset-2' : ''}`}>
-              {showCelebration ? (
-                <Sparkles className="w-10 h-10 text-primary" />
-              ) : (
-                <CheckCircle2 className="w-10 h-10 text-primary" />
-              )}
-            </div>
-            <CardTitle className="text-2xl bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent">
-              Tebrikler!
-            </CardTitle>
-            <CardDescription>
-              Başvurunuz onaylandı
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-gradient-to-r from-primary/10 to-emerald-500/10 border border-primary/20 rounded-lg p-4 text-center">
-              <p className="text-sm text-muted-foreground">Aboneliğiniz başlayacak</p>
-              <p className="text-2xl font-bold text-primary mt-1">
-                {data.acceptanceDate || 'Yakında'}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-center">Abonelik Bilgileri</p>
-              <div className="text-sm text-muted-foreground space-y-1 text-center">
-                <p>Tarife: {data.selectedTariff}</p>
-                <p>Adres: {data.addressFromEtso}</p>
-              </div>
-            </div>
-
-            <p className="text-sm text-muted-foreground text-center">
-              Detaylı bilgi için müşteri portalına giriş yapabilirsiniz.
+          <CardTitle className="text-2xl bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent">
+            Tebrikler!
+          </CardTitle>
+          <CardDescription>
+            Başvurunuz onaylandı
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="bg-gradient-to-r from-primary/10 to-emerald-500/10 border border-primary/20 rounded-lg p-4 text-center">
+            <p className="text-sm text-muted-foreground">Aboneliğiniz başlayacak</p>
+            <p className="text-2xl font-bold text-primary mt-1">
+              {data.acceptanceDate || 'Yakında'}
             </p>
+          </div>
 
-            <Button 
-              onClick={handleGoToDashboard} 
-              className="w-full bg-gradient-to-r from-primary to-emerald-500 hover:from-primary/90 hover:to-emerald-500/90 transition-all duration-300"
-            >
-              Müşteri Portalına Git
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-center">Abonelik Bilgileri</p>
+            <div className="text-sm text-muted-foreground space-y-1 text-center">
+              <p>Tarife: {data.selectedTariff}</p>
+              <p>Adres: {data.addressFromEtso}</p>
+            </div>
+          </div>
+
+          <p className="text-sm text-muted-foreground text-center">
+            Detaylı bilgi için müşteri portalına giriş yapabilirsiniz.
+          </p>
+
+          <Button 
+            onClick={handleGoToDashboard} 
+            className="w-full bg-gradient-to-r from-primary to-emerald-500 hover:from-primary/90 hover:to-emerald-500/90 transition-all duration-300"
+          >
+            Müşteri Portalına Git
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
