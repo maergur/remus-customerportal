@@ -11,7 +11,6 @@ import { ApplicationStatusStep } from '@/components/onboarding/steps/Application
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
 import { AnimatedStepWrapper } from '@/components/onboarding/AnimatedStepWrapper';
 import { OnboardingIllustration } from '@/components/onboarding/OnboardingIllustration';
-import { PregenerateButton } from '@/components/onboarding/PregenerateButton';
 import remusLogo from '@/assets/remus-logo.svg';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -80,15 +79,12 @@ const OnboardingContent = () => {
       {/* Header */}
       <header className="border-b bg-card flex-shrink-0">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center lg:justify-start">
             <img 
               src={remusLogo} 
               alt="Remus Enerji" 
               className={`h-8 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
             />
-            <div className="hidden lg:block">
-              <PregenerateButton />
-            </div>
           </div>
         </div>
       </header>
