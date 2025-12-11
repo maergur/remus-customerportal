@@ -9,6 +9,8 @@ import { DocumentUploadStep } from '@/components/onboarding/steps/DocumentUpload
 import { ContractStep } from '@/components/onboarding/steps/ContractStep';
 import { ApplicationStatusStep } from '@/components/onboarding/steps/ApplicationStatusStep';
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
+import { AnimatedStepWrapper } from '@/components/onboarding/AnimatedStepWrapper';
+import { OnboardingIllustration } from '@/components/onboarding/OnboardingIllustration';
 import remusLogo from '@/assets/remus-logo.svg';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -16,10 +18,39 @@ const TOTAL_STEPS = 7;
 
 const OnboardingContent = () => {
   const { data } = useOnboarding();
+  const { theme } = useTheme();
 
   // Special case for industrial subscribers
   if (data.step === 99) {
-    return <IndustrialContactStep />;
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="border-b bg-card">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-center lg:justify-start">
+              <img 
+                src={remusLogo} 
+                alt="Remus Enerji" 
+                className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+              />
+            </div>
+          </div>
+        </header>
+        <div className="flex min-h-[calc(100vh-73px)]">
+          {/* Form Section */}
+          <div className="flex-1 lg:w-1/2">
+            <div className="container mx-auto px-4 py-6 lg:max-w-xl">
+              <AnimatedStepWrapper stepKey={99}>
+                <IndustrialContactStep />
+              </AnimatedStepWrapper>
+            </div>
+          </div>
+          {/* Illustration Section - Hidden on mobile */}
+          <div className="hidden lg:block lg:w-1/2 p-6">
+            <OnboardingIllustration step={99} className="h-full min-h-[500px]" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const renderStep = () => {
@@ -45,14 +76,12 @@ const OnboardingContent = () => {
     }
   };
 
-  const { theme } = useTheme();
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center lg:justify-start">
             <img 
               src={remusLogo} 
               alt="Remus Enerji" 
@@ -62,15 +91,30 @@ const OnboardingContent = () => {
         </div>
       </header>
 
-      {/* Progress */}
-      <div className="container mx-auto px-4 py-6">
-        <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
-      </div>
+      {/* Main Content - Split Layout */}
+      <div className="flex min-h-[calc(100vh-73px)]">
+        {/* Form Section */}
+        <div className="flex-1 lg:w-1/2 overflow-y-auto">
+          <div className="container mx-auto px-4 py-6 lg:max-w-xl">
+            {/* Progress - Only show for steps 1-7 */}
+            {data.step <= TOTAL_STEPS && (
+              <div className="mb-6">
+                <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
+              </div>
+            )}
 
-      {/* Content */}
-      <main className="container mx-auto px-4 pb-12">
-        {renderStep()}
-      </main>
+            {/* Step Content with Animation */}
+            <AnimatedStepWrapper stepKey={data.step}>
+              {renderStep()}
+            </AnimatedStepWrapper>
+          </div>
+        </div>
+
+        {/* Illustration Section - Hidden on mobile */}
+        <div className="hidden lg:block lg:w-1/2 p-6 sticky top-0 h-screen">
+          <OnboardingIllustration step={data.step} className="h-full min-h-[500px]" />
+        </div>
+      </div>
     </div>
   );
 };
