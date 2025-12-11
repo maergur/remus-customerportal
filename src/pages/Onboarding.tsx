@@ -9,27 +9,18 @@ import { DocumentUploadStep } from '@/components/onboarding/steps/DocumentUpload
 import { ContractStep } from '@/components/onboarding/steps/ContractStep';
 import { ApplicationStatusStep } from '@/components/onboarding/steps/ApplicationStatusStep';
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
-import { AnimatedStepWrapper } from '@/components/onboarding/AnimatedStepWrapper';
 import remusLogo from '@/assets/remus-logo.svg';
-import solarHero from '@/assets/solar-hero.jpg';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const TOTAL_STEPS = 7;
 
-const stepConfig: Record<number, { title: string; subtitle: string }> = {
-  1: { title: 'Temiz Enerjiye', subtitle: 'Adım Atın' },
-  2: { title: 'Güvenli', subtitle: 'Doğrulama' },
-  3: { title: 'Size Özel', subtitle: 'Tarifeler' },
-  4: { title: 'Hızlı', subtitle: 'Kimlik Doğrulama' },
-  5: { title: 'Kurumsal', subtitle: 'Çözümler' },
-  6: { title: 'Kolay', subtitle: 'Belge Yükleme' },
-  7: { title: 'Son Adım', subtitle: 'Sözleşme' },
-  8: { title: 'Tebrikler!', subtitle: 'Başvurunuz Alındı' },
-  99: { title: 'Sanayi', subtitle: 'Çözümleri' }
-};
-
 const OnboardingContent = () => {
   const { data } = useOnboarding();
-  const config = stepConfig[data.step] || stepConfig[1];
+
+  // Special case for industrial subscribers
+  if (data.step === 99) {
+    return <IndustrialContactStep />;
+  }
 
   const renderStep = () => {
     switch (data.step) {
@@ -49,66 +40,37 @@ const OnboardingContent = () => {
         return <ContractStep />;
       case 8:
         return <ApplicationStatusStep />;
-      case 99:
-        return <IndustrialContactStep />;
       default:
         return <PersonalInfoStep />;
     }
   };
 
+  const { theme } = useTheme();
+
   return (
-    <div className="min-h-screen relative">
-      {/* Full screen background image */}
-      <div className="fixed inset-0 -z-10">
-        <img
-          src={solarHero}
-          alt="Background"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/30" />
-      </div>
-
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="relative z-10 py-4 px-6">
-        <img 
-          src={remusLogo} 
-          alt="Remus Enerji" 
-          className="h-8 brightness-0 invert"
-        />
-      </header>
-
-      {/* Main content */}
-      <div className="relative z-10 min-h-[calc(100vh-72px)] flex items-center">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16">
-            {/* Left side - Title */}
-            <div className="lg:flex-1 hidden lg:block">
-              <h1 className="text-5xl xl:text-6xl font-bold text-white leading-tight">
-                {config.title}
-                <br />
-                <span className="text-white/80">{config.subtitle}</span>
-              </h1>
-            </div>
-
-            {/* Right side - Form */}
-            <div className="w-full lg:w-[480px] lg:flex-shrink-0">
-              <div className="bg-card/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 lg:p-8">
-                {/* Progress - Only show for steps 1-7 */}
-                {data.step <= TOTAL_STEPS && (
-                  <div className="mb-6">
-                    <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
-                  </div>
-                )}
-
-                {/* Step Content with Animation */}
-                <AnimatedStepWrapper stepKey={data.step}>
-                  {renderStep()}
-                </AnimatedStepWrapper>
-              </div>
-            </div>
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-center">
+            <img 
+              src={remusLogo} 
+              alt="Remus Enerji" 
+              className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+            />
           </div>
         </div>
+      </header>
+
+      {/* Progress */}
+      <div className="container mx-auto px-4 py-6">
+        <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
       </div>
+
+      {/* Content */}
+      <main className="container mx-auto px-4 pb-12">
+        {renderStep()}
+      </main>
     </div>
   );
 };
