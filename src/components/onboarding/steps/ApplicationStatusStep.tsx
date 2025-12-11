@@ -1,12 +1,17 @@
 import { useOnboarding, ApplicationStatus } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, AlertCircle, PartyPopper } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 export const ApplicationStatusStep = () => {
   const { data, updateData, resetOnboarding, goToStep } = useOnboarding();
   const [status, setStatus] = useState<ApplicationStatus>(data.applicationStatus);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Mock status check - in real app, poll backend
   useEffect(() => {
@@ -22,6 +27,11 @@ export const ApplicationStatusStep = () => {
         rejectionNote: randomStatus === 'REJECTED' ? 'Kimlik belgesi okunamadı. Lütfen daha net bir fotoğraf yükleyiniz.' : '',
         acceptanceDate: randomStatus === 'ACCEPTED' ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('tr-TR') : ''
       });
+
+      // Trigger celebration for accepted status
+      if (randomStatus === 'ACCEPTED') {
+        setShowCelebration(true);
+      }
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -33,12 +43,21 @@ export const ApplicationStatusStep = () => {
   };
 
   const handleGoToDashboard = () => {
-    window.location.href = '/';
+    // Show welcome toast
+    toast({
+      title: "🎉 Hoş Geldiniz!",
+      description: `${data.personalInfo.firstName}, Remus Enerji ailesine hoş geldiniz! Aboneliğiniz aktif edildi.`,
+    });
+    
+    // Navigate with slight delay for toast to show
+    setTimeout(() => {
+      navigate('/', { replace: true });
+    }, 500);
   };
 
   if (status === 'UNDER_REVIEW') {
     return (
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="w-full max-w-md mx-auto animate-fade-in">
         <CardHeader className="text-center">
           <div className="mx-auto w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mb-4">
             <Clock className="w-10 h-10 text-amber-600 animate-pulse" />
@@ -65,7 +84,7 @@ export const ApplicationStatusStep = () => {
             </div>
           </div>
 
-          <Button variant="outline" onClick={handleGoToDashboard} className="w-full">
+          <Button variant="outline" onClick={() => navigate('/')} className="w-full">
             Ana Sayfaya Dön
           </Button>
         </CardContent>
@@ -75,7 +94,7 @@ export const ApplicationStatusStep = () => {
 
   if (status === 'REJECTED') {
     return (
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="w-full max-w-md mx-auto animate-fade-in">
         <CardHeader className="text-center">
           <div className="mx-auto w-20 h-20 bg-destructive/10 rounded-full flex items-center justify-center mb-4">
             <XCircle className="w-10 h-10 text-destructive" />
@@ -112,41 +131,76 @@ export const ApplicationStatusStep = () => {
 
   if (status === 'ACCEPTED') {
     return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle2 className="w-10 h-10 text-primary" />
+      <div className="relative">
+        {/* Celebration confetti effect */}
+        {showCelebration && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-confetti"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              >
+                <div 
+                  className="w-3 h-3 rounded-full"
+                  style={{
+                    backgroundColor: ['#22C55E', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6'][Math.floor(Math.random() * 5)]
+                  }}
+                />
+              </div>
+            ))}
           </div>
-          <CardTitle className="text-2xl">Tebrikler!</CardTitle>
-          <CardDescription>
-            Başvurunuz onaylandı
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 text-center">
-            <p className="text-sm text-muted-foreground">Aboneliğiniz başlayacak</p>
-            <p className="text-2xl font-bold text-primary mt-1">
-              {data.acceptanceDate || 'Yakında'}
-            </p>
-          </div>
+        )}
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-center">Abonelik Bilgileri</p>
-            <div className="text-sm text-muted-foreground space-y-1 text-center">
-              <p>Tarife: {data.selectedTariff}</p>
-              <p>Adres: {data.addressFromEtso}</p>
+        <Card className="w-full max-w-md mx-auto animate-scale-in">
+          <CardHeader className="text-center">
+            <div className="mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 animate-bounce-slow">
+              {showCelebration ? (
+                <PartyPopper className="w-10 h-10 text-primary" />
+              ) : (
+                <CheckCircle2 className="w-10 h-10 text-primary" />
+              )}
             </div>
-          </div>
+            <CardTitle className="text-2xl bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent">
+              Tebrikler!
+            </CardTitle>
+            <CardDescription>
+              Başvurunuz onaylandı
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-gradient-to-r from-primary/10 to-emerald-500/10 border border-primary/20 rounded-lg p-4 text-center">
+              <p className="text-sm text-muted-foreground">Aboneliğiniz başlayacak</p>
+              <p className="text-2xl font-bold text-primary mt-1">
+                {data.acceptanceDate || 'Yakında'}
+              </p>
+            </div>
 
-          <p className="text-sm text-muted-foreground text-center">
-            Detaylı bilgi için müşteri portalına giriş yapabilirsiniz.
-          </p>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-center">Abonelik Bilgileri</p>
+              <div className="text-sm text-muted-foreground space-y-1 text-center">
+                <p>Tarife: {data.selectedTariff}</p>
+                <p>Adres: {data.addressFromEtso}</p>
+              </div>
+            </div>
 
-          <Button onClick={handleGoToDashboard} className="w-full">
-            Müşteri Portalına Git
-          </Button>
-        </CardContent>
-      </Card>
+            <p className="text-sm text-muted-foreground text-center">
+              Detaylı bilgi için müşteri portalına giriş yapabilirsiniz.
+            </p>
+
+            <Button 
+              onClick={handleGoToDashboard} 
+              className="w-full bg-gradient-to-r from-primary to-emerald-500 hover:from-primary/90 hover:to-emerald-500/90 transition-all duration-300"
+            >
+              Müşteri Portalına Git
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
