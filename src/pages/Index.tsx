@@ -3,57 +3,58 @@ import { HeroSection } from "@/components/dashboard/HeroSection";
 import { ReferralWidget } from "@/components/dashboard/ReferralWidget";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
-import { OnboardingStatusWidget } from "@/components/dashboard/OnboardingStatusWidget";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
 import { useEffect, useState } from "react";
-
-const TOTAL_ONBOARDING_STEPS = 8;
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { t } = useLanguage();
-  
-  // Read onboarding state from localStorage (safe approach without provider)
-  const [onboardingState, setOnboardingState] = useState<{
-    status: ApplicationStatus;
-    step: number;
-    rejectionNote: string;
-  } | null>(null);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem('onboardingData');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        setOnboardingState({
-          status: parsed.applicationStatus || 'PENDING',
-          step: parsed.step || 1,
-          rejectionNote: parsed.rejectionNote || '',
-        });
+        const status: ApplicationStatus = parsed.applicationStatus || 'PENDING';
+        
+        // Redirect to onboarding if application is not accepted
+        if (status !== 'ACCEPTED') {
+          navigate('/onboarding', { replace: true });
+          return;
+        }
       } catch {
-        setOnboardingState(null);
+        // No valid data, redirect to onboarding
+        navigate('/onboarding', { replace: true });
+        return;
       }
+    } else {
+      // No onboarding data at all, redirect to onboarding
+      navigate('/onboarding', { replace: true });
+      return;
     }
-  }, []);
+    setIsLoading(false);
+  }, [navigate]);
 
-  // Show hero if: no onboarding data, or application is accepted
-  const showHero = !onboardingState || onboardingState.status === 'ACCEPTED';
+  // Show loading while checking status
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[calc(100vh-8rem)]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
   
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-6 min-h-[calc(100vh-8rem)]">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           <div className="lg:col-span-2 min-h-[264px]">
-            {showHero ? (
-              <HeroSection />
-            ) : (
-              <OnboardingStatusWidget
-                status={onboardingState.status}
-                currentStep={onboardingState.step}
-                totalSteps={TOTAL_ONBOARDING_STEPS}
-                rejectionNote={onboardingState.rejectionNote}
-              />
-            )}
+            <HeroSection />
           </div>
           <div className="lg:col-span-1 min-h-[264px]">
             <InvoiceWidget />
