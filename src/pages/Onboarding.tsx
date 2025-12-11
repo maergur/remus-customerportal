@@ -11,11 +11,32 @@ import { ApplicationStatusStep } from '@/components/onboarding/steps/Application
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
 import remusLogo from '@/assets/remus-logo.svg';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useEffect, useState, useRef } from 'react';
 
 const TOTAL_STEPS = 7;
 
 const OnboardingContent = () => {
   const { data } = useOnboarding();
+  const { setTheme } = useTheme();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
+  const prevStep = useRef(data.step);
+
+  // Force light theme on onboarding
+  useEffect(() => {
+    setTheme('light');
+  }, [setTheme]);
+
+  // Handle step transition animation
+  useEffect(() => {
+    if (prevStep.current !== data.step) {
+      setDirection(data.step > prevStep.current ? 'forward' : 'backward');
+      setIsAnimating(true);
+      const timer = setTimeout(() => setIsAnimating(false), 50);
+      prevStep.current = data.step;
+      return () => clearTimeout(timer);
+    }
+  }, [data.step]);
 
   // Special case for industrial subscribers
   if (data.step === 99) {
@@ -45,7 +66,11 @@ const OnboardingContent = () => {
     }
   };
 
-  const { theme } = useTheme();
+  const animationClass = isAnimating 
+    ? 'opacity-0' 
+    : direction === 'forward' 
+      ? 'animate-slide-in-right' 
+      : 'animate-slide-in-left';
 
   return (
     <div className="min-h-screen bg-background">
@@ -56,7 +81,7 @@ const OnboardingContent = () => {
             <img 
               src={remusLogo} 
               alt="Remus Enerji" 
-              className={`h-10 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
+              className="h-10"
             />
           </div>
         </div>
@@ -67,9 +92,11 @@ const OnboardingContent = () => {
         <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
       </div>
 
-      {/* Content with animation */}
-      <main className="container mx-auto px-4 pb-12 animate-fade-in">
-        {renderStep()}
+      {/* Content with step transition animation */}
+      <main className="container mx-auto px-4 pb-12">
+        <div key={data.step} className={`transition-all duration-300 ${animationClass}`}>
+          {renderStep()}
+        </div>
       </main>
     </div>
   );
