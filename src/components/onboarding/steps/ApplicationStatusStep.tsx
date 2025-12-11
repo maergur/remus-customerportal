@@ -46,18 +46,32 @@ export const ApplicationStatusStep = () => {
 
   // Mock status check - in real app, poll backend
   useEffect(() => {
+    // Only run if status is UNDER_REVIEW or PENDING
+    if (status !== 'UNDER_REVIEW' && status !== 'PENDING') {
+      return;
+    }
+
     // Simulating status check after 5 seconds for demo
     const timer = setTimeout(() => {
-      // For demo, randomly set status
-      const mockStatuses: ApplicationStatus[] = ['ACCEPTED', 'REJECTED', 'UNDER_REVIEW'];
-      const randomStatus = mockStatuses[Math.floor(Math.random() * 3)];
+      // For demo, randomly set status (weighted towards ACCEPTED for better UX)
+      const rand = Math.random();
+      let randomStatus: ApplicationStatus;
+      if (rand < 0.6) {
+        randomStatus = 'ACCEPTED';
+      } else if (rand < 0.8) {
+        randomStatus = 'REJECTED';
+      } else {
+        randomStatus = 'UNDER_REVIEW';
+      }
       
-      setStatus(randomStatus);
-      updateData({ 
+      const newData: Partial<typeof data> = { 
         applicationStatus: randomStatus,
         rejectionNote: randomStatus === 'REJECTED' ? 'Kimlik belgesi okunamadı. Lütfen daha net bir fotoğraf yükleyiniz.' : '',
         acceptanceDate: randomStatus === 'ACCEPTED' ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('tr-TR') : ''
-      });
+      };
+      
+      updateData(newData);
+      setStatus(randomStatus);
 
       // Trigger celebration for accepted status
       if (randomStatus === 'ACCEPTED') {
@@ -66,7 +80,7 @@ export const ApplicationStatusStep = () => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [fireConfetti]);
+  }, [status, updateData, fireConfetti, data]);
 
   const handleRetry = () => {
     resetOnboarding();
