@@ -10,46 +10,26 @@ import { ContractStep } from '@/components/onboarding/steps/ContractStep';
 import { ApplicationStatusStep } from '@/components/onboarding/steps/ApplicationStatusStep';
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
 import { AnimatedStepWrapper } from '@/components/onboarding/AnimatedStepWrapper';
-import { OnboardingIllustration } from '@/components/onboarding/OnboardingIllustration';
 import remusLogo from '@/assets/remus-logo.svg';
-import { useTheme } from '@/contexts/ThemeContext';
+import solarHero from '@/assets/solar-hero.jpg';
 
 const TOTAL_STEPS = 7;
 
+const stepConfig: Record<number, { title: string; subtitle: string }> = {
+  1: { title: 'Temiz Enerjiye', subtitle: 'Adım Atın' },
+  2: { title: 'Güvenli', subtitle: 'Doğrulama' },
+  3: { title: 'Size Özel', subtitle: 'Tarifeler' },
+  4: { title: 'Hızlı', subtitle: 'Kimlik Doğrulama' },
+  5: { title: 'Kurumsal', subtitle: 'Çözümler' },
+  6: { title: 'Kolay', subtitle: 'Belge Yükleme' },
+  7: { title: 'Son Adım', subtitle: 'Sözleşme' },
+  8: { title: 'Tebrikler!', subtitle: 'Başvurunuz Alındı' },
+  99: { title: 'Sanayi', subtitle: 'Çözümleri' }
+};
+
 const OnboardingContent = () => {
   const { data } = useOnboarding();
-  const { theme } = useTheme();
-
-  // Special case for industrial subscribers
-  if (data.step === 99) {
-    return (
-      <div className="h-screen flex flex-col bg-background overflow-hidden">
-        <header className="border-b bg-card flex-shrink-0">
-          <div className="container mx-auto px-4 py-3">
-            <div className="flex items-center justify-center lg:justify-start">
-              <img 
-                src={remusLogo} 
-                alt="Remus Enerji" 
-                className={`h-8 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
-              />
-            </div>
-          </div>
-        </header>
-        <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 lg:w-1/2 overflow-y-auto">
-            <div className="px-4 py-4 lg:px-8 lg:py-6 lg:max-w-xl mx-auto">
-              <AnimatedStepWrapper stepKey={99}>
-                <IndustrialContactStep />
-              </AnimatedStepWrapper>
-            </div>
-          </div>
-          <div className="hidden lg:flex lg:w-1/2 p-4 items-center justify-center">
-            <OnboardingIllustration step={99} className="w-full h-full max-h-[calc(100vh-80px)]" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const config = stepConfig[data.step] || stepConfig[1];
 
   const renderStep = () => {
     switch (data.step) {
@@ -69,48 +49,64 @@ const OnboardingContent = () => {
         return <ContractStep />;
       case 8:
         return <ApplicationStatusStep />;
+      case 99:
+        return <IndustrialContactStep />;
       default:
         return <PersonalInfoStep />;
     }
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden">
+    <div className="min-h-screen relative">
+      {/* Full screen background image */}
+      <div className="fixed inset-0 -z-10">
+        <img
+          src={solarHero}
+          alt="Background"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/30" />
+      </div>
+
       {/* Header */}
-      <header className="border-b bg-card flex-shrink-0">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-center lg:justify-start">
-            <img 
-              src={remusLogo} 
-              alt="Remus Enerji" 
-              className={`h-8 ${theme === 'dark' ? 'brightness-0 invert' : ''}`}
-            />
-          </div>
-        </div>
+      <header className="relative z-10 py-4 px-6">
+        <img 
+          src={remusLogo} 
+          alt="Remus Enerji" 
+          className="h-8 brightness-0 invert"
+        />
       </header>
 
-      {/* Main Content - Split Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Form Section */}
-        <div className="flex-1 lg:w-1/2 overflow-y-auto">
-          <div className="px-4 py-4 lg:px-8 lg:py-6 lg:max-w-xl mx-auto">
-            {/* Progress - Only show for steps 1-7 */}
-            {data.step <= TOTAL_STEPS && (
-              <div className="mb-4">
-                <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
+      {/* Main content */}
+      <div className="relative z-10 min-h-[calc(100vh-72px)] flex items-center">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16">
+            {/* Left side - Title */}
+            <div className="lg:flex-1 hidden lg:block">
+              <h1 className="text-5xl xl:text-6xl font-bold text-white leading-tight">
+                {config.title}
+                <br />
+                <span className="text-white/80">{config.subtitle}</span>
+              </h1>
+            </div>
+
+            {/* Right side - Form */}
+            <div className="w-full lg:w-[480px] lg:flex-shrink-0">
+              <div className="bg-card/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 lg:p-8">
+                {/* Progress - Only show for steps 1-7 */}
+                {data.step <= TOTAL_STEPS && (
+                  <div className="mb-6">
+                    <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
+                  </div>
+                )}
+
+                {/* Step Content with Animation */}
+                <AnimatedStepWrapper stepKey={data.step}>
+                  {renderStep()}
+                </AnimatedStepWrapper>
               </div>
-            )}
-
-            {/* Step Content with Animation */}
-            <AnimatedStepWrapper stepKey={data.step}>
-              {renderStep()}
-            </AnimatedStepWrapper>
+            </div>
           </div>
-        </div>
-
-        {/* Illustration Section - Hidden on mobile */}
-        <div className="hidden lg:flex lg:w-1/2 p-4 items-center justify-center">
-          <OnboardingIllustration step={data.step} className="w-full h-full max-h-[calc(100vh-80px)]" />
         </div>
       </div>
     </div>
