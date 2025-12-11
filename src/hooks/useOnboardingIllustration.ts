@@ -53,6 +53,7 @@ export const useOnboardingIllustration = (step: number) => {
         if (data?.imageUrl) {
           imageCache[step] = data.imageUrl;
           setImageUrl(data.imageUrl);
+          console.log(`Illustration for step ${step} loaded (cached: ${data.cached})`);
         } else {
           throw new Error('No image URL returned');
         }
