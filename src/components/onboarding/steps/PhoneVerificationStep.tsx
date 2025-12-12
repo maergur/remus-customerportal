@@ -5,6 +5,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Phone, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { ContactWidget } from '@/components/onboarding/ContactWidget';
 
 export const PhoneVerificationStep = () => {
   const { data, updateData, nextStep, prevStep } = useOnboarding();
@@ -86,6 +87,8 @@ export const PhoneVerificationStep = () => {
             Doğrula
           </Button>
         </div>
+
+        <ContactWidget title="SMS gelmediyse bize ulaşın" compact />
       </CardContent>
     </Card>
   );

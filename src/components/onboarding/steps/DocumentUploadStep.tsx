@@ -5,6 +5,7 @@ import { Upload, Camera, X, FileCheck, Image } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { ContactWidget } from '@/components/onboarding/ContactWidget';
 
 interface DocumentUploadProps {
   label: string;
@@ -204,6 +205,8 @@ export const DocumentUploadStep = () => {
             Devam Et
           </Button>
         </div>
+
+        <ContactWidget title="Belge yükleme sorunu mu yaşıyorsunuz?" compact />
       </CardContent>
     </Card>
   );
