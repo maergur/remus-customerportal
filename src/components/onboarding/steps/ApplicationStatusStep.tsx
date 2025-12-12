@@ -1,40 +1,12 @@
 import { useOnboarding, ApplicationStatus } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, CheckCircle2, XCircle, AlertCircle, Phone, MessageSquare, Mail } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
-
-// Contact widget for users who need help
-const ContactWidget = ({ title }: { title: string }) => (
-  <div className="bg-muted/50 rounded-lg p-4 mt-4">
-    <p className="text-sm font-medium text-center mb-3">{title}</p>
-    <div className="flex flex-wrap justify-center gap-4 text-sm">
-      <div className="flex items-center gap-2">
-        <Phone className="w-4 h-4 text-primary" />
-        <span className="font-medium">186</span>
-      </div>
-      <a 
-        href="https://wa.me/905321860000" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 hover:text-green-600 transition-colors"
-      >
-        <MessageSquare className="w-4 h-4 text-green-500" />
-        <span>WhatsApp</span>
-      </a>
-      <a 
-        href="mailto:destek@remusenerji.com"
-        className="flex items-center gap-2 hover:text-primary transition-colors"
-      >
-        <Mail className="w-4 h-4 text-muted-foreground" />
-        <span>E-posta</span>
-      </a>
-    </div>
-  </div>
-);
+import { ContactWidget } from '@/components/onboarding/ContactWidget';
 
 export const ApplicationStatusStep = () => {
   const { data, updateData, resetOnboarding, goToStep } = useOnboarding();

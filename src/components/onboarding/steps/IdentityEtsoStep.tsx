@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { CreditCard, HelpCircle, FileText, MapPin, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { ContactWidget } from '@/components/onboarding/ContactWidget';
 
 export const IdentityEtsoStep = () => {
   const { data, updateData, nextStep, prevStep } = useOnboarding();
@@ -176,6 +177,8 @@ export const IdentityEtsoStep = () => {
             Devam Et
           </Button>
         </div>
+
+        <ContactWidget title="ETSO kodunuzu bulamıyor musunuz?" compact />
       </CardContent>
     </Card>
   );
