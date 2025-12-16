@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HelpCircle, Phone, MessageSquare, Mail, X, MessagesSquare } from 'lucide-react';
+import { MessageCircle, Phone, MessageSquare, Mail, X, MessagesSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -144,7 +144,7 @@ export const FloatingHelpButton = () => {
         {isOpen ? (
           <X className="w-5 h-5" />
         ) : (
-          <HelpCircle className="w-5 h-5" />
+          <MessageCircle className="w-5 h-5" />
         )}
       </Button>
     </div>
