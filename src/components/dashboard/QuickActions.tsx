@@ -1,4 +1,4 @@
-import { TrendingUp, AlertCircle, Zap, ChevronRight, Users } from "lucide-react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -52,22 +52,12 @@ export function QuickActions() {
   
   const actions = [
     {
-      icon: Users,
-      title: language === "tr" ? "Arkadaşını Davet" : "Invite Friends",
-      description: language === "tr" ? "Kazan ve kazandır" : "Earn rewards together",
-      value: language === "tr" ? "100 ₺ Kazan" : "Earn 100 ₺",
-      subValue: language === "tr" ? "Her davet için bonus" : "Bonus for each invite",
-      delay: "0s",
-      to: "/referans",
-      accent: true,
-    },
-    {
       icon: Zap,
       title: language === "tr" ? "Aktif Tarife" : "Active Tariff",
       description: language === "tr" ? "Mevcut paketiniz" : "Your current plan",
       value: language === "tr" ? "Yeşil Enerji Pro" : "Green Energy Pro",
       subValue: "0,85 ₺/kWh • " + (language === "tr" ? "Sabit Fiyat" : "Fixed Price"),
-      delay: "0.1s",
+      delay: "0s",
       to: "/tarifeler",
       accent: false,
     },
@@ -77,7 +67,7 @@ export function QuickActions() {
       description: language === "tr" ? "Bu ayki tüketiminiz" : "This month's consumption",
       value: "245 kWh",
       subValue: language === "tr" ? "Geçen aya göre %9 artış" : "9% increase from last month",
-      delay: "0.2s",
+      delay: "0.1s",
       to: "/tuketim-analizi",
       accent: false,
     },
@@ -87,7 +77,7 @@ export function QuickActions() {
       description: language === "tr" ? "7/24 destek hattı" : "24/7 support line",
       value: language === "tr" ? "Aktif Destek" : "Active Support",
       subValue: language === "tr" ? "Ortalama yanıt: 15 dk" : "Avg response: 15 min",
-      delay: "0.3s",
+      delay: "0.2s",
       to: "/ariza-destek",
       accent: false,
     },
