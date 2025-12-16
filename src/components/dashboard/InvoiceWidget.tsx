@@ -6,7 +6,11 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PayNowPanel } from "./PayNowPanel";
 
-const InvoiceWidget = () => {
+interface InvoiceWidgetProps {
+  compact?: boolean;
+}
+
+const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   const { t } = useLanguage();
   const [showPayPanel, setShowPayPanel] = useState(false);
   
@@ -52,6 +56,59 @@ const InvoiceWidget = () => {
 
   const statusConfig = getStatusConfig();
   const StatusIcon = statusConfig.icon;
+
+  if (compact) {
+    return (
+      <>
+        <div className="bg-gradient-to-br from-amber-500/10 via-card to-orange-500/10 rounded-2xl border-2 border-amber-500/30 overflow-hidden h-full flex flex-col">
+          {/* Header */}
+          <div className="p-4 pb-3 border-b border-border/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
+                  <p className="text-xs text-muted-foreground">{invoice.month}</p>
+                </div>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-4 pt-3 flex-1 flex flex-col">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-2xl font-bold text-foreground">
+                {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-sm">₺</span>
+              </p>
+              <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
+                <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
+                <span className={`text-xs font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
+              </div>
+            </div>
+            
+            <p className="text-xs text-muted-foreground mb-3">
+              {t("dueDate")}: {invoice.dueDate}
+            </p>
+
+            <Button 
+              className="w-full mt-auto gap-2 bg-amber-500 hover:bg-amber-600 text-white" 
+              size="sm" 
+              onClick={() => setShowPayPanel(true)}
+            >
+              {t("payNow")}
+            </Button>
+          </div>
+        </div>
+        
+        {showPayPanel && (
+          <PayNowPanel amount={invoice.amount} onClose={() => setShowPayPanel(false)} />
+        )}
+      </>
+    );
+  }
 
   return (
     <>
