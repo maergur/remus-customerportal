@@ -1,4 +1,4 @@
-import { TrendingUp, AlertCircle, Zap, ChevronRight } from "lucide-react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -17,14 +17,14 @@ function QuickActionCard({ icon: Icon, title, description, value, subValue, dela
   return (
     <Link to={to}>
       <div 
-        className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col"
+        className={`bg-card rounded-2xl border overflow-hidden card-hover cursor-pointer animate-fade-in h-full flex flex-col ${accent ? 'border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10' : 'border-border'}`}
         style={{ animationDelay: delay }}
       >
         <div className="p-4 pb-3 border-b border-border/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-primary/10">
-                <Icon className="h-5 w-5 text-primary" />
+              <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${accent ? 'bg-primary text-primary-foreground' : 'bg-primary/10'}`}>
+                <Icon className={`h-5 w-5 ${accent ? '' : 'text-primary'}`} />
               </div>
               <div>
                 <h4 className="font-semibold text-foreground text-sm">{title}</h4>
@@ -51,6 +51,16 @@ export function QuickActions() {
   const { language } = useLanguage();
   
   const actions = [
+    {
+      icon: Users,
+      title: language === "tr" ? "Arkadaşını Davet" : "Invite Friends",
+      description: language === "tr" ? "Kazan ve kazandır" : "Earn rewards together",
+      value: language === "tr" ? "100 ₺ Kazan" : "Earn 100 ₺",
+      subValue: language === "tr" ? "Her davet için bonus" : "Bonus for each invite",
+      delay: "0s",
+      to: "/referans",
+      accent: true,
+    },
     {
       icon: Zap,
       title: language === "tr" ? "Aktif Tarife" : "Active Tariff",
