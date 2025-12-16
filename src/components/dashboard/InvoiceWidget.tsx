@@ -60,13 +60,13 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-gradient-to-br from-amber-500/10 via-card to-orange-500/10 rounded-2xl border-2 border-amber-500/30 overflow-hidden h-full flex flex-col">
+        <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col card-hover cursor-pointer">
           {/* Header */}
           <div className="p-4 pb-3 border-b border-border/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
@@ -94,7 +94,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </p>
 
             <Button 
-              className="w-full mt-auto gap-2 bg-amber-500 hover:bg-amber-600 text-white" 
+              className="w-full mt-auto gap-2" 
               size="sm" 
               onClick={() => setShowPayPanel(true)}
             >
