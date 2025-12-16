@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { SidebarProvider } from "@/contexts/SidebarContext";
+import { FloatingHelpButton } from "@/components/shared/FloatingHelpButton";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -18,6 +19,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {children}
           </div>
         </main>
+        <FloatingHelpButton />
       </div>
     </SidebarProvider>
   );
