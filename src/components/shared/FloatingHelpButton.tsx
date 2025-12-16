@@ -144,7 +144,7 @@ export const FloatingHelpButton = () => {
         {isOpen ? (
           <X className="w-5 h-5" />
         ) : (
-          <MessageCircle className="w-5 h-5" />
+          <MessageCircle className="w-5 h-5 -scale-x-100" />
         )}
       </Button>
     </div>
