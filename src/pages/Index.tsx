@@ -68,10 +68,10 @@ const Index = () => {
             {t("quickActions")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
-            {/* Invoice Widget - Highlighted */}
-            <div className="sm:col-span-2 lg:col-span-1 lg:row-span-1">
-              <InvoiceWidget compact />
-            </div>
+          {/* Invoice Widget */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <InvoiceWidget />
+          </div>
             <QuickActions />
           </div>
         </section>
