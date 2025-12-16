@@ -9,7 +9,7 @@ import { DocumentUploadStep } from '@/components/onboarding/steps/DocumentUpload
 import { ContractStep } from '@/components/onboarding/steps/ContractStep';
 import { ApplicationStatusStep } from '@/components/onboarding/steps/ApplicationStatusStep';
 import { IndustrialContactStep } from '@/components/onboarding/steps/IndustrialContactStep';
-import { FloatingHelpButton } from '@/components/onboarding/FloatingHelpButton';
+import { FloatingHelpButton } from '@/components/shared/FloatingHelpButton';
 import remusLogo from '@/assets/remus-logo.svg';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useEffect, useState, useRef } from 'react';
