@@ -52,7 +52,7 @@ const Index = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-6 min-h-[calc(100vh-8rem)] animate-page-enter">
-        {/* Top Row: Hero + Referral Widget (highlighted) */}
+        {/* Top Row: Hero + Referral Widget */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           <div className="lg:col-span-2 min-h-[264px]">
             <HeroSection />
@@ -61,18 +61,17 @@ const Index = () => {
             <ReferralWidget />
           </div>
         </div>
-
-        {/* Invoice Widget - Full Width */}
-        <div>
-          <InvoiceWidget />
-        </div>
         
-        {/* Quick Actions */}
+        {/* Quick Actions + Invoice Widget */}
         <section className="flex-1 flex flex-col">
           <h3 className="text-lg font-semibold text-foreground mb-4">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
+            {/* Invoice Widget - Highlighted */}
+            <div className="sm:col-span-2 lg:col-span-1 lg:row-span-1">
+              <InvoiceWidget compact />
+            </div>
             <QuickActions />
           </div>
         </section>
