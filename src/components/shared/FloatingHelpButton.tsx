@@ -9,7 +9,7 @@ export const FloatingHelpButton = () => {
 
   if (isChatOpen) {
     return (
-      <div className="fixed bottom-6 left-6 z-50 w-80 h-96 bg-card border rounded-xl shadow-lg flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-200">
+      <div className="fixed bottom-6 right-6 z-50 w-80 h-96 bg-card border rounded-xl shadow-lg flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-200">
         {/* Chat Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-2">
@@ -52,10 +52,10 @@ export const FloatingHelpButton = () => {
   }
 
   return (
-    <div className="fixed bottom-6 left-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50">
       {/* Popup */}
       {isOpen && (
-        <div className="absolute bottom-14 left-0 w-64 bg-card border rounded-xl shadow-lg p-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute bottom-14 right-0 w-64 bg-card border rounded-xl shadow-lg p-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between mb-3">
             <p className="font-medium text-sm">Yardıma mı ihtiyacınız var?</p>
             <Button
