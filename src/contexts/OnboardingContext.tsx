@@ -26,6 +26,7 @@ export interface OnboardingData {
   phoneVerified: boolean;
   verificationCode: string;
   selectedTariff: string;
+  referralCode: string;
   tcKimlikNo: string;
   etsoCode: string;
   addressFromEtso: string;
@@ -56,6 +57,7 @@ const initialData: OnboardingData = {
   phoneVerified: false,
   verificationCode: '',
   selectedTariff: '',
+  referralCode: '',
   tcKimlikNo: '',
   etsoCode: '',
   addressFromEtso: '',

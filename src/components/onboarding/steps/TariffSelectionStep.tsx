@@ -1,39 +1,36 @@
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Zap, Leaf, Star } from 'lucide-react';
+import { Lock, TrendingUp, Percent } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const tariffs = [
   {
-    id: 'ekonomik',
-    name: 'Ekonomik Tarife',
-    description: 'Temel enerji ihtiyaçları için uygun fiyatlı plan',
-    price: '0,89',
+    id: 'sabit',
+    name: 'Yıllık Sabit Fiyat',
+    description: 'Fiyat dalgalanmalarından etkilenmek istemeyenler için',
+    price: '2,80',
     unit: 'TL/kWh',
-    features: ['7/24 Destek', 'Online Fatura', 'Mobil Uygulama'],
-    icon: Zap,
-    popular: false,
-  },
-  {
-    id: 'yesil',
-    name: 'Yeşil Enerji',
-    description: '%100 yenilenebilir enerji kaynakları',
-    price: '0,99',
-    unit: 'TL/kWh',
-    features: ['7/24 Destek', 'Online Fatura', 'Mobil Uygulama', 'Karbon Ayak İzi Raporu'],
-    icon: Leaf,
+    icon: Lock,
     popular: true,
   },
   {
-    id: 'premium',
-    name: 'Premium Tarife',
-    description: 'Ekstra avantajlar ve öncelikli destek',
-    price: '1,09',
-    unit: 'TL/kWh',
-    features: ['Öncelikli Destek', 'Online Fatura', 'Mobil Uygulama', 'Enerji Analizi', 'Taksitli Ödeme'],
-    icon: Star,
+    id: 'degisken-standart',
+    name: 'Değişken Standart',
+    description: 'Piyasa koşullarına göre aylık değişen tarife',
+    price: 'PTF+YEKDEM',
+    unit: '×1.035 marj',
+    icon: TrendingUp,
+    popular: false,
+  },
+  {
+    id: 'degisken-on-odeme',
+    name: 'Değişken Ön Ödeme',
+    description: 'Peşin ödemede en avantajlı fiyat',
+    price: 'PTF+YEKDEM',
+    unit: '×1.005-1.02',
+    icon: Percent,
     popular: false,
   },
 ];
@@ -96,17 +93,9 @@ export const TariffSelectionStep = () => {
               </CardHeader>
               <CardContent className="text-center">
                 <div className="mb-4">
-                  <span className="text-3xl font-bold">{tariff.price}</span>
+                  <span className="text-2xl font-bold">{tariff.price}</span>
                   <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
                 </div>
-                <ul className="space-y-2 text-sm">
-                  {tariff.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
               </CardContent>
             </Card>
           );

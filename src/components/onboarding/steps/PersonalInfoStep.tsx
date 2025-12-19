@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { User, Phone, Mail, Building2 } from 'lucide-react';
+import { User, Phone, Mail, Building2, Gift } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -136,7 +136,22 @@ export const PersonalInfoStep = () => {
               <SelectItem value="ticari">Ticari (İşyeri)</SelectItem>
               <SelectItem value="sanayi">Sanayi</SelectItem>
             </SelectContent>
-          </Select>
+        </Select>
+        </div>
+
+        {/* Referral/Promo Code */}
+        <div className="space-y-2">
+          <Label htmlFor="referralCode">Referans/Promosyon Kodu (Opsiyonel)</Label>
+          <div className="relative">
+            <Gift className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="referralCode"
+              placeholder="Varsa referans veya promosyon kodunuzu giriniz"
+              className="pl-10"
+              value={data.referralCode}
+              onChange={(e) => updateData({ referralCode: e.target.value })}
+            />
+          </div>
         </div>
 
         {/* Simulated reCAPTCHA */}
