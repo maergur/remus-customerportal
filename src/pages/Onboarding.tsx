@@ -1,5 +1,6 @@
 import { useOnboarding, OnboardingProvider } from '@/contexts/OnboardingContext';
 import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress';
+import { OnboardingSidebar } from '@/components/onboarding/OnboardingSidebar';
 import { PersonalInfoStep } from '@/components/onboarding/steps/PersonalInfoStep';
 import { PhoneVerificationStep } from '@/components/onboarding/steps/PhoneVerificationStep';
 import { TariffSelectionStep } from '@/components/onboarding/steps/TariffSelectionStep';
@@ -74,11 +75,11 @@ const OnboardingContent = () => {
       : 'animate-slide-in-left';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b bg-card shrink-0">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center lg:justify-start">
             <img 
               src={remusLogo} 
               alt="Remus Enerji" 
@@ -88,17 +89,28 @@ const OnboardingContent = () => {
         </div>
       </header>
 
-      {/* Progress */}
-      <div className="container mx-auto px-4 py-6">
-        <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
-      </div>
-
-      {/* Content with step transition animation */}
-      <main className="container mx-auto px-4 pb-12">
-        <div key={data.step} className={`transition-all duration-300 ${animationClass}`}>
-          {renderStep()}
+      {/* Main content area with split layout */}
+      <div className="flex-1 flex">
+        {/* Left sidebar - desktop only */}
+        <div className="hidden lg:block w-[400px] shrink-0 sticky top-0 h-[calc(100vh-73px)]">
+          <OnboardingSidebar />
         </div>
-      </main>
+
+        {/* Right content area */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {/* Progress - mobile only shows traditional progress */}
+          <div className="lg:hidden container mx-auto px-4 py-6">
+            <OnboardingProgress currentStep={data.step} totalSteps={TOTAL_STEPS} />
+          </div>
+
+          {/* Content with step transition animation */}
+          <main className="flex-1 container mx-auto px-4 pb-12 lg:py-8 lg:max-w-2xl">
+            <div key={data.step} className={`transition-all duration-300 ${animationClass}`}>
+              {renderStep()}
+            </div>
+          </main>
+        </div>
+      </div>
 
       {/* Global floating help button */}
       <FloatingHelpButton />
