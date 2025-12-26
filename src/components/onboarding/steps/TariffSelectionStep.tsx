@@ -93,8 +93,17 @@ export const TariffSelectionStep = () => {
               </CardHeader>
               <CardContent className="text-center">
                 <div className="mb-4">
-                  <span className="text-2xl font-bold">{tariff.price}</span>
-                  <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
+                  {tariff.id === 'sabit' ? (
+                    <div>
+                      <span className="text-2xl font-bold">{tariff.price}</span>
+                      <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline justify-between px-2">
+                      <span className="text-2xl font-bold">{tariff.unit}</span>
+                      <span className="text-xs text-muted-foreground/50">{tariff.price}</span>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
