@@ -95,8 +95,10 @@ const Tarifeler = () => {
                 <p className="text-sm text-muted-foreground mb-4">{tariff.description}</p>
 
                 <div className="mb-6 flex-1">
-                  <span className="text-2xl font-bold text-foreground">{tariff.price}</span>
-                  <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-bold text-foreground">{tariff.unit}</span>
+                    <span className="text-xs text-muted-foreground/60">{tariff.price}</span>
+                  </div>
                 </div>
 
                 <Button 
