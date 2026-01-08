@@ -14,6 +14,9 @@ const tariffs = [
     unit: 'TL/kWh',
     icon: Lock,
     popular: true,
+    exampleUsage: 1000, // kWh
+    exampleBill: '2.800 TL',
+    exampleNote: 'Piyasa ne olursa olsun faturanız sabit kalır',
   },
   {
     id: 'degisken-standart',
@@ -23,6 +26,9 @@ const tariffs = [
     unit: '×1.035 marj',
     icon: TrendingUp,
     popular: false,
+    exampleUsage: 1000, // kWh
+    exampleBill: '2.450 - 2.900 TL',
+    exampleNote: 'Piyasa düşükken tasarruf, yüksekken risk',
   },
   {
     id: 'degisken-on-odeme',
@@ -32,6 +38,9 @@ const tariffs = [
     unit: '×1.005-1.02',
     icon: Percent,
     popular: false,
+    exampleUsage: 1000, // kWh
+    exampleBill: '2.380 - 2.720 TL',
+    exampleNote: 'En düşük marj, peşin ödeme avantajı',
   },
 ];
 
@@ -91,8 +100,8 @@ export const TariffSelectionStep = () => {
                 <CardTitle className="text-lg">{tariff.name}</CardTitle>
                 <CardDescription className="text-xs">{tariff.description}</CardDescription>
               </CardHeader>
-              <CardContent className="text-center">
-                <div className="mb-4">
+              <CardContent className="text-center space-y-4">
+                <div>
                   {tariff.id === 'sabit' ? (
                     <div>
                       <span className="text-2xl font-bold">{tariff.price}</span>
@@ -104,6 +113,22 @@ export const TariffSelectionStep = () => {
                       <span className="text-xs text-muted-foreground/50">{tariff.price}</span>
                     </div>
                   )}
+                </div>
+                
+                {/* Örnek Fatura Kutusu */}
+                <div className={cn(
+                  'rounded-lg p-3 text-left',
+                  isSelected ? 'bg-primary/10' : 'bg-muted/50'
+                )}>
+                  <p className="text-xs text-muted-foreground mb-1">
+                    Örnek: {tariff.exampleUsage} kWh tüketim
+                  </p>
+                  <p className="text-lg font-semibold text-foreground">
+                    {tariff.exampleBill}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {tariff.exampleNote}
+                  </p>
                 </div>
               </CardContent>
             </Card>
