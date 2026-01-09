@@ -35,42 +35,33 @@ const tariffs = [
   },
 ];
 
-// Senaryo verileri - her tarife için farklı senaryolar
-const scenarios = {
-  sabit: {
-    title: 'Sabit Fiyat Senaryosu',
-    subtitle: 'Piyasa dalgalansa da faturanız aynı kalır',
-    scenarios: [
-      { label: 'Düşük Tüketim', usage: '500 kWh', bill: '1.400 TL', note: 'Küçük işletme / ev' },
-      { label: 'Orta Tüketim', usage: '1.000 kWh', bill: '2.800 TL', note: 'Orta ölçekli işletme' },
-      { label: 'Yüksek Tüketim', usage: '2.500 kWh', bill: '7.000 TL', note: 'Büyük işletme' },
-    ],
-    highlight: 'Fiyat garantisi ile bütçenizi önceden planlayın',
+// 1000 TL baz fatura karşılaştırması
+const comparisonScenarios = [
+  {
+    tariff: 'Yıllık Sabit Fiyat',
+    icon: Lock,
+    baseBill: '1.000 TL',
+    actualBill: '1.000 TL',
+    note: 'Fiyat sabit, değişmez',
     color: 'primary',
   },
-  'degisken-standart': {
-    title: 'Değişken Standart Senaryosu',
-    subtitle: 'Piyasa koşullarına göre faturanız değişir',
-    scenarios: [
-      { label: 'Düşük Tüketim', usage: '500 kWh', bill: '1.225 - 1.450 TL', note: 'Piyasa bağımlı' },
-      { label: 'Orta Tüketim', usage: '1.000 kWh', bill: '2.450 - 2.900 TL', note: 'Piyasa bağımlı' },
-      { label: 'Yüksek Tüketim', usage: '2.500 kWh', bill: '6.125 - 7.250 TL', note: 'Piyasa bağımlı' },
-    ],
-    highlight: 'Piyasa düşükken %15\'e kadar tasarruf potansiyeli',
+  {
+    tariff: 'Değişken Standart',
+    icon: TrendingUp,
+    baseBill: '1.000 TL',
+    actualBill: '850 - 1.150 TL',
+    note: 'Piyasaya göre ±%15 değişir',
     color: 'blue',
   },
-  'degisken-on-odeme': {
-    title: 'Ön Ödeme Senaryosu',
-    subtitle: 'Peşin ödeme ile en düşük marj avantajı',
-    scenarios: [
-      { label: 'Düşük Tüketim', usage: '500 kWh', bill: '1.190 - 1.360 TL', note: 'En avantajlı' },
-      { label: 'Orta Tüketim', usage: '1.000 kWh', bill: '2.380 - 2.720 TL', note: 'En avantajlı' },
-      { label: 'Yüksek Tüketim', usage: '2.500 kWh', bill: '5.950 - 6.800 TL', note: 'En avantajlı' },
-    ],
-    highlight: 'Peşin ödeme ile %3-5 ek tasarruf',
+  {
+    tariff: 'Değişken Ön Ödeme',
+    icon: Percent,
+    baseBill: '1.000 TL',
+    actualBill: '820 - 1.100 TL',
+    note: 'Peşin ödemede en düşük marj',
     color: 'green',
   },
-};
+];
 
 export const TariffSelectionStep = () => {
   const { data, updateData, nextStep, prevStep } = useOnboarding();
@@ -87,7 +78,7 @@ export const TariffSelectionStep = () => {
     nextStep();
   };
 
-  const selectedScenario = data.selectedTariff ? scenarios[data.selectedTariff as keyof typeof scenarios] : null;
+  
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -150,51 +141,43 @@ export const TariffSelectionStep = () => {
         })}
       </div>
 
-      {/* Senaryo Kutusu - Tarife Seçildiğinde Görünür */}
-      {selectedScenario ? (
-        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Calculator className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-lg">{selectedScenario.title}</CardTitle>
-                <CardDescription>{selectedScenario.subtitle}</CardDescription>
-              </div>
+      {/* Statik Karşılaştırma Kutusu - 1000 TL Baz Fatura */}
+      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Calculator className="w-5 h-5 text-primary" />
             </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {selectedScenario.scenarios.map((scenario, index) => (
+            <div>
+              <CardTitle className="text-lg">Fatura Karşılaştırması</CardTitle>
+              <CardDescription>1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {comparisonScenarios.map((scenario, index) => {
+              const Icon = scenario.icon;
+              return (
                 <div
                   key={index}
                   className="bg-background rounded-lg p-4 border border-border/50"
                 >
-                  <p className="text-xs font-medium text-muted-foreground mb-1">{scenario.label}</p>
-                  <div className="flex items-baseline gap-2">
-                    <Zap className="w-4 h-4 text-primary" />
-                    <span className="text-sm text-muted-foreground">{scenario.usage}</span>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon className="w-4 h-4 text-primary" />
+                    </div>
+                    <p className="text-sm font-semibold">{scenario.tariff}</p>
                   </div>
-                  <p className="text-xl font-bold mt-2">{scenario.bill}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{scenario.note}</p>
+                  <p className="text-xs text-muted-foreground mb-1">Tahmini Fatura</p>
+                  <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
+                  <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                 </div>
-              ))}
-            </div>
-            <div className="bg-primary/10 rounded-lg p-3 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-primary shrink-0" />
-              <p className="text-sm font-medium text-primary">{selectedScenario.highlight}</p>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="border-2 border-dashed border-muted rounded-xl p-8 text-center">
-          <Calculator className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">
-            Örnek fatura senaryolarını görmek için bir tarife seçin
-          </p>
-        </div>
-      )}
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="flex gap-3 max-w-md mx-auto">
         <Button variant="outline" onClick={prevStep} className="flex-1">
