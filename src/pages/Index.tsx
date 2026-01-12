@@ -50,23 +50,23 @@ const Index = () => {
   
   return (
     <DashboardLayout>
-      <div className="flex flex-col gap-4 animate-page-enter min-h-[calc(100vh-8rem)]">
-        {/* Top Row: Hero + Quick Actions - Fixed Height */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-shrink-0">
-          <div className="lg:col-span-2 h-[200px]">
+      <div className="flex flex-col gap-4 animate-page-enter">
+        {/* Top Row: Hero + Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
             <HeroSection />
           </div>
-          <div className="lg:col-span-1 h-[200px]">
+          <div className="lg:col-span-1">
             <QuickActions />
           </div>
         </div>
         
-        {/* Second Row: Invoice + Chart - Stretch to fill */}
-        <section className="flex-1 flex flex-col">
-          <h3 className="text-base font-semibold text-foreground mb-3 flex-shrink-0">
+        {/* Second Row: Invoice + Chart */}
+        <section>
+          <h3 className="text-base font-semibold text-foreground mb-3">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             <InvoiceWidget compact />
             <div className="lg:col-span-4">
               <QuickActionsChart />
