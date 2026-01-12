@@ -1,6 +1,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { Zap, ArrowRight, Lock, TrendingUp, Percent } from "lucide-react";
+import { ArrowRight, Lock, TrendingUp, Percent, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
 const tariffs = [
@@ -30,6 +31,31 @@ const tariffs = [
     description: 'Peşin ödemede en avantajlı fiyat',
     icon: Percent,
     popular: false,
+  },
+];
+
+// 1000 TL baz fatura karşılaştırması
+const comparisonScenarios = [
+  {
+    tariff: 'Yıllık Sabit Fiyat',
+    icon: Lock,
+    baseBill: '1.000 TL',
+    actualBill: '1.000 TL',
+    note: 'Fiyat sabit, değişmez',
+  },
+  {
+    tariff: 'Değişken Standart',
+    icon: TrendingUp,
+    baseBill: '1.000 TL',
+    actualBill: '850 - 1.150 TL',
+    note: 'Piyasaya göre ±%15 değişir',
+  },
+  {
+    tariff: 'Değişken Ön Ödeme',
+    icon: Percent,
+    baseBill: '1.000 TL',
+    actualBill: '820 - 1.100 TL',
+    note: 'Peşin ödemede en düşük marj',
   },
 ];
 
@@ -121,6 +147,44 @@ const Tarifeler = () => {
             );
           })}
         </div>
+
+        {/* Fatura Karşılaştırması - Senaryo Kartı */}
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Fatura Karşılaştırması</CardTitle>
+                <CardDescription>1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {comparisonScenarios.map((scenario, index) => {
+                const Icon = scenario.icon;
+                return (
+                  <div
+                    key={index}
+                    className="bg-background rounded-lg p-4 border border-border/50"
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <p className="text-sm font-semibold">{scenario.tariff}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-1">Tahmini Fatura</p>
+                    <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Info */}
         <div className="bg-secondary/50 rounded-2xl p-4 lg:p-6 text-center">
