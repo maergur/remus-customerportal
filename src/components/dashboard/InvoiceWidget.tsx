@@ -61,9 +61,9 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
     return (
       <>
         <div className="bg-gradient-to-br from-orange-500/10 via-card to-card rounded-2xl border border-border/80 overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
-          {/* Content */}
           <div className="p-3 flex-1 flex flex-col">
-            <div className="flex items-center justify-between mb-3">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
                   <FileText className="h-4 w-4 text-orange-500" />
@@ -79,24 +79,25 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
               </div>
             </div>
             
-            <div className="flex items-end justify-between mb-2">
-              <div>
-                <p className="text-xl font-bold text-foreground">
-                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-xs">₺</span>
+            {/* Amount & Due Date - Prominent Display */}
+            <div className="flex-1 flex flex-col justify-end">
+              <div className="text-center mb-3">
+                <p className="text-3xl font-bold text-foreground">
+                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-base font-semibold">₺</span>
                 </p>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
-                  {t("dueDate")}: {invoice.dueDate}
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
                 </p>
               </div>
-            </div>
 
-            <Button 
-              className="w-full mt-auto gap-2 h-7 text-xs" 
-              size="sm" 
-              onClick={() => setShowPayPanel(true)}
-            >
-              {t("payNow")}
-            </Button>
+              <Button 
+                className="w-full gap-2 h-8 text-xs" 
+                size="sm" 
+                onClick={() => setShowPayPanel(true)}
+              >
+                {t("payNow")}
+              </Button>
+            </div>
           </div>
         </div>
         
