@@ -62,16 +62,22 @@ export function QuickActions() {
     {
       icon: Zap,
       title: language === "tr" ? "Aktif Tarife" : "Active Tariff",
+      value: language === "tr" ? "Yeşil Enerji Pro" : "Green Energy Pro",
+      subValue: "0,85 ₺/kWh",
       to: "/tarifeler",
     },
     {
       icon: TrendingUp,
-      title: language === "tr" ? "Tüketim Analizi" : "Consumption",
+      title: language === "tr" ? "Bu Ay Tüketim" : "This Month",
+      value: "245 kWh",
+      subValue: language === "tr" ? "Geçen aya göre %9 ↑" : "9% vs last month",
       to: "/tuketim-analizi",
     },
     {
       icon: AlertCircle,
       title: language === "tr" ? "Destek" : "Support",
+      value: language === "tr" ? "7/24 Aktif" : "24/7 Active",
+      subValue: language === "tr" ? "Ort. yanıt: ~15 dk" : "Avg. response: ~15 min",
       to: "/ariza-destek",
     },
   ];
@@ -108,16 +114,24 @@ export function QuickActions() {
         </div>
       </div>
 
-      {/* Quick Links */}
-      <div className="space-y-1">
+      {/* Quick Links with Details */}
+      <div className="space-y-2">
         {quickLinks.map((link, index) => (
           <Link key={index} to={link.to}>
-            <div className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors">
-              <div className="flex items-center gap-2">
-                <link.icon className="h-4 w-4 text-primary" />
-                <span className="text-sm text-foreground">{link.title}</span>
+            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 transition-colors border border-border/50">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <link.icon className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">{link.title}</p>
+                  <p className="text-xs text-muted-foreground">{link.subValue}</p>
+                </div>
               </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              <div className="text-right flex items-center gap-2">
+                <span className="text-sm font-semibold text-foreground">{link.value}</span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
           </Link>
         ))}
@@ -129,13 +143,18 @@ export function QuickActions() {
 export function QuickActionsChart() {
   const { language } = useLanguage();
   
+  const totalConsumption = consumptionData.reduce((sum, item) => sum + item.tuketim, 0);
+  const avgConsumption = Math.round(totalConsumption / 12);
+  const maxMonth = consumptionData.reduce((max, item) => item.tuketim > max.tuketim ? item : max, consumptionData[0]);
+  const minMonth = consumptionData.reduce((min, item) => item.tuketim < min.tuketim ? item : min, consumptionData[0]);
+  
   return (
-    <Link to="/tuketim-analizi">
+    <Link to="/tuketim-analizi" className="sm:col-span-2">
       <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h4 className="font-semibold text-foreground text-sm">
-              {language === "tr" ? "Yıllık Tüketim" : "Yearly Consumption"}
+            <h4 className="font-semibold text-foreground text-base">
+              {language === "tr" ? "Yıllık Tüketim Analizi" : "Yearly Consumption Analysis"}
             </h4>
             <p className="text-xs text-muted-foreground">
               {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
@@ -143,7 +162,26 @@ export function QuickActionsChart() {
           </div>
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
         </div>
-        <div className="h-32">
+        
+        {/* Stats Row */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
+            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "Toplam" : "Total"}</p>
+            <p className="text-lg font-bold text-foreground">{totalConsumption.toLocaleString()} <span className="text-xs font-normal">kWh</span></p>
+          </div>
+          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
+            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "Ortalama" : "Average"}</p>
+            <p className="text-lg font-bold text-foreground">{avgConsumption} <span className="text-xs font-normal">kWh</span></p>
+          </div>
+          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
+            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "En Yüksek" : "Peak"}</p>
+            <p className="text-lg font-bold text-foreground">{maxMonth.tuketim} <span className="text-xs font-normal">kWh</span></p>
+            <p className="text-[10px] text-muted-foreground">{maxMonth.name}</p>
+          </div>
+        </div>
+        
+        {/* Chart */}
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={consumptionData}>
               <defs>
@@ -152,8 +190,8 @@ export function QuickActionsChart() {
                   <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
-              <YAxis hide />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} width={35} />
               <Tooltip 
                 contentStyle={{ 
                   backgroundColor: 'hsl(var(--card))', 
@@ -161,7 +199,7 @@ export function QuickActionsChart() {
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
-                formatter={(value: number) => [`${value} kWh`, 'Tüketim']}
+                formatter={(value: number) => [`${value} kWh`, language === "tr" ? 'Tüketim' : 'Consumption']}
               />
               <Area 
                 type="monotone" 
