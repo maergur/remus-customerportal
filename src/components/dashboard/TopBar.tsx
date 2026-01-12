@@ -107,7 +107,7 @@ export function TopBar() {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="lg:hidden"
+          className="lg:hidden flex-shrink-0"
           onClick={toggle}
         >
           <Menu className="h-5 w-5" />
@@ -116,7 +116,7 @@ export function TopBar() {
         {/* Profile Completion Bar */}
         <button 
           onClick={handleProfileClick}
-          className="hidden sm:flex items-center gap-3 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-4 py-2 max-w-md w-full"
+          className="hidden sm:flex items-center gap-2 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-3 py-2 flex-shrink-0"
         >
           {isComplete ? (
             <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
@@ -125,17 +125,26 @@ export function TopBar() {
               <span className="text-[8px] font-bold text-primary">{Math.round(completionPercent / 20)}</span>
             </div>
           )}
-          <span className="text-sm text-foreground whitespace-nowrap">
+          <span className="text-sm text-foreground whitespace-nowrap hidden lg:inline">
             {isComplete 
               ? (language === "tr" ? "Profil Tamamlandı" : "Profile Complete")
               : (language === "tr" ? "Profilimi Tamamla" : "Complete Profile")
             }
           </span>
-          <div className="flex-1 min-w-[80px]">
+          <div className="w-16 lg:w-20">
             <Progress value={completionPercent} variant="glow" className="h-1.5" />
           </div>
           <span className="text-xs font-bold text-primary">{completionPercent}%</span>
         </button>
+
+        {/* Search */}
+        <div className="relative flex-1 max-w-sm hidden md:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={language === "tr" ? "Ara..." : "Search..."}
+            className="pl-9 bg-secondary/50 border-transparent focus:border-primary/30 h-9"
+          />
+        </div>
       </div>
 
       {/* Right Section */}
