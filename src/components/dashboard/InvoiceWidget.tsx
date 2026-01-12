@@ -87,25 +87,11 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
           <div className="flex-1" />
 
           {/* Tutar - büyük ve merkezi */}
-          <div className="text-center py-2">
+          <div className="text-center py-3">
             <p className="text-3xl font-bold text-foreground tracking-tight">
               {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
               <span className="text-base font-medium ml-0.5">₺</span>
             </p>
-          </div>
-
-          {/* Tahmin bilgisi */}
-          <div className="bg-amber-500/10 rounded-lg px-2.5 py-2 mb-3">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-muted-foreground">Gelecek ay tahmini</span>
-              <div className="flex items-center gap-1">
-                <span className="font-semibold text-foreground">~780₺</span>
-                <span className="text-primary flex items-center gap-0.5">
-                  <TrendingDown className="h-3 w-3" />
-                  -8%
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Alt bilgi */}

@@ -2,11 +2,14 @@ import { useState } from "react";
 import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast as sonnerToast } from "sonner";
+
+// Current month index (December = 11)
+const currentMonthIndex = 11;
 
 const consumptionData = [
   { name: "Oca", tuketim: 320 },
@@ -22,6 +25,22 @@ const consumptionData = [
   { name: "Kas", tuketim: 290 },
   { name: "Ara", tuketim: 245 },
 ];
+
+// Create chart data with actual and forecast
+const chartData = consumptionData.map((item, index) => ({
+  name: item.name,
+  actual: index <= currentMonthIndex ? item.tuketim : null,
+  forecast: index >= currentMonthIndex ? item.tuketim : null,
+}));
+
+// Add forecast months
+const forecastMonths = [
+  { name: "Oca'27", actual: null, forecast: 335 },
+  { name: "Şub'27", actual: null, forecast: 295 },
+  { name: "Mar'27", actual: null, forecast: 260 },
+];
+
+const fullChartData = [...chartData, ...forecastMonths];
 
 const savingsTips = [
   { tr: "💡 Cihazlarınızı bekleme modunda bırakmayın - yılda 50₺ tasarruf edin", en: "💡 Don't leave devices on standby - save 50₺/year" },
@@ -154,16 +173,22 @@ export function QuickActionsChart() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <h4 className="font-semibold text-foreground text-sm">
-              {language === "tr" ? "Yıllık Tüketim" : "Yearly Consumption"}
+              {language === "tr" ? "Yıllık Tüketim & Tahmin" : "Yearly Consumption & Forecast"}
             </h4>
             <p className="text-xs text-muted-foreground">
               {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
             </p>
           </div>
           <div className="flex items-center gap-4 text-xs">
-            <div className="text-right">
-              <span className="text-muted-foreground">{language === "tr" ? "Toplam: " : "Total: "}</span>
-              <span className="font-semibold text-foreground">{totalConsumption.toLocaleString()} kWh</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                <span className="text-muted-foreground">{language === "tr" ? "Gerçek" : "Actual"}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                <span className="text-muted-foreground">{language === "tr" ? "Tahmin" : "Forecast"}</span>
+              </div>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </div>
@@ -172,14 +197,18 @@ export function QuickActionsChart() {
         {/* Chart */}
         <div className="h-52">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={consumptionData}>
+            <AreaChart data={fullChartData}>
               <defs>
                 <linearGradient id="dashboardGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
                   <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                 </linearGradient>
+                <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0}/>
+                </linearGradient>
               </defs>
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} width={35} />
               <Tooltip 
                 contentStyle={{ 
@@ -188,15 +217,30 @@ export function QuickActionsChart() {
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
-                formatter={(value: number) => [`${value} kWh`, language === "tr" ? 'Tüketim' : 'Consumption']}
+                formatter={(value: number, name: string) => [
+                  `${value} kWh`,
+                  name === 'actual' ? (language === "tr" ? 'Gerçek' : 'Actual') : (language === "tr" ? 'Tahmin' : 'Forecast')
+                ]}
               />
+              <ReferenceLine x="Ara" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
               <Area 
                 type="monotone" 
-                dataKey="tuketim" 
+                dataKey="actual" 
                 stroke="hsl(var(--primary))" 
                 fillOpacity={1} 
                 fill="url(#dashboardGradient)" 
-                strokeWidth={2} 
+                strokeWidth={2}
+                connectNulls={false}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="forecast" 
+                stroke="hsl(38, 92%, 50%)" 
+                fillOpacity={1} 
+                fill="url(#forecastGradient)" 
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                connectNulls={false}
               />
             </AreaChart>
           </ResponsiveContainer>
