@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FileText, Clock, AlertTriangle, CheckCircle, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PayNowPanel } from "./PayNowPanel";
@@ -11,7 +10,7 @@ interface InvoiceWidgetProps {
 }
 
 const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [showPayPanel, setShowPayPanel] = useState(false);
   
   const invoice = {
@@ -147,17 +146,37 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </div>
           </div>
 
-          {/* Consumption Info */}
+          {/* Consumption Breakdown */}
           <div className="bg-secondary/50 dark:bg-secondary/30 rounded-xl p-3 border border-border/50 mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-muted-foreground">{t("consumption")}</span>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-foreground">{t("consumption")}</span>
               <span className={`text-xs font-medium ${consumptionChange > 0 ? 'text-destructive' : 'text-primary'}`}>
-                {consumptionChange > 0 ? '+' : ''}{consumptionChange.toFixed(1)}%
+                {consumptionChange > 0 ? '+' : ''}{consumptionChange.toFixed(1)}% {language === "tr" ? "geçen aya göre" : "vs last month"}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Progress value={(invoice.consumption / 400) * 100} className="h-2 flex-1" />
-              <span className="text-sm font-semibold text-foreground">{invoice.consumption} kWh</span>
+            {/* Consumption breakdown by usage type */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{language === "tr" ? "Gündüz (06-17)" : "Daytime (06-17)"}</span>
+                <span className="text-xs font-medium text-foreground">142 kWh</span>
+              </div>
+              <div className="w-full bg-border rounded-full h-1.5">
+                <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: '45%' }} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{language === "tr" ? "Gece (17-22)" : "Evening (17-22)"}</span>
+                <span className="text-xs font-medium text-foreground">108 kWh</span>
+              </div>
+              <div className="w-full bg-border rounded-full h-1.5">
+                <div className="bg-primary h-1.5 rounded-full" style={{ width: '35%' }} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{language === "tr" ? "Puant (22-06)" : "Off-peak (22-06)"}</span>
+                <span className="text-xs font-medium text-foreground">62 kWh</span>
+              </div>
+              <div className="w-full bg-border rounded-full h-1.5">
+                <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: '20%' }} />
+              </div>
             </div>
           </div>
 
