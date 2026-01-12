@@ -148,45 +148,45 @@ const Tarifeler = () => {
             })}
           </div>
 
-          {/* Row 2: Comparison Card - expanded */}
-          <Card className="flex-1 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-            <CardHeader className="pb-4">
+          {/* Row 2: Comparison Card - compact */}
+          <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+            <CardHeader className="pb-3 pt-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Calculator className="w-6 h-6 text-primary" />
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Calculator className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">Fatura Karşılaştırması</CardTitle>
-                  <CardDescription>1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
+                  <CardTitle className="text-base">Fatura Karşılaştırması</CardTitle>
+                  <CardDescription className="text-xs">1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {comparisonScenarios.map((scenario, index) => {
                   const Icon = scenario.icon;
                   return (
                     <div
                       key={index}
-                      className="bg-background rounded-2xl p-5 border border-border/50"
+                      className="bg-background rounded-xl p-4 border border-border/50"
                     >
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                          <Icon className="w-5 h-5 text-primary" />
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-primary" />
                         </div>
-                        <p className="text-base font-semibold text-foreground">{scenario.tariff}</p>
+                        <p className="text-sm font-semibold text-foreground">{scenario.tariff}</p>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">Tahmini Fatura</p>
-                      <p className="text-3xl font-bold text-foreground">{scenario.actualBill}</p>
-                      <p className="text-sm text-muted-foreground mt-3">{scenario.note}</p>
+                      <p className="text-xs text-muted-foreground mb-1">Tahmini Fatura</p>
+                      <p className="text-2xl font-bold text-foreground">{scenario.actualBill}</p>
+                      <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-5 bg-secondary/50 rounded-xl p-4 text-center">
-                <p className="text-sm text-muted-foreground">
+              <div className="mt-4 bg-secondary/50 rounded-lg p-3 text-center">
+                <p className="text-xs text-muted-foreground">
                   Tarife değişikliği bir sonraki fatura döneminden itibaren geçerli olacaktır.
                 </p>
               </div>
