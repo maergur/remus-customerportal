@@ -73,16 +73,21 @@ export function QuickActions() {
         </div>
       </div>
 
-      {/* Consumption Chart Card */}
-      <Link to="/tuketim-analizi" className="sm:col-span-2 lg:col-span-1">
+      {/* Consumption Chart Card - Spans 2 columns on large screens */}
+      <Link to="/tuketim-analizi" className="sm:col-span-2">
         <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="font-semibold text-foreground text-sm">
-              {language === "tr" ? "Tüketim Grafiği" : "Consumption Chart"}
-            </h4>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h4 className="font-semibold text-foreground text-sm">
+                {language === "tr" ? "Yıllık Tüketim Grafiği" : "Yearly Consumption"}
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
+              </p>
+            </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </div>
-          <div className="h-28">
+          <div className="h-40">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={consumptionData}>
                 <defs>
@@ -91,7 +96,7 @@ export function QuickActions() {
                     <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" hide />
+                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
                 <YAxis hide />
                 <Tooltip 
                   contentStyle={{ 
