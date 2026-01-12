@@ -2,7 +2,6 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { HeroSection } from "@/components/dashboard/HeroSection";
 import { QuickActions, QuickActionsChart } from "@/components/dashboard/QuickActions";
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
-import { ProfileCompletionBar } from "@/components/dashboard/ProfileCompletionBar";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
 import { useEffect, useState } from "react";
@@ -52,9 +51,6 @@ const Index = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-4 animate-page-enter">
-        {/* Profile Completion Bar */}
-        <ProfileCompletionBar />
-        
         {/* Top Row: Hero + Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2">
