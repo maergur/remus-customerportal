@@ -170,7 +170,7 @@ export function QuickActionsChart() {
         </div>
         
         {/* Chart */}
-        <div className="h-36">
+        <div className="h-44">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={consumptionData}>
               <defs>
