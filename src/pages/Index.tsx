@@ -50,10 +50,10 @@ const Index = () => {
   
   return (
     <DashboardLayout>
-      <div className="flex flex-col gap-6 animate-page-enter">
+      <div className="flex flex-col gap-4 animate-page-enter">
         {/* Top Row: Hero + Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-          <div className="lg:col-span-2 min-h-[264px]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
             <HeroSection />
           </div>
           <div className="lg:col-span-1">
@@ -61,9 +61,9 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Second Row: Invoice */}
+        {/* Second Row: Invoice + Chart */}
         <section>
-          <h3 className="text-lg font-semibold text-foreground mb-4">
+          <h3 className="text-base font-semibold text-foreground mb-3">
             {t("quickActions")}
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
