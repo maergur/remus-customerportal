@@ -101,7 +101,7 @@ export function TopBar() {
 
   return (
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
-      {/* Left Section - Mobile Menu Only */}
+      {/* Left Section */}
       <div className="flex items-center gap-3">
         {/* Mobile Menu Button */}
         <Button 
@@ -112,19 +112,24 @@ export function TopBar() {
         >
           <Menu className="h-5 w-5" />
         </Button>
-      </div>
 
-      {/* Right Section */}
-      <div className="flex items-center gap-2 lg:gap-3">
         {/* Search */}
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={language === "tr" ? "Ara..." : "Search..."}
-            className="pl-9 w-48 lg:w-56 bg-secondary/50 border-transparent focus:border-primary/30 h-9"
+            className="pl-9 w-48 lg:w-64 bg-secondary/50 border-transparent focus:border-primary/30 h-9"
           />
         </div>
 
+        {/* Mobile Search Button */}
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Search className="h-5 w-5" />
+        </Button>
+      </div>
+
+      {/* Right Section */}
+      <div className="flex items-center gap-2 lg:gap-3">
         {/* Profile Completion Bar */}
         <button 
           onClick={handleProfileClick}
@@ -148,11 +153,6 @@ export function TopBar() {
           </div>
           <span className="text-xs font-bold text-primary">{completionPercent}%</span>
         </button>
-
-        {/* Mobile Search Button */}
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Search className="h-5 w-5" />
-        </Button>
 
         {/* Theme Toggle */}
         <Button variant="ghost" size="icon" onClick={toggleTheme}>
