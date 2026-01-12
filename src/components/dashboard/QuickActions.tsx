@@ -44,9 +44,26 @@ const forecastMonths = [
 const fullChartData = [...chartData, ...forecastMonths];
 
 const savingsTips = [
-  { tr: "Cihazlarınızı bekleme modunda bırakmayın - yılda 50₺ tasarruf edin", en: "Don't leave devices on standby - save 50₺/year" },
+  { tr: "Cihazlarınızı bekleme modunda bırakmayın - yılda 200₺'ye kadar tasarruf edin", en: "Don't leave devices on standby - save up to 200₺/year" },
   { tr: "LED ampuller ile elektrik faturanızda %80 tasarruf edin", en: "Save 80% on lighting with LED bulbs" },
   { tr: "Kış aylarında termostatı 1°C düşürün - %10 tasarruf", en: "Lower thermostat by 1°C in winter - save 10%" },
+  { tr: "A+++ enerji sınıfı cihazlar %30 daha az enerji tüketir", en: "A+++ appliances consume 30% less energy" },
+  { tr: "Çamaşır ve bulaşık makinenizi tam kapasiteyle çalıştırın", en: "Run washing machines at full capacity" },
+  { tr: "Gece 23:00'ten sonra elektrik daha ucuz - bu saatleri kullanın", en: "Electricity is cheaper after 11 PM - use this time" },
+  { tr: "Buzdolabı kapağını sık açmayın - her açılış enerji harcar", en: "Don't open fridge door often - each opening uses energy" },
+  { tr: "Telefon şarjı dolunca fişi çekin - pil ömrü de uzar", en: "Unplug phone when charged - battery life extends too" },
+  { tr: "Klima yazın 24-26°C'de sabit tutulmalı - sık açma kapama yapmayın", en: "Keep AC at 24-26°C in summer - avoid frequent on/off" },
+  { tr: "Çamaşırları düşük sıcaklıkta yıkayın - aynı temizlik, az enerji", en: "Wash clothes at low temp - same clean, less energy" },
+  { tr: "Ütüyü toplu yapın - her ısınma fazladan enerji harcar", en: "Iron in batches - each warmup uses extra energy" },
+  { tr: "Gündüz doğal ışıktan maksimum faydalanın - perdeleri açın", en: "Maximize natural light during day - open curtains" },
+  { tr: "Akıllı prizler ile cihazları otomatik kapatın - %10 tasarruf", en: "Smart plugs auto-off devices - save 10%" },
+  { tr: "Klima ve kombi bakımı yaptırın - %15 verimlilik artışı", en: "Service AC and boiler - 15% efficiency boost" },
+  { tr: "Isı yalıtımı olmayan evlerde %50'ye varan enerji kaybı olur", en: "Homes without insulation lose up to 50% energy" },
+  { tr: "Eski beyaz eşyalarınızı yenileyin - yeni modeller çok daha verimli", en: "Replace old appliances - new models are more efficient" },
+  { tr: "Hareket sensörlü lambalar kullanın - gereksiz aydınlatma biter", en: "Use motion sensor lights - no unnecessary lighting" },
+  { tr: "Pencere contalarını kontrol edin - küçük açıklıklar büyük kayıp demek", en: "Check window seals - small gaps mean big losses" },
+  { tr: "Bilgisayarı mesai bitiminde tamamen kapatın", en: "Completely shut down computer after work" },
+  { tr: "Enerji takip uygulaması kullanın - hangi cihaz ne kadar harcıyor görün", en: "Use energy tracking apps - see which device uses how much" },
 ];
 
 export function QuickActions() {
