@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast as sonnerToast } from "sonner";
@@ -54,16 +55,28 @@ export function QuickActions() {
   const [copied, setCopied] = useState(false);
   const inviteCode = "REMUS2026";
 
-  useEffect(() => {
+  const showRandomTip = () => {
     const tipIndex = Math.floor(Math.random() * savingsTips.length);
     const tip = savingsTips[tipIndex];
     
+    toast({
+      title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
+      description: language === "tr" ? tip.tr : tip.en,
+      duration: 30000,
+      action: (
+        <ToastAction 
+          altText={language === "tr" ? "Daha fazla ipucu" : "More tips"}
+          onClick={() => showRandomTip()}
+        >
+          {language === "tr" ? "Başka ipucu" : "More tips"}
+        </ToastAction>
+      ),
+    });
+  };
+
+  useEffect(() => {
     const timer = setTimeout(() => {
-      toast({
-        title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
-        description: language === "tr" ? tip.tr : tip.en,
-        duration: 30000,
-      });
+      showRandomTip();
     }, 2000);
 
     return () => clearTimeout(timer);
