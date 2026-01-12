@@ -62,7 +62,7 @@ export function QuickActions() {
     
     const timer = setTimeout(() => {
       toast({
-        title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
+        title: language === "tr" ? "Tasarruf İpucu" : "Savings Tip",
         description: language === "tr" ? tip.tr : tip.en,
         duration: 30000,
         action: (
