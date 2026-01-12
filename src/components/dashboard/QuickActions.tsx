@@ -69,75 +69,76 @@ export function QuickActions() {
     },
   ];
   return (
-    <>
-      {/* Combined Quick Links Card - Simplified */}
-      <div className="sm:col-span-2 lg:col-span-1 bg-card rounded-2xl border border-border p-4">
-        <h4 className="font-semibold text-foreground text-sm mb-3">
-          {language === "tr" ? "Hızlı Erişim" : "Quick Access"}
-        </h4>
-        <div className="space-y-2">
-          {quickLinks.map((link, index) => (
-            <Link key={index} to={link.to}>
-              <div className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-2">
-                  <link.icon className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-foreground">{link.title}</span>
-                </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+    <div className="bg-card rounded-2xl border border-border p-4 h-full">
+      <h4 className="font-semibold text-foreground text-sm mb-3">
+        {language === "tr" ? "Hızlı Erişim" : "Quick Access"}
+      </h4>
+      <div className="space-y-2">
+        {quickLinks.map((link, index) => (
+          <Link key={index} to={link.to}>
+            <div className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-muted/50 transition-colors">
+              <div className="flex items-center gap-2">
+                <link.icon className="h-4 w-4 text-primary" />
+                <span className="text-sm text-foreground">{link.title}</span>
               </div>
-            </Link>
-          ))}
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function QuickActionsChart() {
+  const { language } = useLanguage();
+  
+  return (
+    <Link to="/tuketim-analizi">
+      <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h4 className="font-semibold text-foreground text-sm">
+              {language === "tr" ? "Yıllık Tüketim" : "Yearly Consumption"}
+            </h4>
+            <p className="text-xs text-muted-foreground">
+              {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        </div>
+        <div className="h-32">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={consumptionData}>
+              <defs>
+                <linearGradient id="dashboardGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis hide />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'hsl(var(--card))', 
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  fontSize: '12px'
+                }}
+                formatter={(value: number) => [`${value} kWh`, 'Tüketim']}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="tuketim" 
+                stroke="hsl(var(--primary))" 
+                fillOpacity={1} 
+                fill="url(#dashboardGradient)" 
+                strokeWidth={2} 
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
       </div>
-
-      {/* Consumption Chart Card - Spans 2 columns on large screens */}
-      <Link to="/tuketim-analizi" className="sm:col-span-2">
-        <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h4 className="font-semibold text-foreground text-sm">
-                {language === "tr" ? "Yıllık Tüketim Grafiği" : "Yearly Consumption"}
-              </h4>
-              <p className="text-xs text-muted-foreground">
-                {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
-              </p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="h-40">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={consumptionData}>
-                <defs>
-                  <linearGradient id="dashboardGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis hide />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
-                    fontSize: '12px'
-                  }}
-                  formatter={(value: number) => [`${value} kWh`, 'Tüketim']}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="tuketim" 
-                  stroke="hsl(var(--primary))" 
-                  fillOpacity={1} 
-                  fill="url(#dashboardGradient)" 
-                  strokeWidth={2} 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </Link>
-
-    </>
+    </Link>
   );
 }
