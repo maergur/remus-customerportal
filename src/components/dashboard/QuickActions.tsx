@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check } from "lucide-react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
@@ -43,9 +43,9 @@ const forecastMonths = [
 const fullChartData = [...chartData, ...forecastMonths];
 
 const savingsTips = [
-  { tr: "💡 Cihazlarınızı bekleme modunda bırakmayın - yılda 50₺ tasarruf edin", en: "💡 Don't leave devices on standby - save 50₺/year" },
-  { tr: "💡 LED ampuller ile elektrik faturanızda %80 tasarruf edin", en: "💡 Save 80% on lighting with LED bulbs" },
-  { tr: "💡 Kış aylarında termostatı 1°C düşürün - %10 tasarruf", en: "💡 Lower thermostat by 1°C in winter - save 10%" },
+  { tr: "Cihazlarınızı bekleme modunda bırakmayın - yılda 50₺ tasarruf edin", en: "Don't leave devices on standby - save 50₺/year" },
+  { tr: "LED ampuller ile elektrik faturanızda %80 tasarruf edin", en: "Save 80% on lighting with LED bulbs" },
+  { tr: "Kış aylarında termostatı 1°C düşürün - %10 tasarruf", en: "Lower thermostat by 1°C in winter - save 10%" },
 ];
 
 export function QuickActions() {
@@ -60,8 +60,9 @@ export function QuickActions() {
     
     const timer = setTimeout(() => {
       toast({
+        title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
         description: language === "tr" ? tip.tr : tip.en,
-        duration: 6000,
+        duration: 30000,
       });
     }, 2000);
 
