@@ -1,8 +1,87 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { AlertTriangle, Phone, MessageSquare, Clock, CheckCircle, MapPin, Send } from "lucide-react";
+import { AlertTriangle, Phone, MessageSquare, Clock, CheckCircle, Building2, Send, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useOnboarding } from "@/contexts/OnboardingContext";
+
+// Dağıtım firmalarının iletişim bilgileri
+const distributionCompanies: Record<string, {
+  name: string;
+  phone: string;
+  faultLine: string;
+  address: string;
+  website: string;
+  region: string;
+}> = {
+  "BEDAS": {
+    name: "Boğaziçi Elektrik Dağıtım A.Ş.",
+    phone: "0212 324 24 24",
+    faultLine: "186",
+    address: "Abdurrahmangazi Mah. Güleryüz Sok. No:4 Sancaktepe/İstanbul",
+    website: "https://www.bedas.com.tr",
+    region: "İstanbul Avrupa Yakası",
+  },
+  "AYEDAS": {
+    name: "İstanbul Anadolu Yakası Elektrik Dağıtım A.Ş.",
+    phone: "0216 522 01 86",
+    faultLine: "186",
+    address: "Barbaros Mah. Şebboy Sok. No:4 Ataşehir/İstanbul",
+    website: "https://www.ayedas.com.tr",
+    region: "İstanbul Anadolu Yakası",
+  },
+  "KCETAS": {
+    name: "Kayseri ve Civarı Elektrik T.A.Ş.",
+    phone: "0352 222 41 86",
+    faultLine: "186",
+    address: "Kocasinan Bulvarı No:159 Kocasinan/Kayseri",
+    website: "https://www.kcetas.com.tr",
+    region: "Kayseri ve Çevresi",
+  },
+  "SEDAS": {
+    name: "Sakarya Elektrik Dağıtım A.Ş.",
+    phone: "0264 888 01 86",
+    faultLine: "186",
+    address: "Esentepe Mah. Akyol Cad. No:76 Serdivan/Sakarya",
+    website: "https://www.sedas.com",
+    region: "Sakarya Bölgesi",
+  },
+  "UEDAS": {
+    name: "Uludağ Elektrik Dağıtım A.Ş.",
+    phone: "0224 270 01 86",
+    faultLine: "186",
+    address: "Odunluk Mah. Akademi Cad. No:2 Nilüfer/Bursa",
+    website: "https://www.uedas.com.tr",
+    region: "Bursa ve Çevresi",
+  },
+  "TEDAS": {
+    name: "Türkiye Elektrik Dağıtım A.Ş.",
+    phone: "444 0 186",
+    faultLine: "186",
+    address: "İnönü Bulvarı No:27 Bahçelievler/Ankara",
+    website: "https://www.tedas.gov.tr",
+    region: "Çeşitli Bölgeler",
+  },
+  "DICLE_EDAS": {
+    name: "Dicle Elektrik Dağıtım A.Ş.",
+    phone: "0412 251 01 86",
+    faultLine: "186",
+    address: "Şanlıurfa Yolu 3. Km Bağlar/Diyarbakır",
+    website: "https://www.dedas.com.tr",
+    region: "Güneydoğu Anadolu",
+  },
+  "TOROSLAR_EDAS": {
+    name: "Toroslar Elektrik Dağıtım A.Ş.",
+    phone: "0324 237 01 86",
+    faultLine: "186",
+    address: "Güvenevler Mah. 1913 Sok. No:5 Yenişehir/Mersin",
+    website: "https://www.toroslarelektrik.com.tr",
+    region: "Akdeniz Bölgesi",
+  },
+};
+
+// Varsayılan dağıtım firması (eğer müşteri bilgisi yoksa)
+const defaultCompany = distributionCompanies["BEDAS"];
 
 const recentTickets = [
   { id: "ARZ-2026-045", type: "Elektrik Kesintisi", status: "resolved", date: "15 Ara 2026", description: "Bölgede planlı bakım çalışması" },
@@ -12,6 +91,11 @@ const recentTickets = [
 
 const ArizaDestek = () => {
   const [description, setDescription] = useState("");
+  const { data } = useOnboarding();
+  
+  // Müşterinin kayıtlı dağıtım firmasını al (şimdilik varsayılan kullanılıyor)
+  // İleride OnboardingContext'e distributionCompany alanı eklenebilir
+  const customerCompany = defaultCompany;
 
   const handleSubmit = () => {
     if (!description) {
@@ -40,7 +124,7 @@ const ArizaDestek = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Acil Arıza Hattı</p>
-                <p className="text-lg font-bold text-foreground">186</p>
+                <p className="text-lg font-bold text-foreground">{customerCompany.faultLine}</p>
               </div>
             </div>
             <p className="text-xs text-muted-foreground">7/24 hizmetinizdeyiz</p>
@@ -51,23 +135,31 @@ const ArizaDestek = () => {
                 <MessageSquare className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">WhatsApp Destek</p>
-                <p className="text-lg font-bold text-foreground">0532 186 00 00</p>
+                <p className="text-sm text-muted-foreground">Müşteri Hizmetleri</p>
+                <p className="text-lg font-bold text-foreground">{customerCompany.phone}</p>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Mesaj ile destek alın</p>
+            <p className="text-xs text-muted-foreground">{customerCompany.name}</p>
           </div>
           <div className="bg-card rounded-2xl p-5 border border-border">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                <MapPin className="h-6 w-6 text-blue-500" />
+                <Building2 className="h-6 w-6 text-blue-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">En Yakın Merkez</p>
-                <p className="text-lg font-bold text-foreground">2.3 km</p>
+                <p className="text-sm text-muted-foreground">Dağıtım Firması</p>
+                <p className="text-base font-bold text-foreground leading-tight">{customerCompany.region}</p>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Kadıköy Müşteri Merkezi</p>
+            <p className="text-xs text-muted-foreground line-clamp-2">{customerCompany.address}</p>
+            <a 
+              href={customerCompany.website} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+            >
+              Web sitesini ziyaret et <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
 
