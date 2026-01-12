@@ -2,6 +2,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { HeroSection } from "@/components/dashboard/HeroSection";
 import { QuickActions, QuickActionsChart } from "@/components/dashboard/QuickActions";
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
+import { ProfileCompletionWidget } from "@/components/dashboard/ProfileCompletionWidget";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
 import { useEffect, useState } from "react";
@@ -61,12 +62,13 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Second Row: Invoice + Chart */}
+        {/* Second Row: Profile Completion + Invoice + Chart */}
         <section>
           <h3 className="text-base font-semibold text-foreground mb-3">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+            <ProfileCompletionWidget />
             <InvoiceWidget compact />
             <div className="lg:col-span-4">
               <QuickActionsChart />
