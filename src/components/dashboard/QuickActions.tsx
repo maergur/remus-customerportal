@@ -1,7 +1,9 @@
-import { TrendingUp, AlertCircle, Zap, ChevronRight, Lightbulb, BarChart3 } from "lucide-react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const consumptionData = [
   { name: "Oca", tuketim: 320 },
@@ -19,13 +21,29 @@ const consumptionData = [
 ];
 
 const savingsTips = [
-  { tr: "Cihazlarınızı bekleme modunda bırakmayın", en: "Don't leave devices on standby" },
-  { tr: "LED ampuller ile %80 tasarruf edin", en: "Save 80% with LED bulbs" },
-  { tr: "Kış aylarında termostatı 1°C düşürün", en: "Lower thermostat by 1°C in winter" },
+  { tr: "💡 Cihazlarınızı bekleme modunda bırakmayın - yılda 50₺ tasarruf edin", en: "💡 Don't leave devices on standby - save 50₺/year" },
+  { tr: "💡 LED ampuller ile elektrik faturanızda %80 tasarruf edin", en: "💡 Save 80% on lighting with LED bulbs" },
+  { tr: "💡 Kış aylarında termostatı 1°C düşürün - %10 tasarruf", en: "💡 Lower thermostat by 1°C in winter - save 10%" },
 ];
 
 export function QuickActions() {
   const { language } = useLanguage();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const tipIndex = Math.floor(Math.random() * savingsTips.length);
+    const tip = savingsTips[tipIndex];
+    
+    const timer = setTimeout(() => {
+      toast({
+        title: language === "tr" ? "Tasarruf İpucu" : "Savings Tip",
+        description: language === "tr" ? tip.tr : tip.en,
+        duration: 8000,
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const quickLinks = [
     {
@@ -50,7 +68,6 @@ export function QuickActions() {
       to: "/ariza-destek",
     },
   ];
-
   return (
     <>
       {/* Combined Quick Links Card - Simplified */}
@@ -121,18 +138,6 @@ export function QuickActions() {
         </div>
       </Link>
 
-      {/* Savings Tips Card - Compact */}
-      <div className="sm:col-span-2 lg:col-span-1 bg-primary/5 rounded-2xl border border-primary/20 p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Lightbulb className="h-4 w-4 text-primary" />
-          <h4 className="font-semibold text-foreground text-sm">
-            {language === "tr" ? "Tasarruf İpucu" : "Savings Tip"}
-          </h4>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {language === "tr" ? savingsTips[0].tr : savingsTips[0].en}
-        </p>
-      </div>
     </>
   );
 }
