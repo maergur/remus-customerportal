@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check, Lightbulb } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
 import { useToast } from "@/hooks/use-toast";
@@ -52,31 +52,28 @@ const savingsTips = [
 export function QuickActions() {
   const { language, t } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const inviteCode = "REMUS2026";
 
-  const showRandomTip = () => {
+  useEffect(() => {
     const tipIndex = Math.floor(Math.random() * savingsTips.length);
     const tip = savingsTips[tipIndex];
     
-    toast({
-      title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
-      description: language === "tr" ? tip.tr : tip.en,
-      duration: 30000,
-      action: (
-        <ToastAction 
-          altText={language === "tr" ? "Daha fazla ipucu" : "More tips"}
-          onClick={() => showRandomTip()}
-        >
-          {language === "tr" ? "Başka ipucu" : "More tips"}
-        </ToastAction>
-      ),
-    });
-  };
-
-  useEffect(() => {
     const timer = setTimeout(() => {
-      showRandomTip();
+      toast({
+        title: language === "tr" ? "💡 Tasarruf İpucu" : "💡 Savings Tip",
+        description: language === "tr" ? tip.tr : tip.en,
+        duration: 30000,
+        action: (
+          <ToastAction 
+            altText={language === "tr" ? "Tüm ipuçları" : "All tips"}
+            onClick={() => navigate("/ipuclari")}
+          >
+            {language === "tr" ? "Tüm İpuçları" : "All Tips"}
+          </ToastAction>
+        ),
+      });
     }, 2000);
 
     return () => clearTimeout(timer);
