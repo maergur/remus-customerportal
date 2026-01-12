@@ -197,8 +197,8 @@ export function QuickActionsChart() {
   const minMonth = consumptionData.reduce((min, item) => item.tuketim < min.tuketim ? item : min, consumptionData[0]);
   
   return (
-    <Link to="/tuketim-analizi" className="sm:col-span-2">
-      <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
+    <Link to="/tuketim-analizi" className="sm:col-span-2 h-full">
+      <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4 flex flex-col">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h4 className="font-semibold text-foreground text-sm">
@@ -222,51 +222,57 @@ export function QuickActionsChart() {
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
-        
+
         {/* Chart */}
-        <div className="h-52">
+        <div className="flex-1 min-h-[13rem]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={fullChartData}>
               <defs>
                 <linearGradient id="dashboardGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} width={35} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))', 
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px',
-                  fontSize: '12px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                 }}
                 formatter={(value: number, name: string) => [
                   `${value} kWh`,
-                  name === 'actual' ? (language === "tr" ? 'Gerçek' : 'Actual') : (language === "tr" ? 'Tahmin' : 'Forecast')
+                  name === "actual"
+                    ? language === "tr"
+                      ? "Gerçek"
+                      : "Actual"
+                    : language === "tr"
+                      ? "Tahmin"
+                      : "Forecast",
                 ]}
               />
               <ReferenceLine x="Ara" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
-              <Area 
-                type="monotone" 
-                dataKey="actual" 
-                stroke="hsl(var(--primary))" 
-                fillOpacity={1} 
-                fill="url(#dashboardGradient)" 
+              <Area
+                type="monotone"
+                dataKey="actual"
+                stroke="hsl(var(--primary))"
+                fillOpacity={1}
+                fill="url(#dashboardGradient)"
                 strokeWidth={2}
                 connectNulls={false}
               />
-              <Area 
-                type="monotone" 
-                dataKey="forecast" 
-                stroke="hsl(38, 92%, 50%)" 
-                fillOpacity={1} 
-                fill="url(#forecastGradient)" 
+              <Area
+                type="monotone"
+                dataKey="forecast"
+                stroke="hsl(38, 92%, 50%)"
+                fillOpacity={1}
+                fill="url(#forecastGradient)"
                 strokeWidth={2}
                 strokeDasharray="5 5"
                 connectNulls={false}
