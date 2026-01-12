@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Clock, AlertTriangle, CheckCircle, ChevronRight } from "lucide-react";
+import { FileText, Clock, AlertTriangle, CheckCircle, Zap, TrendingUp, TrendingDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
@@ -27,6 +27,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   };
 
   const consumptionChange = ((invoice.consumption - invoice.previousConsumption) / invoice.previousConsumption) * 100;
+  const isIncrease = consumptionChange > 0;
 
   const getStatusConfig = () => {
     switch (invoice.status) {
@@ -78,26 +79,43 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
                 <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
               </div>
             </div>
-            
-            {/* Amount & Due Date - Prominent Display */}
-            <div className="flex-1 flex flex-col justify-end">
-              <div className="text-center mb-3">
-                <p className="text-3xl font-bold text-foreground">
-                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-base font-semibold">₺</span>
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
-                </p>
-              </div>
 
-              <Button 
-                className="w-full gap-2 h-8 text-xs" 
-                size="sm" 
-                onClick={() => setShowPayPanel(true)}
-              >
-                {t("payNow")}
-              </Button>
+            {/* Amount - Large & Centered */}
+            <div className="text-center py-1">
+              <p className="text-2xl font-bold text-foreground">
+                {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-sm font-semibold">₺</span>
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
+              </p>
             </div>
+
+            {/* Consumption Stats */}
+            <div className="bg-muted/40 rounded-lg p-2 my-2">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-1.5">
+                  <Zap className="h-3.5 w-3.5 text-primary" />
+                  <span className="text-[11px] text-muted-foreground">{t("consumption")}</span>
+                </div>
+                <div className={`flex items-center gap-0.5 ${isIncrease ? 'text-destructive' : 'text-primary'}`}>
+                  {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                  <span className="text-[10px] font-medium">{isIncrease ? '+' : ''}{consumptionChange.toFixed(1)}%</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-foreground">{invoice.consumption} kWh</span>
+                <span className="text-[10px] text-muted-foreground">önceki: {invoice.previousConsumption} kWh</span>
+              </div>
+              <Progress value={75} className="h-1 mt-1.5" />
+            </div>
+
+            <Button 
+              className="w-full gap-2 h-7 text-xs mt-auto" 
+              size="sm" 
+              onClick={() => setShowPayPanel(true)}
+            >
+              {t("payNow")}
+            </Button>
           </div>
         </div>
         
