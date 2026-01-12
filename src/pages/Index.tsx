@@ -66,9 +66,9 @@ const Index = () => {
           <h3 className="text-base font-semibold text-foreground mb-3">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             <InvoiceWidget compact />
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-4">
               <QuickActionsChart />
             </div>
           </div>
