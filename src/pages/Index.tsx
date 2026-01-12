@@ -52,11 +52,11 @@ const Index = () => {
     <DashboardLayout>
       <div className="flex flex-col gap-4 animate-page-enter">
         {/* Top Row: Hero + Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+          <div className="lg:col-span-2 min-h-[280px]">
             <HeroSection />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 min-h-[280px]">
             <QuickActions />
           </div>
         </div>
