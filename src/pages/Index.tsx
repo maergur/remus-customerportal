@@ -56,19 +56,19 @@ const Index = () => {
           <div className="lg:col-span-2">
             <HeroSection />
           </div>
-          <div className="lg:col-span-1 min-h-[calc(100vh-10rem)]">
+          <div className="lg:col-span-1">
             <QuickActions />
           </div>
         </div>
         
-        {/* Second Row: Invoice + Chart */}
-        <section>
+        {/* Second Row: Invoice + Chart - Full Height */}
+        <section className="flex-1 min-h-[calc(100vh-22rem)]">
           <h3 className="text-base font-semibold text-foreground mb-3">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 h-[calc(100%-2rem)]">
             <InvoiceWidget compact />
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-4 h-full">
               <QuickActionsChart />
             </div>
           </div>
