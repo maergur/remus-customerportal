@@ -82,17 +82,17 @@ export function QuickActions() {
     },
   ];
   return (
-    <div className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 p-4 h-full ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+    <div className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 p-3 h-full ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
       {/* Referral Section - Main Focus */}
-      <Link to="/referans" className="block mb-4">
-        <div className="flex items-center justify-between p-3 rounded-xl bg-primary/10 hover:bg-primary/15 transition-colors">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
-              <Gift className="h-5 w-5 text-primary" />
+      <Link to="/referans" className="block mb-3">
+        <div className="flex items-center justify-between p-2.5 rounded-xl bg-primary/10 hover:bg-primary/15 transition-colors">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
+              <Gift className="h-4 w-4 text-primary" />
             </div>
             <div>
               <h4 className="font-semibold text-foreground text-sm">{t("referFriends")}</h4>
-              <p className="text-xs text-muted-foreground">{t("referralDesc")}</p>
+              <p className="text-[11px] text-muted-foreground">{t("referralDesc")}</p>
             </div>
           </div>
           <ChevronRight className="h-4 w-4 text-primary" />
@@ -100,37 +100,37 @@ export function QuickActions() {
       </Link>
 
       {/* Invite Code */}
-      <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-2.5 border border-border/50 mb-4">
+      <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-2 border border-border/50 mb-3">
         <div className="flex items-center justify-between gap-2">
           <code className="text-sm font-bold text-foreground tracking-wider">{inviteCode}</code>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleCopy}
-            className="h-7 px-2 text-xs"
+            className="h-6 px-2 text-xs"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
           </Button>
         </div>
       </div>
 
       {/* Quick Links with Details */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {quickLinks.map((link, index) => (
           <Link key={index} to={link.to}>
-            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 transition-colors border border-border/50">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <link.icon className="h-4 w-4 text-primary" />
+            <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors border border-border/50">
+              <div className="flex items-center gap-2">
+                <div className="h-7 w-7 rounded-md bg-primary/10 flex items-center justify-center">
+                  <link.icon className="h-3.5 w-3.5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">{link.title}</p>
-                  <p className="text-xs text-muted-foreground">{link.subValue}</p>
+                  <p className="text-xs font-medium text-foreground">{link.title}</p>
+                  <p className="text-[10px] text-muted-foreground">{link.subValue}</p>
                 </div>
               </div>
-              <div className="text-right flex items-center gap-2">
-                <span className="text-sm font-semibold text-foreground">{link.value}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              <div className="text-right flex items-center gap-1">
+                <span className="text-xs font-semibold text-foreground">{link.value}</span>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
               </div>
             </div>
           </Link>

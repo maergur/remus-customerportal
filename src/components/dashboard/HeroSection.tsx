@@ -7,7 +7,7 @@ export function HeroSection() {
   const { t } = useLanguage();
   
   return (
-    <section className="relative overflow-hidden rounded-2xl h-full min-h-[264px]">
+    <section className="relative overflow-hidden rounded-2xl h-full min-h-[200px]">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
