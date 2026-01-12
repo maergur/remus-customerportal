@@ -1,6 +1,5 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { HeroSection } from "@/components/dashboard/HeroSection";
-import { ReferralWidget } from "@/components/dashboard/ReferralWidget";
 import { QuickActions, QuickActionsChart } from "@/components/dashboard/QuickActions";
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -67,9 +66,8 @@ const Index = () => {
           <h3 className="text-lg font-semibold text-foreground mb-4">
             {t("quickActions")}
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <InvoiceWidget compact />
-            <ReferralWidget />
             <QuickActionsChart />
           </div>
         </section>

@@ -1,9 +1,12 @@
-import { TrendingUp, AlertCircle, Zap, ChevronRight, BarChart3 } from "lucide-react";
+import { useState } from "react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { toast as sonnerToast } from "sonner";
 
 const consumptionData = [
   { name: "Oca", tuketim: 320 },
@@ -27,8 +30,10 @@ const savingsTips = [
 ];
 
 export function QuickActions() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
+  const inviteCode = "REMUS2026";
 
   useEffect(() => {
     const tipIndex = Math.floor(Math.random() * savingsTips.length);
@@ -36,47 +41,78 @@ export function QuickActions() {
     
     const timer = setTimeout(() => {
       toast({
-        title: language === "tr" ? "Tasarruf İpucu" : "Savings Tip",
         description: language === "tr" ? tip.tr : tip.en,
-        duration: 8000,
+        duration: 6000,
       });
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await navigator.clipboard.writeText(inviteCode);
+    setCopied(true);
+    sonnerToast.success(t("copied"));
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const quickLinks = [
     {
       icon: Zap,
       title: language === "tr" ? "Aktif Tarife" : "Active Tariff",
-      value: language === "tr" ? "Yeşil Enerji Pro" : "Green Energy Pro",
-      subValue: "0,85 ₺/kWh",
       to: "/tarifeler",
     },
     {
       icon: TrendingUp,
-      title: language === "tr" ? "Bu Ay Tüketim" : "This Month",
-      value: "245 kWh",
-      subValue: language === "tr" ? "%9 artış" : "9% increase",
+      title: language === "tr" ? "Tüketim Analizi" : "Consumption",
       to: "/tuketim-analizi",
     },
     {
       icon: AlertCircle,
       title: language === "tr" ? "Destek" : "Support",
-      value: language === "tr" ? "7/24 Aktif" : "24/7 Active",
-      subValue: language === "tr" ? "~15 dk yanıt" : "~15 min response",
       to: "/ariza-destek",
     },
   ];
   return (
-    <div className="bg-card rounded-2xl border border-border p-4 h-full">
-      <h4 className="font-semibold text-foreground text-sm mb-3">
-        {language === "tr" ? "Hızlı Erişim" : "Quick Access"}
-      </h4>
-      <div className="space-y-2">
+    <div className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 p-4 h-full ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+      {/* Referral Section - Main Focus */}
+      <Link to="/referans" className="block mb-4">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-primary/10 hover:bg-primary/15 transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
+              <Gift className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground text-sm">{t("referFriends")}</h4>
+              <p className="text-xs text-muted-foreground">{t("referralDesc")}</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-primary" />
+        </div>
+      </Link>
+
+      {/* Invite Code */}
+      <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-2.5 border border-border/50 mb-4">
+        <div className="flex items-center justify-between gap-2">
+          <code className="text-sm font-bold text-foreground tracking-wider">{inviteCode}</code>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopy}
+            className="h-7 px-2 text-xs"
+          >
+            {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
+          </Button>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div className="space-y-1">
         {quickLinks.map((link, index) => (
           <Link key={index} to={link.to}>
-            <div className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-muted/50 transition-colors">
+            <div className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors">
               <div className="flex items-center gap-2">
                 <link.icon className="h-4 w-4 text-primary" />
                 <span className="text-sm text-foreground">{link.title}</span>
