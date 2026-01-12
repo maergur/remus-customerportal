@@ -65,55 +65,58 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border h-full p-2.5 flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-1.5">
-            <div className="flex items-center gap-1.5">
-              <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
-                <FileText className="h-3 w-3 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground text-xs">{t("lastInvoice")}</h3>
-                <p className="text-[10px] text-muted-foreground">{invoice.month}</p>
-              </div>
+        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col">
+          {/* Header - ikon ve durum badge */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
+              <FileText className="h-4 w-4 text-primary" />
             </div>
-            <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full ${statusConfig.bgColor}`}>
-              <StatusIcon className={`h-2.5 w-2.5 ${statusConfig.color}`} />
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${statusConfig.bgColor}`}>
+              <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
               <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
             </div>
+          </div>
+
+          {/* Başlık */}
+          <div className="mb-1">
+            <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
+            <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
           </div>
 
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Tutar */}
-          <div className="mb-1.5">
-            <p className="text-2xl font-bold text-foreground tracking-tight">
+          {/* Tutar - büyük ve merkezi */}
+          <div className="text-center py-3">
+            <p className="text-3xl font-bold text-foreground tracking-tight">
               {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-              <span className="text-sm font-medium ml-0.5">₺</span>
-            </p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">
-              {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
+              <span className="text-base font-medium ml-0.5">₺</span>
             </p>
           </div>
 
-          {/* Tüketim bilgisi */}
-          <div className="bg-muted/50 rounded-md px-2 py-1.5 mb-1.5">
+          {/* Alt bilgiler */}
+          <div className="space-y-2 mb-3">
             <div className="flex items-center justify-between text-[11px]">
-              <div className="flex items-center gap-1">
+              <span className="text-muted-foreground">{t("dueDate")}</span>
+              <span className="font-medium text-foreground">{invoice.dueDate}</span>
+            </div>
+            <div className="flex items-center justify-between text-[11px]">
+              <div className="flex items-center gap-1 text-muted-foreground">
                 <Zap className="h-3 w-3 text-primary" />
-                <span className="text-muted-foreground">{invoice.consumption} kWh</span>
+                <span>Tüketim</span>
               </div>
-              <div className={`flex items-center gap-0.5 font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
-                {isIncrease ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
-                <span>{isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%</span>
+              <div className="flex items-center gap-1">
+                <span className="font-medium text-foreground">{invoice.consumption} kWh</span>
+                <span className={`font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                  {isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%
+                </span>
               </div>
             </div>
           </div>
 
           {/* Buton */}
           <Button 
-            className="w-full h-7 text-xs" 
+            className="w-full" 
             size="sm" 
             onClick={() => setShowPayPanel(true)}
           >
