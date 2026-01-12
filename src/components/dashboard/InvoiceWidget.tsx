@@ -61,56 +61,56 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-gradient-to-br from-orange-500/10 via-card to-card rounded-2xl border border-border/80 overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
-          <div className="p-3 flex-1 flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-orange-500" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
-                  <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
-                </div>
+        <div className="bg-card rounded-2xl border border-border h-full flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between p-3 pb-2">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="h-4 w-4 text-primary" />
               </div>
-              <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
-                <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
-                <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
+              <div>
+                <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
+                <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
               </div>
             </div>
-
-            {/* Amount - Large & Centered */}
-            <div className="text-center py-1">
-              <p className="text-2xl font-bold text-foreground">
-                {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-sm font-semibold">₺</span>
-              </p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">
-                {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
-              </p>
+            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
+              <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
+              <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
             </div>
+          </div>
 
-            {/* Consumption Stats */}
-            <div className="bg-muted/40 rounded-lg p-2 my-2">
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-primary" />
-                  <span className="text-[11px] text-muted-foreground">{t("consumption")}</span>
-                </div>
-                <div className={`flex items-center gap-0.5 ${isIncrease ? 'text-destructive' : 'text-primary'}`}>
-                  {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  <span className="text-[10px] font-medium">{isIncrease ? '+' : ''}{consumptionChange.toFixed(1)}%</span>
-                </div>
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col justify-center px-3">
+            <div className="flex items-baseline justify-between">
+              <div>
+                <p className="text-2xl font-bold text-foreground tracking-tight">
+                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                  <span className="text-sm font-medium ml-0.5">₺</span>
+                </p>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-foreground">{invoice.consumption} kWh</span>
-                <span className="text-[10px] text-muted-foreground">önceki: {invoice.previousConsumption} kWh</span>
+              <div className="text-right">
+                <p className="text-[10px] text-muted-foreground">{t("dueDate")}</p>
+                <p className="text-xs font-medium text-foreground">{invoice.dueDate}</p>
               </div>
-              <Progress value={75} className="h-1 mt-1.5" />
             </div>
+            
+            {/* Consumption mini stat */}
+            <div className="flex items-center gap-2 mt-2 text-[11px]">
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Zap className="h-3 w-3 text-primary" />
+                <span>{invoice.consumption} kWh</span>
+              </div>
+              <div className={`flex items-center gap-0.5 ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                <span className="font-medium">{isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%</span>
+              </div>
+            </div>
+          </div>
 
+          {/* Footer */}
+          <div className="p-3 pt-2">
             <Button 
-              className="w-full gap-2 h-7 text-xs mt-auto" 
+              className="w-full h-8 text-xs" 
               size="sm" 
               onClick={() => setShowPayPanel(true)}
             >
