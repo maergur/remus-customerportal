@@ -3,7 +3,7 @@ import { AlertTriangle, Phone, MessageSquare, Clock, CheckCircle, Building2, Sen
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useOnboarding } from "@/contexts/OnboardingContext";
+
 
 // Dağıtım firmalarının iletişim bilgileri
 const distributionCompanies: Record<string, {
@@ -91,10 +91,9 @@ const recentTickets = [
 
 const ArizaDestek = () => {
   const [description, setDescription] = useState("");
-  const { data } = useOnboarding();
   
   // Müşterinin kayıtlı dağıtım firmasını al (şimdilik varsayılan kullanılıyor)
-  // İleride OnboardingContext'e distributionCompany alanı eklenebilir
+  // İleride kullanıcı profili veritabanından çekilebilir
   const customerCompany = defaultCompany;
 
   const handleSubmit = () => {
