@@ -97,18 +97,16 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </p>
           </div>
 
-          {/* Geçen ay karşılaştırması */}
+          {/* Tüketim bilgisi */}
           <div className="bg-muted/50 rounded-lg px-2.5 py-2 mb-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">Geçen ay</span>
-              <div className="flex items-center gap-2">
-                <span className="text-foreground font-medium">
-                  {invoice.previousAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
-                </span>
-                <div className={`flex items-center gap-0.5 font-medium ${isAmountIncrease ? 'text-amber-600' : 'text-primary'}`}>
-                  {isAmountIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  <span>{isAmountIncrease ? '+' : ''}{amountChange.toFixed(0)}%</span>
-                </div>
+              <div className="flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5 text-primary" />
+                <span className="text-muted-foreground">{invoice.consumption} kWh</span>
+              </div>
+              <div className={`flex items-center gap-1 font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                <span>{isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%</span>
               </div>
             </div>
           </div>

@@ -68,7 +68,9 @@ const Index = () => {
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <InvoiceWidget compact />
-            <QuickActionsChart />
+            <div className="lg:col-span-2">
+              <QuickActionsChart />
+            </div>
           </div>
         </section>
       </div>
