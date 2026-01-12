@@ -68,7 +68,7 @@ const Tarifeler = () => {
 
   return (
     <DashboardLayout>
-      <div className="animate-page-enter flex flex-col gap-5 min-h-[calc(100vh-4rem-2rem)] max-h-[calc(100vh-4rem-2rem)] lg:min-h-[calc(100vh-4rem-3rem)] lg:max-h-[calc(100vh-4rem-3rem)] overflow-hidden">
+      <div className="animate-page-enter flex flex-col gap-5">
         {/* Header */}
         <header className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div>
