@@ -130,7 +130,7 @@ export function QuickActions() {
     },
   ];
   return (
-    <div className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 p-3 h-full ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+    <div className="bg-gradient-to-br from-primary/10 via-card to-card rounded-2xl border-2 border-primary/30 p-4 h-full min-h-[280px] flex flex-col ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
       {/* Referral Section - Main Focus */}
       <Link to="/referans" className="block mb-3">
         <div className="flex items-center justify-between p-2.5 rounded-xl bg-primary/10 hover:bg-primary/15 transition-colors">
@@ -163,7 +163,7 @@ export function QuickActions() {
       </div>
 
       {/* Quick Links with Details */}
-      <div className="space-y-1.5">
+      <div className="space-y-2 flex-1 flex flex-col justify-evenly">
         {quickLinks.map((link, index) => (
           <Link key={index} to={link.to}>
             <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors border border-border/50">
