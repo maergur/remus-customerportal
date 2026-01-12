@@ -66,126 +66,128 @@ const Tarifeler = () => {
 
   return (
     <DashboardLayout>
-      <div className="h-full flex flex-col gap-4">
-        {/* Header - Compact */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Tarifeler</h1>
-            <p className="text-sm text-muted-foreground">Size en uygun enerji tarifesini seçin</p>
-          </div>
-          {/* Current Tariff Badge */}
-          <div className="hidden sm:flex items-center gap-3 bg-primary/5 rounded-xl px-4 py-2 border border-primary/20">
-            <Lock className="h-5 w-5 text-primary" />
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground">Mevcut Tarife</p>
-              <p className="text-sm font-bold text-foreground">Yıllık Sabit • ₺2,80/kWh</p>
+      <div className="flex flex-col gap-6 animate-page-enter">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Tarifeler</h1>
+          <p className="text-muted-foreground mt-1">Size en uygun enerji tarifesini seçin</p>
+        </div>
+
+        {/* Current Tariff Banner */}
+        <div className="bg-primary/5 rounded-2xl p-5 border border-primary/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Lock className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Mevcut Tarifeniz</p>
+                <p className="text-lg font-bold text-foreground">Yıllık Sabit Fiyat</p>
+              </div>
+            </div>
+            <div className="text-left sm:text-right">
+              <p className="text-sm text-muted-foreground">Birim Fiyat</p>
+              <p className="text-lg font-bold text-primary">₺2,80 / kWh</p>
             </div>
           </div>
         </div>
 
-        {/* Main Content - Two Column Layout */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-4 min-h-0">
-          {/* Left: Tariff Cards */}
-          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {tariffs.map((tariff) => {
-              const Icon = tariff.icon;
-              const isCurrent = tariff.id === 'sabit';
-              
-              return (
-                <div 
-                  key={tariff.id} 
-                  className={`relative bg-card rounded-xl p-4 border ${tariff.popular ? 'border-primary shadow-glow' : 'border-border'} flex flex-col`}
-                >
-                  {tariff.popular && (
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-primary text-primary-foreground">
-                        Popüler
-                      </span>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Tariff Cards */}
+          {tariffs.map((tariff) => {
+            const Icon = tariff.icon;
+            const isCurrent = tariff.id === 'sabit';
+            
+            return (
+              <div 
+                key={tariff.id} 
+                className={`relative bg-card rounded-2xl p-6 border ${tariff.popular ? 'border-primary shadow-glow' : 'border-border'} flex flex-col`}
+              >
+                {tariff.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-primary text-primary-foreground">
+                      Popüler
+                    </span>
+                  </div>
+                )}
+                
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                  <Icon className="h-6 w-6 text-primary" />
+                </div>
+
+                <h3 className="text-lg font-bold text-foreground">{tariff.name}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{tariff.description}</p>
+
+                <div className="mb-5 flex-1">
+                  {tariff.id === 'sabit' ? (
+                    <div>
+                      <span className="text-3xl font-bold text-foreground">{tariff.price}</span>
+                      <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-2xl font-bold text-foreground">{tariff.unit}</span>
+                      <p className="text-xs text-muted-foreground/60 mt-1">{tariff.price}</p>
                     </div>
                   )}
-                  
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-foreground truncate">{tariff.name}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-1">{tariff.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="mb-3 flex-1">
-                    {tariff.id === 'sabit' ? (
-                      <div>
-                        <span className="text-xl font-bold text-foreground">{tariff.price}</span>
-                        <span className="text-muted-foreground text-xs ml-1">{tariff.unit}</span>
-                      </div>
-                    ) : (
-                      <div>
-                        <span className="text-lg font-bold text-foreground">{tariff.unit}</span>
-                        <p className="text-[10px] text-muted-foreground/60">{tariff.price}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <Button 
-                    variant={tariff.popular ? "default" : "outline"} 
-                    size="sm"
-                    className="w-full"
-                    onClick={() => handleSelectTariff(tariff.name)}
-                    disabled={isCurrent}
-                  >
-                    {isCurrent ? "Mevcut" : "Seç"}
-                    {!isCurrent && <ArrowRight className="h-3.5 w-3.5 ml-1" />}
-                  </Button>
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Right: Comparison Card */}
-          <Card className="lg:col-span-2 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden flex flex-col">
-            <CardHeader className="pb-2 pt-4 px-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Calculator className="w-4 h-4 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-sm">Fatura Karşılaştırması</CardTitle>
-                  <CardDescription className="text-xs">1.000 TL baz fatura örneği</CardDescription>
-                </div>
+                <Button 
+                  variant={tariff.popular ? "default" : "outline"} 
+                  className="w-full"
+                  onClick={() => handleSelectTariff(tariff.name)}
+                  disabled={isCurrent}
+                >
+                  {isCurrent ? "Mevcut Tarife" : "Seç"}
+                  {!isCurrent && <ArrowRight className="h-4 w-4 ml-1" />}
+                </Button>
               </div>
-            </CardHeader>
-            <CardContent className="flex-1 px-4 pb-4 pt-2">
-              <div className="grid grid-cols-1 gap-2 h-full">
-                {comparisonScenarios.map((scenario, index) => {
-                  const Icon = scenario.icon;
-                  return (
-                    <div
-                      key={index}
-                      className="bg-background rounded-lg p-3 border border-border/50 flex items-center gap-3"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-4 h-4 text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium truncate">{scenario.tariff}</p>
-                        <p className="text-[10px] text-muted-foreground">{scenario.note}</p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-bold text-foreground">{scenario.actualBill}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+            );
+          })}
         </div>
 
-        {/* Footer Info - Compact */}
-        <div className="bg-secondary/50 rounded-xl px-4 py-2.5 text-center">
-          <p className="text-muted-foreground text-xs">
+        {/* Comparison Card - Full Width */}
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Fatura Karşılaştırması</CardTitle>
+                <CardDescription>1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {comparisonScenarios.map((scenario, index) => {
+                const Icon = scenario.icon;
+                return (
+                  <div
+                    key={index}
+                    className="bg-background rounded-xl p-5 border border-border/50"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <p className="text-sm font-semibold">{scenario.tariff}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-1">Tahmini Fatura</p>
+                    <p className="text-2xl font-bold text-foreground">{scenario.actualBill}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Footer Info */}
+        <div className="bg-secondary/50 rounded-2xl p-4 text-center">
+          <p className="text-muted-foreground text-sm">
             Tarife değişikliği bir sonraki fatura döneminden itibaren geçerli olacaktır.
           </p>
         </div>
