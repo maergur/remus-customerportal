@@ -61,8 +61,8 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col justify-end">
-          {/* Header - kompakt */}
+        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col">
+          {/* Header - üstte */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -78,6 +78,9 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
               <span className={`text-[11px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
             </div>
           </div>
+
+          {/* Spacer - boşluğu üstte tutar */}
+          <div className="flex-1" />
 
           {/* Tutar - büyük ve belirgin */}
           <div className="mb-2">
