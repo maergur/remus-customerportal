@@ -11,6 +11,7 @@ import Tarifeler from "./pages/Tarifeler";
 import Referans from "./pages/Referans";
 import Onboarding from "./pages/Onboarding";
 import Ipuclari from "./pages/Ipuclari";
+import Profil from "./pages/Profil";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/tarifeler" element={<Tarifeler />} />
           <Route path="/referans" element={<Referans />} />
           <Route path="/ipuclari" element={<Ipuclari />} />
+          <Route path="/profil" element={<Profil />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

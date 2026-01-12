@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const notifications = [
   {
@@ -61,10 +62,15 @@ export function TopBar() {
   const { toggle } = useSidebarContext();
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const navigate = useNavigate();
   const unreadCount = notifications.filter(n => n.unread).length;
 
   const handleLogout = () => {
     toast.success(language === "tr" ? "Başarıyla çıkış yapıldı" : "Successfully logged out");
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profil');
   };
 
   return (
@@ -183,7 +189,10 @@ export function TopBar() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary">
+            <DropdownMenuItem 
+              className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary"
+              onClick={handleProfileClick}
+            >
               <UserCircle className="h-4 w-4 text-muted-foreground" />
               <span>{t("profile")}</span>
             </DropdownMenuItem>
