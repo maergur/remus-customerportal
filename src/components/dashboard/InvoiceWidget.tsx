@@ -61,7 +61,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col">
+        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col justify-end">
           {/* Header - kompakt */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
@@ -79,11 +79,11 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </div>
           </div>
 
-          {/* Tutar - kompakt, sola yaslı */}
+          {/* Tutar - büyük ve belirgin */}
           <div className="mb-2">
-            <p className="text-2xl font-bold text-foreground tracking-tight">
+            <p className="text-3xl font-bold text-foreground tracking-tight">
               {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-              <span className="text-sm font-medium ml-1">₺</span>
+              <span className="text-base font-medium ml-1">₺</span>
             </p>
             <p className="text-[11px] text-muted-foreground mt-1">
               {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
@@ -106,7 +106,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
 
           {/* Buton - en altta */}
           <Button 
-            className="w-full h-8 mt-auto" 
+            className="w-full h-8" 
             size="sm" 
             onClick={() => setShowPayPanel(true)}
           >
