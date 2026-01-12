@@ -151,37 +151,26 @@ export function QuickActionsChart() {
   return (
     <Link to="/tuketim-analizi" className="sm:col-span-2">
       <div className="bg-card rounded-2xl border border-border overflow-hidden card-hover cursor-pointer h-full p-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h4 className="font-semibold text-foreground text-base">
-              {language === "tr" ? "Yıllık Tüketim Analizi" : "Yearly Consumption Analysis"}
+            <h4 className="font-semibold text-foreground text-sm">
+              {language === "tr" ? "Yıllık Tüketim" : "Yearly Consumption"}
             </h4>
             <p className="text-xs text-muted-foreground">
               {language === "tr" ? "Detaylı analiz için tıklayın" : "Click for detailed analysis"}
             </p>
           </div>
-          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-        </div>
-        
-        {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
-            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "Toplam" : "Total"}</p>
-            <p className="text-lg font-bold text-foreground">{totalConsumption.toLocaleString()} <span className="text-xs font-normal">kWh</span></p>
-          </div>
-          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
-            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "Ortalama" : "Average"}</p>
-            <p className="text-lg font-bold text-foreground">{avgConsumption} <span className="text-xs font-normal">kWh</span></p>
-          </div>
-          <div className="bg-secondary/50 dark:bg-secondary/30 rounded-lg p-3 border border-border/50">
-            <p className="text-xs text-muted-foreground mb-1">{language === "tr" ? "En Yüksek" : "Peak"}</p>
-            <p className="text-lg font-bold text-foreground">{maxMonth.tuketim} <span className="text-xs font-normal">kWh</span></p>
-            <p className="text-[10px] text-muted-foreground">{maxMonth.name}</p>
+          <div className="flex items-center gap-4 text-xs">
+            <div className="text-right">
+              <span className="text-muted-foreground">{language === "tr" ? "Toplam: " : "Total: "}</span>
+              <span className="font-semibold text-foreground">{totalConsumption.toLocaleString()} kWh</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
         
         {/* Chart */}
-        <div className="h-48">
+        <div className="h-28">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={consumptionData}>
               <defs>
