@@ -58,8 +58,10 @@ const InvoiceWidget = ({
   };
   const statusConfig = getStatusConfig();
   const StatusIcon = statusConfig.icon;
+
   if (compact) {
-    return <>
+    return (
+      <>
         <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col">
           {/* Header - ikon ve durum badge */}
           <div className="flex items-center justify-between mb-3">
@@ -73,46 +75,46 @@ const InvoiceWidget = ({
           </div>
 
           {/* Başlık */}
-          <div className="mb-1">
+          <div className="mb-2">
             <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
             <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
           </div>
 
-          {/* Spacer */}
-          
+          {/* Orantılı içerik */}
+          <div className="flex-1 flex flex-col justify-center">
+            {/* Tutar - büyük ve merkezi */}
+            <div className="text-center">
+              <p className="text-3xl font-bold text-foreground tracking-tight">
+                {invoice.amount.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}
+                <span className="text-base font-medium ml-0.5">₺</span>
+              </p>
+            </div>
 
-          {/* Tutar - büyük ve merkezi */}
-          <div className="text-center py-3">
-            <p className="text-3xl font-bold text-foreground tracking-tight">
-              {invoice.amount.toLocaleString('tr-TR', {
-              minimumFractionDigits: 2
-            })}
-              <span className="text-base font-medium ml-0.5">₺</span>
-            </p>
-          </div>
-
-          {/* Alt bilgi */}
-          <div className="flex items-center justify-between text-[11px] mb-3">
-            <span className="text-muted-foreground">{t("dueDate")}</span>
-            <span className="font-medium text-foreground">{invoice.dueDate}</span>
+            {/* Alt bilgi */}
+            <div className="flex items-center justify-between text-[11px] mt-4">
+              <span className="text-muted-foreground">{t("dueDate")}</span>
+              <span className="font-medium text-foreground">{invoice.dueDate}</span>
+            </div>
           </div>
 
           {/* Butonlar */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mt-4">
             <Button className="w-full" size="sm" onClick={() => setShowPayPanel(true)}>
               {t("payNow")}
             </Button>
             <Button variant="outline" className="w-full" size="sm" asChild>
-              <Link to="/faturalar">
-                {t("details")}
-              </Link>
+              <Link to="/faturalar">{t("details")}</Link>
             </Button>
           </div>
         </div>
-        
-        {showPayPanel && <PayNowPanel amount={invoice.amount} onClose={() => setShowPayPanel(false)} />}
-      </>;
+
+        {showPayPanel && (
+          <PayNowPanel amount={invoice.amount} onClose={() => setShowPayPanel(false)} />
+        )}
+      </>
+    );
   }
+
   return <>
       <div className="bg-card rounded-2xl border border-border overflow-hidden h-full">
         {/* Header */}
