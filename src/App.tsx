@@ -10,6 +10,7 @@ import ArizaDestek from "./pages/ArizaDestek";
 import Tarifeler from "./pages/Tarifeler";
 import Referans from "./pages/Referans";
 import Onboarding from "./pages/Onboarding";
+import Ipuclari from "./pages/Ipuclari";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/ariza-destek" element={<ArizaDestek />} />
           <Route path="/tarifeler" element={<Tarifeler />} />
           <Route path="/referans" element={<Referans />} />
+          <Route path="/ipuclari" element={<Ipuclari />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
