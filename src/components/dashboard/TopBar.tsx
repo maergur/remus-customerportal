@@ -1,6 +1,7 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Globe, Sun, Moon, Languages } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Sun, Moon, Languages, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,7 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const notifications = [
   {
@@ -65,6 +67,30 @@ export function TopBar() {
   const navigate = useNavigate();
   const unreadCount = notifications.filter(n => n.unread).length;
 
+  const [completionPercent, setCompletionPercent] = useState(0);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('onboardingData');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        const items = [
+          !!(data.personalInfo?.firstName && data.personalInfo?.lastName && data.personalInfo?.email),
+          !!data.phoneVerified,
+          !!data.addressConfirmed,
+          !!data.selectedTariff,
+          !!data.contractAccepted,
+        ];
+        const completed = items.filter(Boolean).length;
+        setCompletionPercent(Math.round((completed / items.length) * 100));
+      } catch {
+        setCompletionPercent(0);
+      }
+    }
+  }, []);
+
+  const isComplete = completionPercent === 100;
+
   const handleLogout = () => {
     toast.success(language === "tr" ? "Başarıyla çıkış yapıldı" : "Successfully logged out");
   };
@@ -76,8 +102,7 @@ export function TopBar() {
   return (
     <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
       {/* Left Section */}
-      <div className="flex items-center gap-3">
-        {/* Mobile Menu Button */}
+      <div className="flex items-center gap-3 flex-1">
         {/* Mobile Menu Button */}
         <Button 
           variant="ghost" 
@@ -88,14 +113,29 @@ export function TopBar() {
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* Search */}
-        <div className="relative w-full max-w-md hidden sm:block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder={language === "tr" ? "İşlem veya Sayfa Ara..." : "Search transactions or pages..."}
-            className="pl-11 bg-secondary/50 border-transparent focus:border-primary/30"
-          />
-        </div>
+        {/* Profile Completion Bar */}
+        <button 
+          onClick={handleProfileClick}
+          className="hidden sm:flex items-center gap-3 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-4 py-2 max-w-md w-full"
+        >
+          {isComplete ? (
+            <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+          ) : (
+            <div className="h-4 w-4 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0">
+              <span className="text-[8px] font-bold text-primary">{Math.round(completionPercent / 20)}</span>
+            </div>
+          )}
+          <span className="text-sm text-foreground whitespace-nowrap">
+            {isComplete 
+              ? (language === "tr" ? "Profil Tamamlandı" : "Profile Complete")
+              : (language === "tr" ? "Profilimi Tamamla" : "Complete Profile")
+            }
+          </span>
+          <div className="flex-1 min-w-[80px]">
+            <Progress value={completionPercent} variant="glow" className="h-1.5" />
+          </div>
+          <span className="text-xs font-bold text-primary">{completionPercent}%</span>
+        </button>
       </div>
 
       {/* Right Section */}
