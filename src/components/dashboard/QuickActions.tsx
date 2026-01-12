@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check, Lightbulb } from "lucide-react";
+import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check, Lightbulb, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
@@ -69,8 +69,9 @@ export function QuickActions() {
           <ToastAction 
             altText={language === "tr" ? "Tüm ipuçları" : "All tips"}
             onClick={() => navigate("/ipuclari")}
+            className="p-2"
           >
-            {language === "tr" ? "Tüm İpuçları" : "All Tips"}
+            <ArrowRight className="h-4 w-4" />
           </ToastAction>
         ),
       });
