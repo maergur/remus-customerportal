@@ -101,9 +101,9 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
           </div>
 
           {/* Butonlar */}
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <Button 
-              className="flex-1" 
+              className="w-full" 
               size="sm" 
               onClick={() => setShowPayPanel(true)}
             >
@@ -111,7 +111,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </Button>
             <Button 
               variant="outline"
-              className="flex-1" 
+              className="w-full" 
               size="sm" 
               asChild
             >
