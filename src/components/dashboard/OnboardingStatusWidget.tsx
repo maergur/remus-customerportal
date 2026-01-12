@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 interface OnboardingStatusWidgetProps {
   status: ApplicationStatus;
   currentStep: number;
@@ -21,7 +21,15 @@ export function OnboardingStatusWidget({
   const { t } = useLanguage();
   const navigate = useNavigate();
   
-  const progressPercent = Math.round((currentStep / totalSteps) * 100);
+  const targetPercent = Math.round((currentStep / totalSteps) * 100);
+  const [animatedPercent, setAnimatedPercent] = useState(0);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedPercent(targetPercent);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [targetPercent]);
   
   const handleContinue = () => {
     navigate("/onboarding");
@@ -51,9 +59,9 @@ export function OnboardingStatusWidget({
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("progress")}</span>
-                <span className="text-primary font-medium">{progressPercent}%</span>
+                <span className="text-primary font-medium transition-all duration-700">{animatedPercent}%</span>
               </div>
-              <Progress value={progressPercent} className="h-2" />
+              <Progress value={animatedPercent} variant="glow" className="h-2" />
             </div>
             
             <Button onClick={handleContinue} className="group">
