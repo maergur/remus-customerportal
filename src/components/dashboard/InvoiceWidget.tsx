@@ -61,62 +61,52 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-3 pb-2">
+        <div className="bg-card rounded-2xl border border-border h-full p-4 flex flex-col">
+          {/* Header - same structure as QuickActionsChart */}
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <FileText className="h-4 w-4 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
-                <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
+                <p className="text-xs text-muted-foreground">{invoice.month}</p>
               </div>
             </div>
-            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
-              <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
-              <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${statusConfig.bgColor}`}>
+              <StatusIcon className={`h-3.5 w-3.5 ${statusConfig.color}`} />
+              <span className={`text-xs font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col justify-center px-3">
-            <div className="flex items-baseline justify-between">
-              <div>
-                <p className="text-2xl font-bold text-foreground tracking-tight">
-                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                  <span className="text-sm font-medium ml-0.5">₺</span>
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-[10px] text-muted-foreground">{t("dueDate")}</p>
-                <p className="text-xs font-medium text-foreground">{invoice.dueDate}</p>
-              </div>
-            </div>
-            
-            {/* Consumption mini stat */}
-            <div className="flex items-center gap-2 mt-2 text-[11px]">
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Zap className="h-3 w-3 text-primary" />
-                <span>{invoice.consumption} kWh</span>
-              </div>
-              <div className={`flex items-center gap-0.5 ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
-                {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                <span className="font-medium">{isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%</span>
+          {/* Amount Section - fills remaining space */}
+          <div className="flex-1 flex flex-col justify-center">
+            <p className="text-3xl font-bold text-foreground tracking-tight">
+              {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+              <span className="text-base font-medium ml-1">₺</span>
+            </p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-muted-foreground">
+                {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
+              </p>
+              <div className="flex items-center gap-1.5 text-xs">
+                <Zap className="h-3.5 w-3.5 text-primary" />
+                <span className="text-muted-foreground">{invoice.consumption} kWh</span>
+                <span className={`font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                  {isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="p-3 pt-2">
-            <Button 
-              className="w-full h-8 text-xs" 
-              size="sm" 
-              onClick={() => setShowPayPanel(true)}
-            >
-              {t("payNow")}
-            </Button>
-          </div>
+          {/* Action Button */}
+          <Button 
+            className="w-full h-9 mt-4" 
+            size="sm" 
+            onClick={() => setShowPayPanel(true)}
+          >
+            {t("payNow")}
+          </Button>
         </div>
         
         {showPayPanel && (
