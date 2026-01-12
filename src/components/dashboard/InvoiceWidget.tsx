@@ -94,34 +94,32 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             </p>
           </div>
 
-          {/* Alt bilgiler */}
-          <div className="space-y-2 mb-3">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-muted-foreground">{t("dueDate")}</span>
-              <span className="font-medium text-foreground">{invoice.dueDate}</span>
-            </div>
-            <div className="flex items-center justify-between text-[11px]">
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Zap className="h-3 w-3 text-primary" />
-                <span>Tüketim</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="font-medium text-foreground">{invoice.consumption} kWh</span>
-                <span className={`font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
-                  {isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%
-                </span>
-              </div>
-            </div>
+          {/* Alt bilgi */}
+          <div className="flex items-center justify-between text-[11px] mb-3">
+            <span className="text-muted-foreground">{t("dueDate")}</span>
+            <span className="font-medium text-foreground">{invoice.dueDate}</span>
           </div>
 
-          {/* Buton */}
-          <Button 
-            className="w-full" 
-            size="sm" 
-            onClick={() => setShowPayPanel(true)}
-          >
-            {t("payNow")}
-          </Button>
+          {/* Butonlar */}
+          <div className="flex gap-2">
+            <Button 
+              className="flex-1" 
+              size="sm" 
+              onClick={() => setShowPayPanel(true)}
+            >
+              {t("payNow")}
+            </Button>
+            <Button 
+              variant="outline"
+              className="flex-1" 
+              size="sm" 
+              asChild
+            >
+              <Link to="/faturalar">
+                {t("details")}
+              </Link>
+            </Button>
+          </div>
         </div>
         
         {showPayPanel && (
