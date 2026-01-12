@@ -18,6 +18,7 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
     month: "Aralık 2026",
     monthEn: "December 2026",
     amount: 847.50,
+    previousAmount: 745.20,
     dueDate: "15 Aralık 2026",
     dueDateEn: "December 15, 2026",
     daysLeft: 5,
@@ -25,6 +26,9 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
     previousConsumption: 285,
     status: "pending" as "pending" | "paid" | "overdue",
   };
+
+  const amountChange = ((invoice.amount - invoice.previousAmount) / invoice.previousAmount) * 100;
+  const isAmountIncrease = amountChange > 0;
 
   const consumptionChange = ((invoice.consumption - invoice.previousConsumption) / invoice.previousConsumption) * 100;
   const isIncrease = consumptionChange > 0;
@@ -91,6 +95,22 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
             <p className="text-[11px] text-muted-foreground mt-1">
               {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
             </p>
+          </div>
+
+          {/* Geçen ay karşılaştırması */}
+          <div className="bg-muted/50 rounded-lg px-2.5 py-2 mb-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">Geçen ay</span>
+              <div className="flex items-center gap-2">
+                <span className="text-foreground font-medium">
+                  {invoice.previousAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}₺
+                </span>
+                <div className={`flex items-center gap-0.5 font-medium ${isAmountIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                  {isAmountIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                  <span>{isAmountIncrease ? '+' : ''}{amountChange.toFixed(0)}%</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Tüketim bilgisi - arka planlı kutu */}
