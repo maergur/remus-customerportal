@@ -61,47 +61,52 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border h-full p-4 flex flex-col">
-          {/* Header - same structure as QuickActionsChart */}
-          <div className="flex items-center justify-between mb-3">
+        <div className="bg-card rounded-2xl border border-border h-full p-3 flex flex-col">
+          {/* Header - kompakt */}
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <FileText className="h-4 w-4 text-primary" />
+              <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="h-3.5 w-3.5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
-                <p className="text-xs text-muted-foreground">{invoice.month}</p>
+                <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
               </div>
             </div>
-            <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${statusConfig.bgColor}`}>
-              <StatusIcon className={`h-3.5 w-3.5 ${statusConfig.color}`} />
-              <span className={`text-xs font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
+            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
+              <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
+              <span className={`text-[11px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
             </div>
           </div>
 
-          {/* Amount Section - fills remaining space */}
-          <div className="flex-1 flex flex-col justify-center">
-            <p className="text-3xl font-bold text-foreground tracking-tight">
+          {/* Tutar - kompakt, sola yaslı */}
+          <div className="mb-2">
+            <p className="text-2xl font-bold text-foreground tracking-tight">
               {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-              <span className="text-base font-medium ml-1">₺</span>
+              <span className="text-sm font-medium ml-1">₺</span>
             </p>
-            <div className="flex items-center justify-between mt-2">
-              <p className="text-xs text-muted-foreground">
-                {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
-              </p>
-              <div className="flex items-center gap-1.5 text-xs">
+            <p className="text-[11px] text-muted-foreground mt-1">
+              {t("dueDate")}: <span className="font-medium text-foreground">{invoice.dueDate}</span>
+            </p>
+          </div>
+
+          {/* Tüketim bilgisi - arka planlı kutu */}
+          <div className="bg-muted/50 rounded-lg px-2.5 py-2 mb-2">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-1.5">
                 <Zap className="h-3.5 w-3.5 text-primary" />
                 <span className="text-muted-foreground">{invoice.consumption} kWh</span>
-                <span className={`font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
-                  {isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%
-                </span>
+              </div>
+              <div className={`flex items-center gap-1 font-medium ${isIncrease ? 'text-amber-600' : 'text-primary'}`}>
+                {isIncrease ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                <span>{isIncrease ? '+' : ''}{consumptionChange.toFixed(0)}%</span>
               </div>
             </div>
           </div>
 
-          {/* Action Button */}
+          {/* Buton - en altta */}
           <Button 
-            className="w-full h-9 mt-4" 
+            className="w-full h-8 mt-auto" 
             size="sm" 
             onClick={() => setShowPayPanel(true)}
           >
