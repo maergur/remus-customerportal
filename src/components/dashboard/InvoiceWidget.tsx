@@ -60,41 +60,38 @@ const InvoiceWidget = ({ compact = false }: InvoiceWidgetProps) => {
   if (compact) {
     return (
       <>
-        <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col card-hover cursor-pointer">
-          {/* Header */}
-          <div className="p-4 pb-3 border-b border-border/50">
-            <div className="flex items-center justify-between">
+        <div className="bg-gradient-to-br from-orange-500/10 via-card to-card rounded-2xl border border-border/80 overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
+          {/* Content */}
+          <div className="p-3 flex-1 flex flex-col">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-primary" />
+                <div className="h-8 w-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-orange-500" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground text-sm">{t("lastInvoice")}</h3>
-                  <p className="text-xs text-muted-foreground">{invoice.month}</p>
+                  <p className="text-[11px] text-muted-foreground">{invoice.month}</p>
                 </div>
               </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-4 pt-3 flex-1 flex flex-col">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-2xl font-bold text-foreground">
-                {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-sm">₺</span>
-              </p>
               <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${statusConfig.bgColor}`}>
                 <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
-                <span className={`text-xs font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
+                <span className={`text-[10px] font-medium ${statusConfig.color}`}>{statusConfig.label}</span>
               </div>
             </div>
             
-            <p className="text-xs text-muted-foreground mb-3">
-              {t("dueDate")}: {invoice.dueDate}
-            </p>
+            <div className="flex items-end justify-between mb-2">
+              <div>
+                <p className="text-xl font-bold text-foreground">
+                  {invoice.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-xs">₺</span>
+                </p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">
+                  {t("dueDate")}: {invoice.dueDate}
+                </p>
+              </div>
+            </div>
 
             <Button 
-              className="w-full mt-auto gap-2" 
+              className="w-full mt-auto gap-2 h-7 text-xs" 
               size="sm" 
               onClick={() => setShowPayPanel(true)}
             >
