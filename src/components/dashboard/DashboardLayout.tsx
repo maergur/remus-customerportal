@@ -13,9 +13,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider>
       <div className="min-h-screen bg-background">
         <Sidebar />
-        <main className="lg:ml-64 transition-all duration-300">
+        <main className="lg:ml-64 transition-all duration-300 min-h-screen flex flex-col">
           <TopBar />
-          <div className="p-4 lg:p-6">
+          <div className="p-4 lg:p-6 flex-1 flex flex-col">
             {children}
           </div>
         </main>
