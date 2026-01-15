@@ -38,6 +38,9 @@ const Register = () => {
 
   // Found customer
   const [foundCustomer, setFoundCustomer] = useState<MockCustomer | null>(null);
+  
+  // Captcha state
+  const [captchaChecked, setCaptchaChecked] = useState(false);
 
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, '');
@@ -56,6 +59,12 @@ const Register = () => {
 
   const handleIdentify = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!captchaChecked) {
+      toast.error('Lütfen robot olmadığınızı doğrulayın');
+      return;
+    }
+    
     setIsLoading(true);
 
     setTimeout(() => {
@@ -82,8 +91,8 @@ const Register = () => {
       }
 
       if (customer.hasPassword) {
-        toast.error('Bu hesap için zaten şifre belirlenmiş. Giriş yapabilirsiniz.');
-        navigate('/giris');
+        toast.info('Bu hesap için zaten şifre belirlenmiş. Şifrenizi hatırlamıyorsanız sıfırlayabilirsiniz.');
+        navigate('/sifremi-unuttum');
         setIsLoading(false);
         return;
       }
@@ -226,7 +235,25 @@ const Register = () => {
                           Abonelik başvurunuzda kullandığınız telefon numarası
                         </p>
                       </div>
-                      <Button type="submit" className="w-full" disabled={isLoading}>
+                      {/* Captcha */}
+                      <div className="border rounded-lg p-4 bg-muted/50">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={captchaChecked}
+                            onChange={(e) => setCaptchaChecked(e.target.checked)}
+                            className="w-5 h-5 rounded border-2"
+                          />
+                          <span className="text-sm">Robot değilim</span>
+                          <img 
+                            src="https://www.gstatic.com/recaptcha/api2/logo_48.png" 
+                            alt="reCAPTCHA" 
+                            className="h-8 ml-auto"
+                          />
+                        </label>
+                      </div>
+                      
+                      <Button type="submit" className="w-full" disabled={isLoading || !captchaChecked}>
                         {isLoading ? 'Kontrol ediliyor...' : 'Devam Et'}
                       </Button>
                     </form>
@@ -248,7 +275,25 @@ const Register = () => {
                           Abonelik başvurunuzda kullandığınız e-posta adresi
                         </p>
                       </div>
-                      <Button type="submit" className="w-full" disabled={isLoading}>
+                      {/* Captcha */}
+                      <div className="border rounded-lg p-4 bg-muted/50">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={captchaChecked}
+                            onChange={(e) => setCaptchaChecked(e.target.checked)}
+                            className="w-5 h-5 rounded border-2"
+                          />
+                          <span className="text-sm">Robot değilim</span>
+                          <img 
+                            src="https://www.gstatic.com/recaptcha/api2/logo_48.png" 
+                            alt="reCAPTCHA" 
+                            className="h-8 ml-auto"
+                          />
+                        </label>
+                      </div>
+                      
+                      <Button type="submit" className="w-full" disabled={isLoading || !captchaChecked}>
                         {isLoading ? 'Kontrol ediliyor...' : 'Devam Et'}
                       </Button>
                     </form>
