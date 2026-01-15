@@ -4,6 +4,7 @@ import { QuickActions, QuickActionsChart } from "@/components/dashboard/QuickAct
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
+import { getSession } from "@/lib/mockCustomers";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +14,15 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // First check if user has an active session
+    const session = getSession();
+    if (session) {
+      // User is logged in via auth flow
+      setIsLoading(false);
+      return;
+    }
+
+    // Fallback: Check onboarding data for legacy flow
     const saved = localStorage.getItem('onboardingData');
     if (saved) {
       try {
@@ -21,20 +31,20 @@ const Index = () => {
         
         // Redirect to onboarding if application is not accepted
         if (status !== 'ACCEPTED') {
-          navigate('/onboarding', { replace: true });
+          navigate('/giris', { replace: true });
           return;
         }
+        setIsLoading(false);
       } catch {
-        // No valid data, redirect to onboarding
-        navigate('/onboarding', { replace: true });
+        // No valid data, redirect to login
+        navigate('/giris', { replace: true });
         return;
       }
     } else {
-      // No onboarding data at all, redirect to onboarding
-      navigate('/onboarding', { replace: true });
+      // No session and no onboarding data, redirect to login
+      navigate('/giris', { replace: true });
       return;
     }
-    setIsLoading(false);
   }, [navigate]);
 
   // Show loading while checking status

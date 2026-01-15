@@ -12,6 +12,9 @@ import Referans from "./pages/Referans";
 import Onboarding from "./pages/Onboarding";
 import Ipuclari from "./pages/Ipuclari";
 import Profil from "./pages/Profil";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +26,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/giris" element={<Login />} />
+          <Route path="/kayit" element={<Register />} />
+          <Route path="/sifremi-unuttum" element={<ForgotPassword />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/" element={<Index />} />
           <Route path="/tuketim-analizi" element={<TuketimAnalizi />} />
