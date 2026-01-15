@@ -7,19 +7,9 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Eye, EyeOff, Phone, Mail, ArrowLeft, CheckCircle2, Shield, Lock, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import remusLogo from '@/assets/remus-logo.svg';
-import {
-  findCustomerByPhone,
-  findCustomerByEmail,
-  generateVerificationCode,
-  verifyCode,
-  setCustomerPassword,
-  saveSession,
-  MockCustomer,
-} from '@/lib/mockCustomers';
+import { findCustomerByPhone, findCustomerByEmail, generateVerificationCode, verifyCode, setCustomerPassword, saveSession, MockCustomer } from '@/lib/mockCustomers';
 import { cn } from '@/lib/utils';
-
 type Step = 'identify' | 'verify' | 'password' | 'success';
-
 const Register = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>('identify');
@@ -44,20 +34,16 @@ const Register = () => {
 
   // Found customer
   const [foundCustomer, setFoundCustomer] = useState<MockCustomer | null>(null);
-
   const isEmail = (value: string) => {
     return value.includes('@');
   };
-
   const isValidEmail = (value: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
-
   const isValidPhone = (value: string) => {
     const digits = value.replace(/\D/g, '');
     return digits.length === 10;
   };
-
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, '');
     if (numbers.length <= 3) return numbers;
@@ -78,7 +64,6 @@ const Register = () => {
       setIdentifierValid(isValidPhone(identifier));
     }
   }, [identifier]);
-
   const handleIdentifierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!isEmail(value) && /^\d/.test(value.replace(/\s/g, ''))) {
@@ -90,7 +75,6 @@ const Register = () => {
       setIdentifier(value);
     }
   };
-
   const handleIdentify = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -99,53 +83,40 @@ const Register = () => {
       toast.error('Bir hata oluştu. Lütfen tekrar deneyin.');
       return;
     }
-
     setIsLoading(true);
-
     setTimeout(() => {
       let customer: MockCustomer | undefined;
       const trimmedIdentifier = identifier.trim();
-
       if (isEmail(trimmedIdentifier)) {
         customer = findCustomerByEmail(trimmedIdentifier);
       } else {
         const normalizedPhone = trimmedIdentifier.replace(/\s/g, '');
         customer = findCustomerByPhone(normalizedPhone);
       }
-
       if (!customer) {
         toast.error('Bu bilgilerle kayıtlı bir hesap bulunamadı. Yeni müşteri olarak kayıt olabilirsiniz.');
         setIsLoading(false);
         return;
       }
-
       if (customer.hasPassword) {
         toast.error('Bu hesap için zaten şifre belirlenmiş. Şifrenizi sıfırlayabilirsiniz.');
         navigate('/sifremi-unuttum');
         setIsLoading(false);
         return;
       }
-
       setFoundCustomer(customer);
       const target = isEmail(trimmedIdentifier) ? trimmedIdentifier : trimmedIdentifier.replace(/\s/g, '');
       generateVerificationCode(target);
-      toast.success(
-        isEmail(trimmedIdentifier)
-          ? `${trimmedIdentifier} adresine doğrulama kodu gönderildi`
-          : `+90 ${identifier} numarasına doğrulama kodu gönderildi`
-      );
+      toast.success(isEmail(trimmedIdentifier) ? `${trimmedIdentifier} adresine doğrulama kodu gönderildi` : `+90 ${identifier} numarasına doğrulama kodu gönderildi`);
       setStep('verify');
       setIsLoading(false);
     }, 1000);
   };
-
   const handleVerify = async () => {
     if (verificationCode.length !== 6) return;
-
     setIsLoading(true);
     const trimmedIdentifier = identifier.trim();
     const target = isEmail(trimmedIdentifier) ? trimmedIdentifier : trimmedIdentifier.replace(/\s/g, '');
-
     setTimeout(() => {
       if (verifyCode(target, verificationCode)) {
         toast.success('Doğrulama başarılı!');
@@ -156,7 +127,6 @@ const Register = () => {
       setIsLoading(false);
     }, 500);
   };
-
   const handleResendCode = () => {
     const trimmedIdentifier = identifier.trim();
     const target = isEmail(trimmedIdentifier) ? trimmedIdentifier : trimmedIdentifier.replace(/\s/g, '');
@@ -164,7 +134,6 @@ const Register = () => {
     toast.success('Yeni doğrulama kodu gönderildi');
     setVerificationCode('');
   };
-
   const validatePassword = (pwd: string): string[] => {
     const errors: string[] = [];
     if (pwd.length < 8) errors.push('En az 8 karakter olmalı');
@@ -173,49 +142,38 @@ const Register = () => {
     if (!/[0-9]/.test(pwd)) errors.push('En az bir rakam içermeli');
     return errors;
   };
-
   const handleSetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const errors = validatePassword(password);
     if (errors.length > 0) {
       toast.error(errors[0]);
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error('Şifreler eşleşmiyor');
       return;
     }
-
     if (!foundCustomer) return;
-
     setIsLoading(true);
-
     setTimeout(() => {
       setCustomerPassword(foundCustomer.id, password);
-      
       saveSession({
         customerId: foundCustomer.id,
         customerNumber: foundCustomer.customerNumber,
         fullName: foundCustomer.fullName,
         phone: foundCustomer.phone,
-        email: foundCustomer.email,
+        email: foundCustomer.email
       });
-
       setStep('success');
       setIsLoading(false);
     }, 1000);
   };
-
   const passwordErrors = validatePassword(password);
   const inputType = isEmail(identifier) ? 'email' : 'phone';
   const identifierHasValue = identifier.length > 0;
   const passwordHasValue = password.length > 0;
   const confirmPasswordHasValue = confirmPassword.length > 0;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
@@ -228,8 +186,7 @@ const Register = () => {
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
-          {step === 'identify' && (
-            <>
+          {step === 'identify' && <>
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Hesap Oluştur</CardTitle>
                 <CardDescription>
@@ -240,72 +197,27 @@ const Register = () => {
                 <form onSubmit={handleIdentify} className="space-y-6">
                   {/* Floating Label Input - Identifier */}
                   <div className="relative">
-                    <div
-                      className={cn(
-                        "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                        (identifierFocused || identifierHasValue) && "opacity-100 text-primary",
-                        !identifierFocused && !identifierHasValue && "opacity-70",
-                      )}
-                    >
+                    <div className={cn("absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10", (identifierFocused || identifierHasValue) && "opacity-100 text-primary", !identifierFocused && !identifierHasValue && "opacity-70")}>
                       {inputType === 'email' ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
                     </div>
 
-                    <Input
-                      id="identifier"
-                      type="text"
-                      value={identifier}
-                      onChange={handleIdentifierChange}
-                      onFocus={() => setIdentifierFocused(true)}
-                      onBlur={() => setIdentifierFocused(false)}
-                      className={cn(
-                        "h-10 pl-10 pr-10 transition-all duration-200",
-                        "border focus:ring-0",
-                        identifierFocused ? "border-primary" : "border-input",
-                        identifierValid === false && identifier.length > 0 && "border-destructive",
-                        identifierValid === true && "border-primary",
-                      )}
-                      placeholder="Telefon veya e-posta"
-                      required
-                    />
+                    <Input id="identifier" type="text" value={identifier} onChange={handleIdentifierChange} onFocus={() => setIdentifierFocused(true)} onBlur={() => setIdentifierFocused(false)} className={cn("h-10 pl-10 pr-10 transition-all duration-200", "border focus:ring-0", identifierFocused ? "border-primary" : "border-input", identifierValid === false && identifier.length > 0 && "border-destructive", identifierValid === true && "border-primary")} placeholder="Telefon veya e-posta" required />
 
                     {/* Floating Label */}
-                    <span
-                      className={cn(
-                        "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
-                        identifierFocused || identifierHasValue
-                          ? "-top-2 text-xs text-primary"
-                          : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
-                      )}
-                    >
+                    <span className={cn("absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1", identifierFocused || identifierHasValue ? "-top-2 text-xs text-primary" : "top-1/2 -translate-y-1/2 text-muted-foreground hidden")}>
                       {inputType === 'email' ? 'E-posta Adresi' : 'Telefon Numarası'}
                     </span>
 
                     {/* Validation Icon */}
-                    {identifier.length > 0 && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        {identifierValid ? (
-                          <CheckCircle2 className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
-                        ) : (
-                          <AlertCircle className="h-4 w-4 text-destructive animate-in zoom-in-50 duration-200" />
-                        )}
-                      </div>
-                    )}
+                    {identifier.length > 0 && <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        {identifierValid ? <CheckCircle2 className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" /> : <AlertCircle className="h-4 w-4 text-destructive animate-in zoom-in-50 duration-200" />}
+                      </div>}
                   </div>
 
-                  <p className="text-xs text-muted-foreground -mt-4">
-                    Abonelik başvurunuzda kullandığınız telefon veya e-posta
-                  </p>
+                  
 
                   {/* Honeypot */}
-                  <input
-                    type="text"
-                    name="website"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                    className="absolute -left-[9999px] opacity-0 pointer-events-none"
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
+                  <input type="text" name="website" value={honeypot} onChange={e => setHoneypot(e.target.value)} className="absolute -left-[9999px] opacity-0 pointer-events-none" tabIndex={-1} autoComplete="off" />
 
                   <Button type="submit" className="w-full" disabled={isLoading || !identifierValid}>
                     {isLoading ? 'Kontrol ediliyor...' : 'Devam Et'}
@@ -313,38 +225,27 @@ const Register = () => {
                 </form>
 
                 <div className="mt-6 text-center">
-                  <Link
-                    to="/giris"
-                    className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-                  >
+                  <Link to="/giris" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
                     <ArrowLeft className="h-4 w-4" />
                     Giriş sayfasına dön
                   </Link>
                 </div>
               </CardContent>
-            </>
-          )}
+            </>}
 
-          {step === 'verify' && (
-            <>
+          {step === 'verify' && <>
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-2xl">Doğrulama Kodu</CardTitle>
                 <CardDescription>
-                  {isEmail(identifier)
-                    ? `${identifier} adresine gönderilen 6 haneli kodu girin`
-                    : `+90 ${identifier} numarasına gönderilen 6 haneli kodu girin`}
+                  {isEmail(identifier) ? `${identifier} adresine gönderilen 6 haneli kodu girin` : `+90 ${identifier} numarasına gönderilen 6 haneli kodu girin`}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex justify-center">
-                  <InputOTP
-                    maxLength={6}
-                    value={verificationCode}
-                    onChange={setVerificationCode}
-                  >
+                  <InputOTP maxLength={6} value={verificationCode} onChange={setVerificationCode}>
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
@@ -356,11 +257,7 @@ const Register = () => {
                   </InputOTP>
                 </div>
 
-                <Button
-                  className="w-full"
-                  onClick={handleVerify}
-                  disabled={verificationCode.length !== 6 || isLoading}
-                >
+                <Button className="w-full" onClick={handleVerify} disabled={verificationCode.length !== 6 || isLoading}>
                   {isLoading ? 'Doğrulanıyor...' : 'Doğrula'}
                 </Button>
 
@@ -371,23 +268,17 @@ const Register = () => {
                   </Button>
                 </div>
 
-                <Button
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => {
-                    setStep('identify');
-                    setVerificationCode('');
-                  }}
-                >
+                <Button variant="ghost" className="w-full" onClick={() => {
+              setStep('identify');
+              setVerificationCode('');
+            }}>
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Geri Dön
                 </Button>
               </CardContent>
-            </>
-          )}
+            </>}
 
-          {step === 'password' && (
-            <>
+          {step === 'password' && <>
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Şifre Belirle</CardTitle>
                 <CardDescription>
@@ -398,146 +289,70 @@ const Register = () => {
                 <form onSubmit={handleSetPassword} className="space-y-4">
                   {/* Floating Label Input - Password */}
                   <div className="relative">
-                    <div
-                      className={cn(
-                        "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                        (passwordFocused || passwordHasValue) && "opacity-100 text-primary",
-                        !passwordFocused && !passwordHasValue && "opacity-70",
-                      )}
-                    >
+                    <div className={cn("absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10", (passwordFocused || passwordHasValue) && "opacity-100 text-primary", !passwordFocused && !passwordHasValue && "opacity-70")}>
                       <Lock className="h-4 w-4" />
                     </div>
 
-                    <Input
-                      id="new-password"
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onFocus={() => setPasswordFocused(true)}
-                      onBlur={() => setPasswordFocused(false)}
-                      className={cn(
-                        "h-10 pl-10 pr-10 transition-all duration-200",
-                        "border focus:ring-0",
-                        passwordFocused ? "border-primary" : "border-input",
-                      )}
-                      placeholder="Yeni şifre"
-                      required
-                    />
+                    <Input id="new-password" type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} onFocus={() => setPasswordFocused(true)} onBlur={() => setPasswordFocused(false)} className={cn("h-10 pl-10 pr-10 transition-all duration-200", "border focus:ring-0", passwordFocused ? "border-primary" : "border-input")} placeholder="Yeni şifre" required />
 
                     {/* Floating Label */}
-                    <span
-                      className={cn(
-                        "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
-                        passwordFocused || passwordHasValue
-                          ? "-top-2 text-xs text-primary"
-                          : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
-                      )}
-                    >
+                    <span className={cn("absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1", passwordFocused || passwordHasValue ? "-top-2 text-xs text-primary" : "top-1/2 -translate-y-1/2 text-muted-foreground hidden")}>
                       Yeni Şifre
                     </span>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    >
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
 
                   {/* Password requirements */}
                   <div className="space-y-1">
-                    {[
-                      { label: 'En az 8 karakter', valid: password.length >= 8 },
-                      { label: 'Büyük harf', valid: /[A-Z]/.test(password) },
-                      { label: 'Küçük harf', valid: /[a-z]/.test(password) },
-                      { label: 'Rakam', valid: /[0-9]/.test(password) },
-                    ].map((req, i) => (
-                      <div
-                        key={i}
-                        className={`text-xs flex items-center gap-1.5 ${
-                          req.valid ? 'text-primary' : 'text-muted-foreground'
-                        }`}
-                      >
+                    {[{
+                  label: 'En az 8 karakter',
+                  valid: password.length >= 8
+                }, {
+                  label: 'Büyük harf',
+                  valid: /[A-Z]/.test(password)
+                }, {
+                  label: 'Küçük harf',
+                  valid: /[a-z]/.test(password)
+                }, {
+                  label: 'Rakam',
+                  valid: /[0-9]/.test(password)
+                }].map((req, i) => <div key={i} className={`text-xs flex items-center gap-1.5 ${req.valid ? 'text-primary' : 'text-muted-foreground'}`}>
                         <CheckCircle2 className={`h-3 w-3 ${req.valid ? 'opacity-100' : 'opacity-30'}`} />
                         {req.label}
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
 
                   {/* Floating Label Input - Confirm Password */}
                   <div className="relative">
-                    <div
-                      className={cn(
-                        "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                        (confirmPasswordFocused || confirmPasswordHasValue) && "opacity-100 text-primary",
-                        !confirmPasswordFocused && !confirmPasswordHasValue && "opacity-70",
-                      )}
-                    >
+                    <div className={cn("absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10", (confirmPasswordFocused || confirmPasswordHasValue) && "opacity-100 text-primary", !confirmPasswordFocused && !confirmPasswordHasValue && "opacity-70")}>
                       <Lock className="h-4 w-4" />
                     </div>
 
-                    <Input
-                      id="confirm-password"
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      onFocus={() => setConfirmPasswordFocused(true)}
-                      onBlur={() => setConfirmPasswordFocused(false)}
-                      className={cn(
-                        "h-10 pl-10 pr-10 transition-all duration-200",
-                        "border focus:ring-0",
-                        confirmPasswordFocused ? "border-primary" : "border-input",
-                        confirmPassword && password !== confirmPassword && "border-destructive",
-                        confirmPassword && password === confirmPassword && "border-primary",
-                      )}
-                      placeholder="Şifre tekrar"
-                      required
-                    />
+                    <Input id="confirm-password" type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onFocus={() => setConfirmPasswordFocused(true)} onBlur={() => setConfirmPasswordFocused(false)} className={cn("h-10 pl-10 pr-10 transition-all duration-200", "border focus:ring-0", confirmPasswordFocused ? "border-primary" : "border-input", confirmPassword && password !== confirmPassword && "border-destructive", confirmPassword && password === confirmPassword && "border-primary")} placeholder="Şifre tekrar" required />
 
                     {/* Floating Label */}
-                    <span
-                      className={cn(
-                        "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
-                        confirmPasswordFocused || confirmPasswordHasValue
-                          ? "-top-2 text-xs text-primary"
-                          : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
-                      )}
-                    >
+                    <span className={cn("absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1", confirmPasswordFocused || confirmPasswordHasValue ? "-top-2 text-xs text-primary" : "top-1/2 -translate-y-1/2 text-muted-foreground hidden")}>
                       Şifre Tekrar
                     </span>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    >
+                    <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                       {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
 
-                  {confirmPassword && password !== confirmPassword && (
-                    <p className="text-xs text-destructive">Şifreler eşleşmiyor</p>
-                  )}
+                  {confirmPassword && password !== confirmPassword && <p className="text-xs text-destructive">Şifreler eşleşmiyor</p>}
 
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={
-                      isLoading ||
-                      passwordErrors.length > 0 ||
-                      password !== confirmPassword
-                    }
-                  >
+                  <Button type="submit" className="w-full" disabled={isLoading || passwordErrors.length > 0 || password !== confirmPassword}>
                     {isLoading ? 'Kaydediliyor...' : 'Şifremi Kaydet'}
                   </Button>
                 </form>
               </CardContent>
-            </>
-          )}
+            </>}
 
-          {step === 'success' && (
-            <>
+          {step === 'success' && <>
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                   <CheckCircle2 className="h-8 w-8 text-primary" />
@@ -559,8 +374,7 @@ const Register = () => {
                   Portala Git
                 </Button>
               </CardContent>
-            </>
-          )}
+            </>}
         </Card>
       </main>
 
@@ -568,8 +382,6 @@ const Register = () => {
       <footer className="py-4 text-center text-xs text-muted-foreground">
         <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Register;
