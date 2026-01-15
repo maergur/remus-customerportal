@@ -8,13 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Eye, EyeOff, Phone, Mail, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import remusLogo from '@/assets/remus-logo.svg';
-import {
-  findCustomerByPhone,
-  findCustomerByEmail,
-  verifyCustomerPassword,
-  saveSession,
-} from '@/lib/mockCustomers';
-
+import { findCustomerByPhone, findCustomerByEmail, verifyCustomerPassword, saveSession } from '@/lib/mockCustomers';
 const Login = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'phone' | 'email'>('phone');
@@ -28,7 +22,6 @@ const Login = () => {
   // Email login state
   const [email, setEmail] = useState('');
   const [emailPassword, setEmailPassword] = useState('');
-
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, '');
     if (numbers.length <= 3) return numbers;
@@ -36,95 +29,78 @@ const Login = () => {
     if (numbers.length <= 8) return `${numbers.slice(0, 3)} ${numbers.slice(3, 6)} ${numbers.slice(6)}`;
     return `${numbers.slice(0, 3)} ${numbers.slice(3, 6)} ${numbers.slice(6, 8)} ${numbers.slice(8, 10)}`;
   };
-
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value);
     if (formatted.replace(/\s/g, '').length <= 10) {
       setPhone(formatted);
     }
   };
-
   const handlePhoneLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
     const normalizedPhone = phone.replace(/\s/g, '');
     const customer = findCustomerByPhone(normalizedPhone);
-
     setTimeout(() => {
       if (!customer) {
         toast.error('Bu telefon numarası sistemde kayıtlı değil');
         setIsLoading(false);
         return;
       }
-
       if (!customer.hasPassword) {
         toast.error('Henüz şifreniz belirlenmemiş. Lütfen kayıt olun.');
         setIsLoading(false);
         return;
       }
-
       if (!verifyCustomerPassword(customer.id, phonePassword)) {
         toast.error('Şifre hatalı');
         setIsLoading(false);
         return;
       }
-
       saveSession({
         customerId: customer.id,
         customerNumber: customer.customerNumber,
         fullName: customer.fullName,
         phone: customer.phone,
-        email: customer.email,
+        email: customer.email
       });
-
       toast.success('Giriş başarılı!');
       navigate('/');
       setIsLoading(false);
     }, 1000);
   };
-
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
     const customer = findCustomerByEmail(email);
-
     setTimeout(() => {
       if (!customer) {
         toast.error('Bu e-posta adresi sistemde kayıtlı değil');
         setIsLoading(false);
         return;
       }
-
       if (!customer.hasPassword) {
         toast.error('Henüz şifreniz belirlenmemiş. Lütfen kayıt olun.');
         setIsLoading(false);
         return;
       }
-
       if (!verifyCustomerPassword(customer.id, emailPassword)) {
         toast.error('Şifre hatalı');
         setIsLoading(false);
         return;
       }
-
       saveSession({
         customerId: customer.id,
         customerNumber: customer.customerNumber,
         fullName: customer.fullName,
         phone: customer.phone,
-        email: customer.email,
+        email: customer.email
       });
-
       toast.success('Giriş başarılı!');
       navigate('/');
       setIsLoading(false);
     }, 1000);
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
@@ -144,7 +120,7 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'phone' | 'email')}>
+            <Tabs value={activeTab} onValueChange={v => setActiveTab(v as 'phone' | 'email')}>
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="phone" className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
@@ -164,41 +140,19 @@ const Login = () => {
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                         +90
                       </span>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="555 123 45 67"
-                        value={phone}
-                        onChange={handlePhoneChange}
-                        className="pl-12"
-                        required
-                      />
+                      <Input id="phone" type="tel" placeholder="555 123 45 67" value={phone} onChange={handlePhoneChange} className="pl-12" required />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="phone-password">Şifre</Label>
-                      <Link
-                        to="/sifremi-unuttum"
-                        className="text-xs text-primary hover:underline"
-                      >
+                      <Link to="/sifremi-unuttum" className="text-xs text-primary hover:underline">
                         Şifremi Unuttum
                       </Link>
                     </div>
                     <div className="relative">
-                      <Input
-                        id="phone-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        value={phonePassword}
-                        onChange={(e) => setPhonePassword(e.target.value)}
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                      >
+                      <Input id="phone-password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={phonePassword} onChange={e => setPhonePassword(e.target.value)} required />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
@@ -213,39 +167,18 @@ const Login = () => {
                 <form onSubmit={handleEmailLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">E-posta Adresi</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="ornek@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
+                    <Input id="email" type="email" placeholder="ornek@email.com" value={email} onChange={e => setEmail(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="email-password">Şifre</Label>
-                      <Link
-                        to="/sifremi-unuttum"
-                        className="text-xs text-primary hover:underline"
-                      >
+                      <Link to="/sifremi-unuttum" className="text-xs text-primary hover:underline">
                         Şifremi Unuttum
                       </Link>
                     </div>
                     <div className="relative">
-                      <Input
-                        id="email-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        value={emailPassword}
-                        onChange={(e) => setEmailPassword(e.target.value)}
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                      >
+                      <Input id="email-password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={emailPassword} onChange={e => setEmailPassword(e.target.value)} required />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
@@ -258,14 +191,7 @@ const Login = () => {
             </Tabs>
 
             {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">veya</span>
-              </div>
-            </div>
+            
 
             {/* Register Options */}
             <div className="space-y-3">
@@ -289,8 +215,6 @@ const Login = () => {
       <footer className="py-4 text-center text-xs text-muted-foreground">
         <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
