@@ -128,7 +128,7 @@ const Login = () => {
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md overflow-hidden">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl">Müşteri Portalına Giriş</CardTitle>
+            <CardTitle className="text-2xl">Müşteri Portalı</CardTitle>
             <CardDescription>Hesabınıza giriş yapın veya yeni hesap oluşturun</CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
