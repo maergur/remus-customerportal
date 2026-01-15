@@ -138,18 +138,11 @@ const Login = () => {
                 <div
                   className={cn(
                     "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                    (identifierFocused || identifierHasValue) && "opacity-100",
+                    (identifierFocused || identifierHasValue) && "opacity-100 text-primary",
                     !identifierFocused && !identifierHasValue && "opacity-70",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "transition-all duration-300",
-                      inputType === "email" ? "text-primary" : "text-primary",
-                    )}
-                  >
-                    {inputType === "email" ? <Mail className="h-5 w-5" /> : <Phone className="h-5 w-5" />}
-                  </div>
+                  {inputType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
                 </div>
 
                 <Input
@@ -160,8 +153,8 @@ const Login = () => {
                   onFocus={() => setIdentifierFocused(true)}
                   onBlur={() => setIdentifierFocused(false)}
                   className={cn(
-                    "h-14 pl-12 pr-12 text-base transition-all duration-200",
-                    "border-2 focus:ring-0",
+                    "h-10 pl-10 pr-10 transition-all duration-200",
+                    "border focus:ring-0",
                     identifierFocused ? "border-primary" : "border-input",
                     identifierValid === false && identifier.length > 0 && "border-destructive",
                     identifierValid === true && "border-primary",
@@ -173,9 +166,9 @@ const Login = () => {
                 {/* Floating Label */}
                 <span
                   className={cn(
-                    "absolute left-12 transition-all duration-200 pointer-events-none bg-card px-1",
+                    "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
                     identifierFocused || identifierHasValue
-                      ? "-top-2.5 text-xs text-primary"
+                      ? "-top-2 text-xs text-primary"
                       : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
                   )}
                 >
@@ -186,9 +179,9 @@ const Login = () => {
                 {identifier.length > 0 && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
                     {identifierValid ? (
-                      <CheckCircle2 className="h-5 w-5 text-primary animate-in zoom-in-50 duration-200" />
+                      <CheckCircle2 className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
                     ) : (
-                      <AlertCircle className="h-5 w-5 text-destructive animate-in zoom-in-50 duration-200" />
+                      <AlertCircle className="h-4 w-4 text-destructive animate-in zoom-in-50 duration-200" />
                     )}
                   </div>
                 )}
@@ -203,7 +196,7 @@ const Login = () => {
                     !passwordFocused && !passwordHasValue && "opacity-70",
                   )}
                 >
-                  <Lock className="h-5 w-5" />
+                  <Lock className="h-4 w-4" />
                 </div>
 
                 <Input
@@ -214,8 +207,8 @@ const Login = () => {
                   onFocus={() => setPasswordFocused(true)}
                   onBlur={() => setPasswordFocused(false)}
                   className={cn(
-                    "h-14 pl-12 pr-12 text-base transition-all duration-200",
-                    "border-2 focus:ring-0",
+                    "h-10 pl-10 pr-10 transition-all duration-200",
+                    "border focus:ring-0",
                     passwordFocused ? "border-primary" : "border-input",
                   )}
                   placeholder="Şifreniz"
@@ -225,9 +218,9 @@ const Login = () => {
                 {/* Floating Label */}
                 <span
                   className={cn(
-                    "absolute left-12 transition-all duration-200 pointer-events-none bg-card px-1",
+                    "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
                     passwordFocused || passwordHasValue
-                      ? "-top-2.5 text-xs text-primary"
+                      ? "-top-2 text-xs text-primary"
                       : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
                   )}
                 >
@@ -239,7 +232,7 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
 
