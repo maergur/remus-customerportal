@@ -100,7 +100,7 @@ const Register = () => {
       }
       if (customer.hasPassword) {
         toast.error('Bu hesap için zaten şifre belirlenmiş. Şifrenizi sıfırlayabilirsiniz.');
-        navigate('/sifremi-unuttum');
+        navigate('/sifremi-unuttum', { state: { identifier: identifier.trim() } });
         setIsLoading(false);
         return;
       }

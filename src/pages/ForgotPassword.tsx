@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +23,18 @@ type ResetMethod = 'sms' | 'email';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState<Step>('identify');
+
+  // Kayıt sayfasından gelen identifier'ı otomatik doldur
+  useEffect(() => {
+    const state = location.state as { identifier?: string } | null;
+    if (state?.identifier) {
+      setIdentifier(state.identifier);
+      // State'i temizle (browser geri/ileri butonlarında tekrar dolmasın)
+      window.history.replaceState({}, document.title);
+    }
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
