@@ -6,8 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, ArrowRight, Phone, Mail, Lock, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import remusLogo from "@/assets/remus-logo.svg";
+import smartEnergyHero from "@/assets/smart-energy-hero.jpg";
 import { findCustomerByPhone, findCustomerByEmail, verifyCustomerPassword, saveSession } from "@/lib/mockCustomers";
 import { cn } from "@/lib/utils";
+
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -114,15 +116,17 @@ const Login = () => {
   const identifierHasValue = identifier.length > 0;
   const passwordHasValue = password.length > 0;
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
-      {/* Header */}
-      <header className="border-b bg-card/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center">
-            <img src={remusLogo} alt="Remus Enerji" className="h-10" />
+    <div className="min-h-screen flex">
+      {/* Sol Panel - Form */}
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-background via-background to-muted/30">
+        {/* Header */}
+        <header className="border-b bg-card/80 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-center lg:justify-start">
+              <img src={remusLogo} alt="Remus Enerji" className="h-10" />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">
@@ -299,11 +303,31 @@ const Login = () => {
         </Card>
       </main>
 
-      {/* Footer */}
-      <footer className="py-4 text-center text-xs text-muted-foreground">
-        <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
-      </footer>
+        {/* Footer */}
+        <footer className="py-4 text-center text-xs text-muted-foreground">
+          <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
+        </footer>
+      </div>
+
+      {/* Sağ Panel - Görsel (mobilde gizli) */}
+      <div className="hidden lg:flex lg:flex-1 relative overflow-hidden">
+        <img 
+          src={smartEnergyHero} 
+          alt="Smart Energy" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
+        <div className="relative z-10 flex flex-col justify-end p-12 text-white">
+          <h2 className="text-4xl font-bold mb-4">
+            Enerjinizi akıllıca yönetin
+          </h2>
+          <p className="text-lg text-white/80">
+            Tüketiminizi takip edin, tasarruf edin
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default Login;
