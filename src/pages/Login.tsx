@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, ArrowRight, Phone, Mail, Lock, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import remusLogo from "@/assets/remus-logo.svg";
+import AuthLayout from "@/components/auth/AuthLayout";
 import greenEnergyLogin from "@/assets/green-energy-login.jpg";
 import { findCustomerByPhone, findCustomerByEmail, verifyCustomerPassword, saveSession } from "@/lib/mockCustomers";
 import { cn } from "@/lib/utils";
@@ -24,16 +24,20 @@ const Login = () => {
 
   // Validation states
   const [identifierValid, setIdentifierValid] = useState<boolean | null>(null);
+
   const isEmail = (value: string) => {
     return value.includes("@");
   };
+
   const isValidEmail = (value: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
+
   const isValidPhone = (value: string) => {
     const digits = value.replace(/\D/g, "");
     return digits.length === 10;
   };
+
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, "");
     if (numbers.length <= 3) return numbers;
@@ -54,6 +58,7 @@ const Login = () => {
       setIdentifierValid(isValidPhone(identifier));
     }
   }, [identifier]);
+
   const handleIdentifierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -67,6 +72,7 @@ const Login = () => {
       setIdentifier(value);
     }
   };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -112,255 +118,204 @@ const Login = () => {
       setIsLoading(false);
     }, 1000);
   };
+
   const inputType = isEmail(identifier) ? "email" : "phone";
   const identifierHasValue = identifier.length > 0;
   const passwordHasValue = password.length > 0;
+
   return (
-    <div className="min-h-screen flex">
-      {/* Sol Panel - Form */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-background via-background to-muted/30">
-        {/* Header */}
-        <header className="border-b bg-card/80 backdrop-blur-sm">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-center lg:justify-start">
-              <img src={remusLogo} alt="Remus Enerji" className="h-10" />
-            </div>
-          </div>
-        </header>
-
-      {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md overflow-hidden">
-          <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl">Müşteri Portalı</CardTitle>
-            <CardDescription>Hesabınıza giriş yapın veya yeni hesap oluşturun</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <form onSubmit={handleLogin} className="space-y-6">
-              {/* Floating Label Input - Identifier */}
-              <div className="relative">
-                <div
-                  className={cn(
-                    "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                    (identifierFocused || identifierHasValue) && "opacity-100 text-primary",
-                    !identifierFocused && !identifierHasValue && "opacity-70",
-                  )}
-                >
-                  {inputType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
-                </div>
-
-                <Input
-                  id="identifier"
-                  type="text"
-                  value={identifier}
-                  onChange={handleIdentifierChange}
-                  onFocus={() => setIdentifierFocused(true)}
-                  onBlur={() => setIdentifierFocused(false)}
-                  className={cn(
-                    "h-10 pl-10 pr-10 transition-all duration-200",
-                    "border focus:ring-0",
-                    identifierFocused ? "border-primary" : "border-input",
-                    identifierValid === false && identifier.length > 0 && "border-destructive",
-                    identifierValid === true && "border-primary",
-                  )}
-                  placeholder="Telefon veya e-posta"
-                  required
-                />
-
-                {/* Floating Label */}
-                <span
-                  className={cn(
-                    "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
-                    identifierFocused || identifierHasValue
-                      ? "-top-2 text-xs text-primary"
-                      : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
-                  )}
-                >
-                  {inputType === "email" ? "E-posta Adresi" : "Telefon Numarası"}
-                </span>
-
-                {/* Validation Icon */}
-                {identifier.length > 0 && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    {identifierValid ? (
-                      <CheckCircle2 className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
-                    ) : (
-                      <AlertCircle className="h-4 w-4 text-destructive animate-in zoom-in-50 duration-200" />
-                    )}
-                  </div>
+    <AuthLayout
+      heroImage={greenEnergyLogin}
+      heroImageAlt="Yeşil Enerji"
+      badge="%100 Yenilenebilir Enerji"
+      badgeIcon={
+        <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      }
+      title="Enerjinizi akıllıca yönetin"
+      subtitle="Tüketiminizi takip edin, tasarruf edin"
+      topStats={[
+        { label: "Aktif Müşteri", value: "125.000+" },
+        { label: "Aylık Tasarruf", value: "₺2.5M+" },
+      ]}
+      bottomStats={[
+        { value: "%35", label: "Ortalama Tasarruf" },
+        { value: "24/7", label: "Destek Hizmeti" },
+      ]}
+    >
+      <Card className="w-full max-w-md overflow-hidden">
+        <CardHeader className="text-center pb-2">
+          <CardTitle className="text-2xl">Müşteri Portalı</CardTitle>
+          <CardDescription>Hesabınıza giriş yapın veya yeni hesap oluşturun</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <form onSubmit={handleLogin} className="space-y-6">
+            {/* Floating Label Input - Identifier */}
+            <div className="relative">
+              <div
+                className={cn(
+                  "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
+                  (identifierFocused || identifierHasValue) && "opacity-100 text-primary",
+                  !identifierFocused && !identifierHasValue && "opacity-70",
                 )}
+              >
+                {inputType === "email" ? <Mail className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
               </div>
 
-              {/* Floating Label Input - Password */}
-              <div className="relative">
-                <div
-                  className={cn(
-                    "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
-                    (passwordFocused || passwordHasValue) && "opacity-100 text-primary",
-                    !passwordFocused && !passwordHasValue && "opacity-70",
-                  )}
-                >
-                  <Lock className="h-4 w-4" />
-                </div>
-
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => setPasswordFocused(false)}
-                  className={cn(
-                    "h-10 pl-10 pr-10 transition-all duration-200",
-                    "border focus:ring-0",
-                    passwordFocused ? "border-primary" : "border-input",
-                  )}
-                  placeholder="Şifreniz"
-                  required
-                />
-
-                {/* Floating Label */}
-                <span
-                  className={cn(
-                    "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
-                    passwordFocused || passwordHasValue
-                      ? "-top-2 text-xs text-primary"
-                      : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
-                  )}
-                >
-                  Şifre
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-
-              {/* Honeypot - Hidden from users, visible to bots */}
-              <input
+              <Input
+                id="identifier"
                 type="text"
-                name="website"
-                value={honeypot}
-                onChange={(e) => setHoneypot(e.target.value)}
-                className="absolute -left-[9999px] opacity-0 pointer-events-none"
-                tabIndex={-1}
-                autoComplete="off"
+                value={identifier}
+                onChange={handleIdentifierChange}
+                onFocus={() => setIdentifierFocused(true)}
+                onBlur={() => setIdentifierFocused(false)}
+                className={cn(
+                  "h-10 pl-10 pr-10 transition-all duration-200",
+                  "border focus:ring-0",
+                  identifierFocused ? "border-primary" : "border-input",
+                  identifierValid === false && identifier.length > 0 && "border-destructive",
+                  identifierValid === true && "border-primary",
+                )}
+                placeholder="Telefon veya e-posta"
+                required
               />
 
-              {/* Forgot Password Link */}
-              <div className="flex justify-end">
-                <Link to="/sifremi-unuttum" className="text-sm text-primary hover:underline">
-                  Şifremi Unuttum
-                </Link>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full h-12 text-base font-medium transition-all duration-200"
-                disabled={isLoading || !identifierValid}
-              >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    Giriş yapılıyor...
-                  </span>
-                ) : (
-                  "Giriş Yap"
+              {/* Floating Label */}
+              <span
+                className={cn(
+                  "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
+                  identifierFocused || identifierHasValue
+                    ? "-top-2 text-xs text-primary"
+                    : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
                 )}
-              </Button>
-            </form>
+              >
+                {inputType === "email" ? "E-posta Adresi" : "Telefon Numarası"}
+              </span>
 
-            {/* Divider */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+              {/* Validation Icon */}
+              {identifier.length > 0 && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  {identifierValid ? (
+                    <CheckCircle2 className="h-4 w-4 text-primary animate-in zoom-in-50 duration-200" />
+                  ) : (
+                    <AlertCircle className="h-4 w-4 text-destructive animate-in zoom-in-50 duration-200" />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Floating Label Input - Password */}
+            <div className="relative">
+              <div
+                className={cn(
+                  "absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none z-10",
+                  (passwordFocused || passwordHasValue) && "opacity-100 text-primary",
+                  !passwordFocused && !passwordHasValue && "opacity-70",
+                )}
+              >
+                <Lock className="h-4 w-4" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase"></div>
+
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
+                className={cn(
+                  "h-10 pl-10 pr-10 transition-all duration-200",
+                  "border focus:ring-0",
+                  passwordFocused ? "border-primary" : "border-input",
+                )}
+                placeholder="Şifreniz"
+                required
+              />
+
+              {/* Floating Label */}
+              <span
+                className={cn(
+                  "absolute left-10 transition-all duration-200 pointer-events-none bg-card px-1",
+                  passwordFocused || passwordHasValue
+                    ? "-top-2 text-xs text-primary"
+                    : "top-1/2 -translate-y-1/2 text-muted-foreground hidden",
+                )}
+              >
+                Şifre
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
 
-            {/* Register Options */}
-            <div className="space-y-3">
-              <Link to="/kayit">
-                <Button
-                  variant="outline"
-                  className="w-full h-12 group transition-all duration-200 hover:border-primary hover:bg-primary/5"
-                >
-                  Mevcut Müşteriyim, Şifre Belirle
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+            {/* Honeypot - Hidden from users, visible to bots */}
+            <input
+              type="text"
+              name="website"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              className="absolute -left-[9999px] opacity-0 pointer-events-none"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+
+            {/* Forgot Password Link */}
+            <div className="flex justify-end">
+              <Link to="/sifremi-unuttum" className="text-sm text-primary hover:underline">
+                Şifremi Unuttum
               </Link>
-              <Link to="/onboarding">
-                <Button variant="ghost" className="w-full h-11 text-muted-foreground hover:text-foreground">
-                  Yeni Müşteri Olarak Kayıt Ol
-                </Button>
-              </Link>
             </div>
-          </CardContent>
-        </Card>
-      </main>
 
-        {/* Footer */}
-        <footer className="py-4 text-center text-xs text-muted-foreground">
-          <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
-        </footer>
-      </div>
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-medium transition-all duration-200"
+              disabled={isLoading || !identifierValid}
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  Giriş yapılıyor...
+                </span>
+              ) : (
+                "Giriş Yap"
+              )}
+            </Button>
+          </form>
 
-      {/* Sağ Panel - Görsel (mobilde gizli) */}
-      <div className="hidden lg:flex lg:flex-1 relative overflow-hidden">
-        <img 
-          src={greenEnergyLogin} 
-          alt="Yeşil Enerji" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-        
-        {/* İstatistik Kartları */}
-        <div className="absolute top-8 right-8 flex flex-col gap-4">
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-            <p className="text-white/70 text-sm">Aktif Müşteri</p>
-            <p className="text-white text-2xl font-bold">125.000+</p>
+          {/* Divider */}
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase"></div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-            <p className="text-white/70 text-sm">Aylık Tasarruf</p>
-            <p className="text-white text-2xl font-bold">₺2.5M+</p>
-          </div>
-        </div>
 
-        <div className="relative z-10 flex flex-col justify-end p-12 text-white">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-12 w-12 rounded-full bg-primary/80 flex items-center justify-center">
-              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-1 border border-white/20">
-              <span className="text-sm text-white/90">%100 Yenilenebilir Enerji</span>
-            </div>
+          {/* Register Options */}
+          <div className="space-y-3">
+            <Link to="/kayit">
+              <Button
+                variant="outline"
+                className="w-full h-12 group transition-all duration-200 hover:border-primary hover:bg-primary/5"
+              >
+                Mevcut Müşteriyim, Şifre Belirle
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link to="/onboarding">
+              <Button variant="ghost" className="w-full h-11 text-muted-foreground hover:text-foreground">
+                Yeni Müşteri Olarak Kayıt Ol
+              </Button>
+            </Link>
           </div>
-          <h2 className="text-4xl font-bold mb-4">
-            Enerjinizi akıllıca yönetin
-          </h2>
-          <p className="text-lg text-white/80 mb-6">
-            Tüketiminizi takip edin, tasarruf edin
-          </p>
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-primary">%35</span>
-              <span className="text-sm text-white/70">Ortalama Tasarruf</span>
-            </div>
-            <div className="w-px h-12 bg-white/20" />
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-primary">24/7</span>
-              <span className="text-sm text-white/70">Destek Hizmeti</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+      </Card>
+    </AuthLayout>
   );
 };
 
