@@ -189,8 +189,8 @@ const Register = () => {
           {step === 'identify' && <>
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Hesap Oluştur</CardTitle>
-                <CardDescription>
-                  Mevcut müşteri bilgilerinizi doğrulayın ve şifrenizi belirleyin
+              <CardDescription>
+                  Abonelik başvurunuzda kullandığınız telefon veya e-posta
                 </CardDescription>
               </CardHeader>
               <CardContent>
