@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff, ArrowRight, Phone, Mail, Lock, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import remusLogo from "@/assets/remus-logo.svg";
-import smartEnergyHero from "@/assets/smart-energy-hero.jpg";
+import greenEnergyLogin from "@/assets/green-energy-login.jpg";
 import { findCustomerByPhone, findCustomerByEmail, verifyCustomerPassword, saveSession } from "@/lib/mockCustomers";
 import { cn } from "@/lib/utils";
 
@@ -312,18 +312,52 @@ const Login = () => {
       {/* Sağ Panel - Görsel (mobilde gizli) */}
       <div className="hidden lg:flex lg:flex-1 relative overflow-hidden">
         <img 
-          src={smartEnergyHero} 
-          alt="Smart Energy" 
+          src={greenEnergyLogin} 
+          alt="Yeşil Enerji" 
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        
+        {/* İstatistik Kartları */}
+        <div className="absolute top-8 right-8 flex flex-col gap-4">
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+            <p className="text-white/70 text-sm">Aktif Müşteri</p>
+            <p className="text-white text-2xl font-bold">125.000+</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+            <p className="text-white/70 text-sm">Aylık Tasarruf</p>
+            <p className="text-white text-2xl font-bold">₺2.5M+</p>
+          </div>
+        </div>
+
         <div className="relative z-10 flex flex-col justify-end p-12 text-white">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-12 w-12 rounded-full bg-primary/80 flex items-center justify-center">
+              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-1 border border-white/20">
+              <span className="text-sm text-white/90">%100 Yenilenebilir Enerji</span>
+            </div>
+          </div>
           <h2 className="text-4xl font-bold mb-4">
             Enerjinizi akıllıca yönetin
           </h2>
-          <p className="text-lg text-white/80">
+          <p className="text-lg text-white/80 mb-6">
             Tüketiminizi takip edin, tasarruf edin
           </p>
+          <div className="flex items-center gap-6">
+            <div className="flex flex-col">
+              <span className="text-3xl font-bold text-primary">%35</span>
+              <span className="text-sm text-white/70">Ortalama Tasarruf</span>
+            </div>
+            <div className="w-px h-12 bg-white/20" />
+            <div className="flex flex-col">
+              <span className="text-3xl font-bold text-primary">24/7</span>
+              <span className="text-sm text-white/70">Destek Hizmeti</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

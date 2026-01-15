@@ -9,7 +9,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Eye, EyeOff, ArrowLeft, CheckCircle2, Shield, Phone, Mail, Lock, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import remusLogo from '@/assets/remus-logo.svg';
-import winterCampaign from '@/assets/winter-campaign.jpg';
+import greenEnergyReset from '@/assets/green-energy-reset.jpg';
 import {
   findCustomerByPhoneOrEmail,
   generateVerificationCode,
@@ -658,18 +658,52 @@ const ForgotPassword = () => {
       {/* Sağ Panel - Görsel (mobilde gizli) */}
       <div className="hidden lg:flex lg:flex-1 relative overflow-hidden">
         <img 
-          src={winterCampaign} 
-          alt="Şifre Sıfırlama" 
+          src={greenEnergyReset} 
+          alt="Yeni Başlangıç" 
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        
+        {/* İstatistik Kartları */}
+        <div className="absolute top-8 right-8 flex flex-col gap-4">
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+            <p className="text-white/70 text-sm">Güvenlik Puanı</p>
+            <p className="text-white text-2xl font-bold">A+</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+            <p className="text-white/70 text-sm">Şifreli İşlem</p>
+            <p className="text-white text-2xl font-bold">256-bit</p>
+          </div>
+        </div>
+
         <div className="relative z-10 flex flex-col justify-end p-12 text-white">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-12 w-12 rounded-full bg-primary/80 flex items-center justify-center">
+              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-1 border border-white/20">
+              <span className="text-sm text-white/90">Güvenli Şifre Sıfırlama</span>
+            </div>
+          </div>
           <h2 className="text-4xl font-bold mb-4">
             Güvenliğiniz bizim için önemli
           </h2>
-          <p className="text-lg text-white/80">
+          <p className="text-lg text-white/80 mb-6">
             Şifrenizi kolayca sıfırlayın ve hesabınıza erişin
           </p>
+          <div className="flex items-center gap-6">
+            <div className="flex flex-col">
+              <span className="text-3xl font-bold text-primary">2FA</span>
+              <span className="text-sm text-white/70">Doğrulama</span>
+            </div>
+            <div className="w-px h-12 bg-white/20" />
+            <div className="flex flex-col">
+              <span className="text-3xl font-bold text-primary">SSL</span>
+              <span className="text-sm text-white/70">Şifreli Bağlantı</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
