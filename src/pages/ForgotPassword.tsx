@@ -453,7 +453,7 @@ const ForgotPassword = () => {
                   variant="ghost"
                   className="w-full"
                   onClick={() => {
-                    setStep('method');
+                    setStep('identify');
                     setVerificationCode('');
                   }}
                 >
