@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Eye, EyeOff, Phone, Mail, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, User } from 'lucide-react';
 import { toast } from 'sonner';
 import remusLogo from '@/assets/remus-logo.svg';
 import {
@@ -17,17 +16,14 @@ import {
 
 const Login = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'phone' | 'email'>('phone');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
 
-  // Phone login state
-  const [phone, setPhone] = useState('');
-  const [phonePassword, setPhonePassword] = useState('');
-
-  // Email login state
-  const [email, setEmail] = useState('');
-  const [emailPassword, setEmailPassword] = useState('');
+  const isEmail = (value: string) => {
+    return value.includes('@');
+  };
 
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, '');
@@ -37,23 +33,37 @@ const Login = () => {
     return `${numbers.slice(0, 3)} ${numbers.slice(3, 6)} ${numbers.slice(6, 8)} ${numbers.slice(8, 10)}`;
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    if (formatted.replace(/\s/g, '').length <= 10) {
-      setPhone(formatted);
+  const handleIdentifierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // If it looks like a phone number (starts with digit and no @), format it
+    if (!isEmail(value) && /^\d/.test(value.replace(/\s/g, ''))) {
+      const formatted = formatPhoneNumber(value);
+      if (formatted.replace(/\s/g, '').length <= 10) {
+        setIdentifier(formatted);
+      }
+    } else {
+      setIdentifier(value);
     }
   };
 
-  const handlePhoneLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const normalizedPhone = phone.replace(/\s/g, '');
-    const customer = findCustomerByPhone(normalizedPhone);
+    const trimmedIdentifier = identifier.trim();
+    let customer;
+
+    if (isEmail(trimmedIdentifier)) {
+      customer = findCustomerByEmail(trimmedIdentifier);
+    } else {
+      const normalizedPhone = trimmedIdentifier.replace(/\s/g, '');
+      customer = findCustomerByPhone(normalizedPhone);
+    }
 
     setTimeout(() => {
       if (!customer) {
-        toast.error('Bu telefon numarası sistemde kayıtlı değil');
+        toast.error('Bu telefon numarası veya e-posta adresi sistemde kayıtlı değil');
         setIsLoading(false);
         return;
       }
@@ -64,46 +74,7 @@ const Login = () => {
         return;
       }
 
-      if (!verifyCustomerPassword(customer.id, phonePassword)) {
-        toast.error('Şifre hatalı');
-        setIsLoading(false);
-        return;
-      }
-
-      saveSession({
-        customerId: customer.id,
-        customerNumber: customer.customerNumber,
-        fullName: customer.fullName,
-        phone: customer.phone,
-        email: customer.email,
-      });
-
-      toast.success('Giriş başarılı!');
-      navigate('/');
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const customer = findCustomerByEmail(email);
-
-    setTimeout(() => {
-      if (!customer) {
-        toast.error('Bu e-posta adresi sistemde kayıtlı değil');
-        setIsLoading(false);
-        return;
-      }
-
-      if (!customer.hasPassword) {
-        toast.error('Henüz şifreniz belirlenmemiş. Lütfen kayıt olun.');
-        setIsLoading(false);
-        return;
-      }
-
-      if (!verifyCustomerPassword(customer.id, emailPassword)) {
+      if (!verifyCustomerPassword(customer.id, password)) {
         toast.error('Şifre hatalı');
         setIsLoading(false);
         return;
@@ -144,118 +115,54 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'phone' | 'email')}>
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="phone" className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  Telefon
-                </TabsTrigger>
-                <TabsTrigger value="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  E-posta
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="phone">
-                <form onSubmit={handlePhoneLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Telefon Numarası</Label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                        +90
-                      </span>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="555 123 45 67"
-                        value={phone}
-                        onChange={handlePhoneChange}
-                        className="pl-12"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="phone-password">Şifre</Label>
-                      <Link
-                        to="/sifremi-unuttum"
-                        className="text-xs text-primary hover:underline"
-                      >
-                        Şifremi Unuttum
-                      </Link>
-                    </div>
-                    <div className="relative">
-                      <Input
-                        id="phone-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        value={phonePassword}
-                        onChange={(e) => setPhonePassword(e.target.value)}
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
-                  </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="email">
-                <form onSubmit={handleEmailLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">E-posta Adresi</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="ornek@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="email-password">Şifre</Label>
-                      <Link
-                        to="/sifremi-unuttum"
-                        className="text-xs text-primary hover:underline"
-                      >
-                        Şifremi Unuttum
-                      </Link>
-                    </div>
-                    <div className="relative">
-                      <Input
-                        id="email-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        value={emailPassword}
-                        onChange={(e) => setEmailPassword(e.target.value)}
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
-                  </Button>
-                </form>
-              </TabsContent>
-            </Tabs>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="identifier">Telefon Numarası veya E-posta</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="identifier"
+                    type="text"
+                    placeholder="555 123 45 67 veya ornek@email.com"
+                    value={identifier}
+                    onChange={handleIdentifierChange}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Şifre</Label>
+                  <Link
+                    to="/sifremi-unuttum"
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Şifremi Unuttum
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+              </Button>
+            </form>
 
             {/* Divider */}
             <div className="relative my-6">
