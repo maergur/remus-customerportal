@@ -121,7 +121,22 @@ const ForgotPassword = () => {
       }
 
       setFoundCustomer(customer);
-      setStep('method');
+      
+      // Automatically set reset method based on input type and skip method selection
+      const inputIsEmail = isEmail(identifier);
+      setResetMethod(inputIsEmail ? 'email' : 'sms');
+      
+      // Generate verification code and go directly to verify step
+      const target = inputIsEmail ? customer.email : customer.phone;
+      generateVerificationCode(target);
+      
+      toast.success(
+        inputIsEmail
+          ? `${customer.email} adresine doğrulama kodu gönderildi`
+          : `+90 ${customer.phone} numarasına doğrulama kodu gönderildi`
+      );
+      
+      setStep('verify');
       setIsLoading(false);
     }, 1000);
   };
