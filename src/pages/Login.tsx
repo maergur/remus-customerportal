@@ -257,21 +257,11 @@ const Login = () => {
               </TabsContent>
             </Tabs>
 
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">veya</span>
-              </div>
-            </div>
-
             {/* Register Options */}
-            <div className="space-y-3">
+            <div className="space-y-3 mt-6">
               <Link to="/kayit">
                 <Button variant="outline" className="w-full group">
-                  Mevcut Müşteriyim, Hesap Oluştur
+                  Mevcut Müşteriyim, Şifre Belirle
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
