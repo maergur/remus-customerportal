@@ -120,8 +120,8 @@ const Register = () => {
       }
 
       if (customer.hasPassword) {
-        toast.error('Bu hesap için zaten şifre belirlenmiş. Giriş yapabilirsiniz.');
-        navigate('/giris');
+        toast.error('Bu hesap için zaten şifre belirlenmiş. Şifrenizi sıfırlayabilirsiniz.');
+        navigate('/sifremi-unuttum');
         setIsLoading(false);
         return;
       }
