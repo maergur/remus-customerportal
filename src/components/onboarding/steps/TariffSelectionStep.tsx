@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, TrendingUp, Percent, Calculator, Zap } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Lock, TrendingUp, Percent, Calculator, Zap, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 const tariffs = [
   {
@@ -89,6 +90,14 @@ const calculateScenarios = (monthlyKwh: number) => {
 export const TariffSelectionStep = () => {
   const { data, updateData, nextStep, prevStep } = useOnboarding();
   const [monthlyKwh, setMonthlyKwh] = useState<number>(357);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+
+  // Tarife seçildiğinde hesaplayıcıyı otomatik aç
+  useEffect(() => {
+    if (data.selectedTariff) {
+      setIsCalculatorOpen(true);
+    }
+  }, [data.selectedTariff]);
 
   const handleSelectTariff = (tariffId: string) => {
     updateData({ selectedTariff: tariffId });
@@ -172,27 +181,38 @@ export const TariffSelectionStep = () => {
         })}
       </div>
 
-      {/* Dinamik Karşılaştırma Kutusu - kWh Girişli */}
-      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
-        <CardHeader className="pb-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Calculator className="w-5 h-5 text-primary" />
+      {/* Collapsible Fatura Hesaplayıcı */}
+      <Collapsible open={isCalculatorOpen} onOpenChange={setIsCalculatorOpen}>
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
+          <CollapsibleTrigger asChild>
+            <CardHeader className="pb-4 cursor-pointer hover:bg-primary/5 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Calculator className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg">Fatura Hesaplayıcı</CardTitle>
+                    <CardDescription>Tüketiminize göre tarifeleri karşılaştırın</CardDescription>
+                  </div>
+                </div>
+                <ChevronDown 
+                  className={cn(
+                    "w-5 h-5 text-muted-foreground transition-transform duration-300",
+                    isCalculatorOpen && "rotate-180"
+                  )} 
+                />
               </div>
-              <div>
-                <CardTitle className="text-lg">Fatura Hesaplayıcı</CardTitle>
-                <CardDescription>Aylık tüketiminize göre tahmini fatura</CardDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 bg-background rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-2">
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+            <CardContent className="pt-0">
+              {/* kWh Input */}
+              <div className="flex items-center justify-center gap-2 bg-background rounded-lg p-3 border border-border mb-4">
                 <Zap className="w-4 h-4 text-primary" />
                 <Label htmlFor="kwh-input" className="text-sm font-medium whitespace-nowrap">
                   Aylık Tüketim:
                 </Label>
-              </div>
-              <div className="flex items-center gap-1">
                 <Input
                   id="kwh-input"
                   type="number"
@@ -204,36 +224,36 @@ export const TariffSelectionStep = () => {
                 />
                 <span className="text-sm text-muted-foreground font-medium">kWh</span>
               </div>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {comparisonScenarios.map((scenario, index) => {
-              const Icon = scenario.icon;
-              return (
-                <div
-                  key={index}
-                  className="bg-background rounded-lg p-4 border border-border/50 transition-all hover:border-primary/30"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-primary" />
+
+              {/* Karşılaştırma Kartları */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {comparisonScenarios.map((scenario, index) => {
+                  const Icon = scenario.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="bg-background rounded-lg p-4 border border-border/50 transition-all hover:border-primary/30"
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <p className="text-sm font-semibold">{scenario.tariff}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
+                      <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
+                      <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                     </div>
-                    <p className="text-sm font-semibold">{scenario.tariff}</p>
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
-                  <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
-                  <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
-                </div>
-              );
-            })}
-          </div>
-          <p className="text-xs text-muted-foreground text-center mt-4">
-            * Hesaplamalar örnek fiyatlandırma üzerinden yapılmıştır. Gerçek faturanız piyasa koşullarına göre değişebilir.
-          </p>
-        </CardContent>
-      </Card>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground text-center mt-4">
+                * Hesaplamalar örnek fiyatlandırma üzerinden yapılmıştır. Gerçek faturanız piyasa koşullarına göre değişebilir.
+              </p>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
 
       <div className="flex gap-3 max-w-md mx-auto">
         <Button variant="outline" onClick={prevStep} className="flex-1">
