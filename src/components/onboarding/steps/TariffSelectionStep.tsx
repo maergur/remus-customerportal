@@ -1,16 +1,20 @@
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, TrendingUp, Percent, Zap, Calculator } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Lock, TrendingUp, Percent, Calculator, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useState, useMemo } from 'react';
 
 const tariffs = [
   {
     id: 'sabit',
     name: 'Yıllık Sabit Fiyat',
     description: 'Fiyat dalgalanmalarından etkilenmek istemeyenler için',
-    price: '2,80',
+    pricePerKwh: 2.80,
+    displayPrice: '2,80',
     unit: 'TL/kWh',
     icon: Lock,
     popular: true,
@@ -19,52 +23,72 @@ const tariffs = [
     id: 'degisken-standart',
     name: 'Değişken Standart',
     description: 'Piyasa koşullarına göre aylık değişen tarife',
-    price: 'PTF+YEKDEM',
+    pricePerKwh: 2.65,
+    displayPrice: 'PTF+YEKDEM',
     unit: '×1.035 marj',
     icon: TrendingUp,
     popular: false,
+    varianceMin: 0.85,
+    varianceMax: 1.15,
   },
   {
     id: 'degisken-on-odeme',
     name: 'Değişken Ön Ödeme',
     description: 'Peşin ödemede en avantajlı fiyat',
-    price: 'PTF+YEKDEM',
+    pricePerKwh: 2.55,
+    displayPrice: 'PTF+YEKDEM',
     unit: '×1.005-1.02',
     icon: Percent,
     popular: false,
+    varianceMin: 0.82,
+    varianceMax: 1.10,
   },
 ];
 
-// 1000 TL baz fatura karşılaştırması
-const comparisonScenarios = [
-  {
-    tariff: 'Yıllık Sabit Fiyat',
-    icon: Lock,
-    baseBill: '1.000 TL',
-    actualBill: '1.000 TL',
-    note: 'Fiyat sabit, değişmez',
-    color: 'primary',
-  },
-  {
-    tariff: 'Değişken Standart',
-    icon: TrendingUp,
-    baseBill: '1.000 TL',
-    actualBill: '850 - 1.150 TL',
-    note: 'Piyasaya göre ±%15 değişir',
-    color: 'blue',
-  },
-  {
-    tariff: 'Değişken Ön Ödeme',
-    icon: Percent,
-    baseBill: '1.000 TL',
-    actualBill: '820 - 1.100 TL',
-    note: 'Peşin ödemede en düşük marj',
-    color: 'green',
-  },
-];
+const calculateScenarios = (monthlyKwh: number) => {
+  const sabitTariff = tariffs.find(t => t.id === 'sabit')!;
+  const degiskenStandart = tariffs.find(t => t.id === 'degisken-standart')!;
+  const degiskenOnOdeme = tariffs.find(t => t.id === 'degisken-on-odeme')!;
+
+  const sabitBill = monthlyKwh * sabitTariff.pricePerKwh;
+  const standartMin = monthlyKwh * degiskenStandart.pricePerKwh * degiskenStandart.varianceMin!;
+  const standartMax = monthlyKwh * degiskenStandart.pricePerKwh * degiskenStandart.varianceMax!;
+  const onOdemeMin = monthlyKwh * degiskenOnOdeme.pricePerKwh * degiskenOnOdeme.varianceMin!;
+  const onOdemeMax = monthlyKwh * degiskenOnOdeme.pricePerKwh * degiskenOnOdeme.varianceMax!;
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('tr-TR', { 
+      style: 'decimal', 
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0 
+    }).format(value) + ' TL';
+  };
+
+  return [
+    {
+      tariff: 'Yıllık Sabit Fiyat',
+      icon: Lock,
+      actualBill: formatCurrency(sabitBill),
+      note: 'Fiyat sabit, değişmez',
+    },
+    {
+      tariff: 'Değişken Standart',
+      icon: TrendingUp,
+      actualBill: `${formatCurrency(standartMin)} - ${formatCurrency(standartMax)}`,
+      note: 'Piyasaya göre ±%15 değişir',
+    },
+    {
+      tariff: 'Değişken Ön Ödeme',
+      icon: Percent,
+      actualBill: `${formatCurrency(onOdemeMin)} - ${formatCurrency(onOdemeMax)}`,
+      note: 'Peşin ödemede en düşük marj',
+    },
+  ];
+};
 
 export const TariffSelectionStep = () => {
   const { data, updateData, nextStep, prevStep } = useOnboarding();
+  const [monthlyKwh, setMonthlyKwh] = useState<number>(357);
 
   const handleSelectTariff = (tariffId: string) => {
     updateData({ selectedTariff: tariffId });
@@ -78,7 +102,14 @@ export const TariffSelectionStep = () => {
     nextStep();
   };
 
-  
+  const comparisonScenarios = useMemo(() => {
+    return calculateScenarios(monthlyKwh);
+  }, [monthlyKwh]);
+
+  const handleKwhChange = (value: string) => {
+    const numValue = parseInt(value) || 0;
+    setMonthlyKwh(Math.max(0, Math.min(10000, numValue)));
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -125,13 +156,13 @@ export const TariffSelectionStep = () => {
                 <div>
                   {tariff.id === 'sabit' ? (
                     <div>
-                      <span className="text-2xl font-bold">{tariff.price}</span>
+                      <span className="text-2xl font-bold">{tariff.displayPrice}</span>
                       <span className="text-muted-foreground text-sm ml-1">{tariff.unit}</span>
                     </div>
                   ) : (
                     <div className="flex items-baseline justify-between px-2">
                       <span className="text-2xl font-bold">{tariff.unit}</span>
-                      <span className="text-xs text-muted-foreground/50">{tariff.price}</span>
+                      <span className="text-xs text-muted-foreground/50">{tariff.displayPrice}</span>
                     </div>
                   )}
                 </div>
@@ -141,16 +172,38 @@ export const TariffSelectionStep = () => {
         })}
       </div>
 
-      {/* Statik Karşılaştırma Kutusu - 1000 TL Baz Fatura */}
+      {/* Dinamik Karşılaştırma Kutusu - kWh Girişli */}
       <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
         <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-primary" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Fatura Hesaplayıcı</CardTitle>
+                <CardDescription>Aylık tüketiminize göre tahmini fatura</CardDescription>
+              </div>
             </div>
-            <div>
-              <CardTitle className="text-lg">Fatura Karşılaştırması</CardTitle>
-              <CardDescription>1.000 TL baz fatura üzerinden örnek hesaplama</CardDescription>
+            <div className="flex items-center gap-2 bg-background rounded-lg p-2 border border-border">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-primary" />
+                <Label htmlFor="kwh-input" className="text-sm font-medium whitespace-nowrap">
+                  Aylık Tüketim:
+                </Label>
+              </div>
+              <div className="flex items-center gap-1">
+                <Input
+                  id="kwh-input"
+                  type="number"
+                  value={monthlyKwh}
+                  onChange={(e) => handleKwhChange(e.target.value)}
+                  className="w-24 h-8 text-center font-semibold"
+                  min={0}
+                  max={10000}
+                />
+                <span className="text-sm text-muted-foreground font-medium">kWh</span>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -161,7 +214,7 @@ export const TariffSelectionStep = () => {
               return (
                 <div
                   key={index}
-                  className="bg-background rounded-lg p-4 border border-border/50"
+                  className="bg-background rounded-lg p-4 border border-border/50 transition-all hover:border-primary/30"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
@@ -169,13 +222,16 @@ export const TariffSelectionStep = () => {
                     </div>
                     <p className="text-sm font-semibold">{scenario.tariff}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-1">Tahmini Fatura</p>
+                  <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
                   <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
                   <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                 </div>
               );
             })}
           </div>
+          <p className="text-xs text-muted-foreground text-center mt-4">
+            * Hesaplamalar örnek fiyatlandırma üzerinden yapılmıştır. Gerçek faturanız piyasa koşullarına göre değişebilir.
+          </p>
         </CardContent>
       </Card>
 
