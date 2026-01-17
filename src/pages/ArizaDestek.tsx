@@ -36,25 +36,35 @@ const distributionCompanies: Record<string, {
 };
 
 // Örnek ticket'lar
-const sampleTickets = [
+type TicketStatus = 'pending' | 'in_progress' | 'resolved';
+
+interface Ticket {
+  id: string;
+  type: string;
+  status: TicketStatus;
+  date: string;
+  description: string;
+}
+
+const sampleTickets: Ticket[] = [
   { 
     id: "DST-2026-045", 
     type: "Fatura İtirazı", 
-    status: "in_progress" as const, 
+    status: "in_progress", 
     date: "15 Ara 2026", 
     description: "Aralık faturası normalden yüksek geldi" 
   },
   { 
     id: "DST-2026-032", 
     type: "Sayaç Arızası", 
-    status: "resolved" as const, 
+    status: "resolved", 
     date: "28 Kas 2026", 
     description: "Sayaç ekranı yanmıyor" 
   },
   { 
     id: "DST-2026-018", 
     type: "Tarife Değişikliği", 
-    status: "resolved" as const, 
+    status: "resolved", 
     date: "10 Kas 2026", 
     description: "Yeşil Enerji tarifesine geçiş talebi" 
   },
@@ -118,28 +128,67 @@ const ArizaDestek = () => {
         </div>
 
         {/* Main Content */}
-        {view.type === 'categories' && (
-          <div className="space-y-6">
-            {/* Category Selection */}
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <HelpCircle className="h-5 w-5 text-primary" />
+{view.type === 'categories' && (
+          <>
+            {/* Mobile: Active Ticket Banner */}
+            {sampleTickets.filter(t => t.status === 'in_progress' || t.status === 'pending').length > 0 && (
+              <div className="lg:hidden bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                    {sampleTickets.filter(t => t.status === 'in_progress' || t.status === 'pending').length} aktif başvurunuz var
+                  </span>
                 </div>
-                <div>
-                  <h2 className="font-semibold text-foreground">Konu Seçin</h2>
-                  <p className="text-sm text-muted-foreground">İlgili kategoriyi seçerek başlayın</p>
+                <button 
+                  onClick={() => {
+                    const el = document.getElementById('recent-tickets-mobile');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="text-sm font-medium text-amber-600 dark:text-amber-400 hover:underline"
+                >
+                  Gör →
+                </button>
+              </div>
+            )}
+
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left Column: Categories (2/3 width) */}
+              <div className="lg:col-span-2">
+                <div className="bg-card rounded-2xl border border-border p-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <HelpCircle className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="font-semibold text-foreground">Konu Seçin</h2>
+                      <p className="text-sm text-muted-foreground">İlgili kategoriyi seçerek başlayın</p>
+                    </div>
+                  </div>
+                  <SupportCategoriesGrid onSelectCategory={handleSelectCategory} />
                 </div>
               </div>
-              <SupportCategoriesGrid onSelectCategory={handleSelectCategory} />
+
+              {/* Right Column: Recent Tickets (1/3 width) - Sticky on Desktop */}
+              <div className="lg:col-span-1">
+                <div className="lg:sticky lg:top-6">
+                  <RecentTickets 
+                    tickets={sampleTickets} 
+                    onSelectTicket={handleSelectTicket}
+                    compact
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Recent Tickets */}
-            <RecentTickets 
-              tickets={sampleTickets} 
-              onSelectTicket={handleSelectTicket}
-            />
-          </div>
+            {/* Mobile: Full Tickets List */}
+            <div id="recent-tickets-mobile" className="lg:hidden">
+              <RecentTickets 
+                tickets={sampleTickets} 
+                onSelectTicket={handleSelectTicket}
+              />
+            </div>
+          </>
         )}
 
         {view.type === 'help' && (

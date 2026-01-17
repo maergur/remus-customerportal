@@ -193,20 +193,24 @@ interface SupportCategoriesProps {
 
 export const SupportCategoriesGrid = ({ onSelectCategory }: SupportCategoriesProps) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 gap-3">
       {supportCategories.map((category) => {
         const Icon = category.icon;
         return (
           <button
             key={category.id}
             onClick={() => onSelectCategory(category)}
-            className="group bg-card hover:bg-secondary/50 rounded-2xl p-6 border border-border hover:border-primary/30 transition-all duration-200 text-left"
+            className="group bg-card hover:bg-secondary/50 rounded-xl p-4 border border-border hover:border-primary/30 transition-all duration-200 text-left"
           >
-            <div className={`h-14 w-14 rounded-xl ${category.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-              <Icon className={`h-7 w-7 ${category.iconColor}`} />
+            <div className="flex items-start gap-3">
+              <div className={`h-10 w-10 rounded-lg ${category.bgColor} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                <Icon className={`h-5 w-5 ${category.iconColor}`} />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-medium text-foreground text-sm mb-0.5">{category.title}</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">{category.description}</p>
+              </div>
             </div>
-            <h3 className="font-semibold text-foreground mb-1">{category.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">{category.description}</p>
           </button>
         );
       })}
