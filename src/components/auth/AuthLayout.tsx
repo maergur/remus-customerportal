@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import remusLogo from '@/assets/remus-logo.svg';
+import { ReactNode, useEffect } from 'react';
 
 interface StatCard {
   label: string;
@@ -34,19 +33,22 @@ const AuthLayout = ({
   topStats,
   bottomStats,
 }: AuthLayoutProps) => {
+  // Force light mode on auth pages
+  useEffect(() => {
+    const wasDark = document.documentElement.classList.contains('dark');
+    document.documentElement.classList.remove('dark');
+    
+    return () => {
+      if (wasDark) {
+        document.documentElement.classList.add('dark');
+      }
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex">
       {/* Sol Panel - Form */}
       <div className="flex-1 flex flex-col bg-gradient-to-br from-background via-background to-muted/30">
-        {/* Header */}
-        <header className="border-b bg-card/80 backdrop-blur-sm">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-center lg:justify-start">
-              <img src={remusLogo} alt="Remus Enerji" className="h-10" />
-            </div>
-          </div>
-        </header>
-
         {/* Main Content */}
         <main className="flex-1 flex items-center justify-center p-4">
           {children}
@@ -54,7 +56,7 @@ const AuthLayout = ({
 
         {/* Footer */}
         <footer className="py-4 text-center text-xs text-muted-foreground">
-          <p>© 2024 Remus Enerji. Tüm hakları saklıdır.</p>
+          <p>© 2026 Remus Enerji. Tüm hakları saklıdır.</p>
         </footer>
       </div>
 

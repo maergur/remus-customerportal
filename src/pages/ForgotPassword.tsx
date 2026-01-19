@@ -10,6 +10,7 @@ import { Eye, EyeOff, ArrowLeft, CheckCircle2, Shield, Phone, Mail, Lock, AlertC
 import { toast } from 'sonner';
 import AuthLayout from '@/components/auth/AuthLayout';
 import greenEnergyReset from '@/assets/green-energy-reset.jpg';
+import remusLogo from '@/assets/remus-logo.svg';
 import {
   findCustomerByPhoneOrEmail,
   generateVerificationCode,
@@ -268,8 +269,10 @@ const ForgotPassword = () => {
         { value: "SSL", label: "Şifreli Bağlantı" },
       ]}
     >
-      <Card className="w-full max-w-md">
-        {step === 'identify' && (
+      <div className="flex flex-col items-center w-full max-w-md">
+        <img src={remusLogo} alt="Remus Enerji" className="h-12 mb-6" />
+        <Card className="w-full">
+          {step === 'identify' && (
           <>
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Şifremi Unuttum</CardTitle>
@@ -649,7 +652,8 @@ const ForgotPassword = () => {
             </CardContent>
           </>
         )}
-      </Card>
+        </Card>
+      </div>
     </AuthLayout>
   );
 };

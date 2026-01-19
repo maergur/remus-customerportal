@@ -7,6 +7,7 @@ import { Eye, EyeOff, ArrowRight, Phone, Mail, Lock, CheckCircle2, AlertCircle }
 import { toast } from "sonner";
 import AuthLayout from "@/components/auth/AuthLayout";
 import greenEnergyLogin from "@/assets/green-energy-login.jpg";
+import remusLogo from "@/assets/remus-logo.svg";
 import { findCustomerByPhone, findCustomerByEmail, verifyCustomerPassword, saveSession } from "@/lib/mockCustomers";
 import { cn } from "@/lib/utils";
 
@@ -144,7 +145,9 @@ const Login = () => {
         { value: "24/7", label: "Destek Hizmeti" },
       ]}
     >
-      <Card className="w-full max-w-md overflow-hidden">
+      <div className="flex flex-col items-center w-full max-w-md">
+        <img src={remusLogo} alt="Remus Enerji" className="h-12 mb-6" />
+        <Card className="w-full overflow-hidden">
         <CardHeader className="text-center pb-2">
           <CardTitle className="text-2xl">Müşteri Portalı</CardTitle>
           <CardDescription>Hesabınıza giriş yapın veya yeni hesap oluşturun</CardDescription>
@@ -315,6 +318,7 @@ const Login = () => {
           </div>
         </CardContent>
       </Card>
+      </div>
     </AuthLayout>
   );
 };

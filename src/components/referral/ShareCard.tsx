@@ -48,7 +48,7 @@ export function ShareCard({
   const [activeTab, setActiveTab] = useState<"code" | "link">("code");
 
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
       {/* Tabs */}
       <div className="flex border-b border-border">
         <button
@@ -75,24 +75,24 @@ export function ShareCard({
         </button>
       </div>
 
-      <div className="p-5">
+      <div className="p-4 flex-1 flex flex-col">
         {activeTab === "code" ? (
           /* Invite Code */
           <div className="bg-gradient-to-r from-primary/5 to-transparent rounded-xl p-4 border border-primary/20">
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground mb-1">Davet Kodun</p>
-                <code className="text-2xl md:text-3xl font-bold text-foreground tracking-[0.15em] font-mono">
+                <code className="text-2xl font-bold text-foreground tracking-[0.15em] font-mono">
                   {inviteCode}
                 </code>
               </div>
               <Button
                 variant={copied ? "default" : "outline"}
-                size="lg"
+                size="default"
                 onClick={() => onCopy(inviteCode, "code")}
-                className="shrink-0 gap-2 h-12"
+                className="shrink-0 gap-2"
               >
-                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? "Kopyalandı!" : "Kopyala"}
               </Button>
             </div>
@@ -103,17 +103,17 @@ export function ShareCard({
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-muted-foreground mb-1">Referans Linkin</p>
-                <code className="text-sm md:text-base font-medium text-foreground truncate block">
+                <code className="text-sm font-medium text-foreground truncate block">
                   {referralLink}
                 </code>
               </div>
               <Button
                 variant={copied ? "default" : "outline"}
-                size="lg"
+                size="default"
                 onClick={() => onCopy(`https://${referralLink}`, "link")}
-                className="shrink-0 gap-2 h-12"
+                className="shrink-0 gap-2"
               >
-                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? "Kopyalandı!" : "Kopyala"}
               </Button>
             </div>
@@ -121,7 +121,7 @@ export function ShareCard({
         )}
 
         {/* Share Buttons */}
-        <div className="mt-5">
+        <div className="mt-auto pt-4">
           <p className="text-sm font-medium text-muted-foreground mb-3">Hızlı Paylaş</p>
           <div className="grid grid-cols-4 gap-2">
             {socialPlatforms.map((platform) => (

@@ -150,13 +150,6 @@ const TuketimAnalizi = () => {
           </div>
         </div>
 
-        {/* Tips */}
-        <div className="bg-primary/5 rounded-2xl p-4 lg:p-6 border border-primary/20">
-          <h3 className="text-lg font-semibold text-foreground mb-2">💡 Tasarruf İpucu</h3>
-          <p className="text-muted-foreground text-sm lg:text-base">
-            Kış aylarında tüketiminiz artış gösteriyor. Isıtma sistemlerinizi optimize ederek ve yalıtımınızı iyileştirerek aylık %15'e kadar tasarruf sağlayabilirsiniz.
-          </p>
-        </div>
       </div>
     </DashboardLayout>
   );

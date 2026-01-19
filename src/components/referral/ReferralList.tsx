@@ -45,7 +45,7 @@ export function ReferralList({ referrals, maxItems, onViewAll }: ReferralListPro
 
   if (referrals.length === 0) {
     return (
-      <div className="bg-card rounded-2xl border border-border p-8 text-center">
+      <div className="bg-card rounded-2xl border border-border p-8 text-center h-full flex flex-col items-center justify-center">
         <div className="h-16 w-16 rounded-full bg-secondary mx-auto mb-4 flex items-center justify-center">
           <Clock className="h-8 w-8 text-muted-foreground" />
         </div>
@@ -58,11 +58,11 @@ export function ReferralList({ referrals, maxItems, onViewAll }: ReferralListPro
   }
 
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
       <div className="p-4 border-b border-border">
         <h3 className="font-semibold text-foreground">Davetlerin</h3>
       </div>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border flex-1 overflow-auto">
         {displayedReferrals.map((referral) => {
           const status = statusConfig[referral.status];
           const StatusIcon = status.icon;
@@ -73,7 +73,7 @@ export function ReferralList({ referrals, maxItems, onViewAll }: ReferralListPro
               className="flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold">
                   {referral.name.charAt(0)}
                 </div>
                 <div>
@@ -86,14 +86,12 @@ export function ReferralList({ referrals, maxItems, onViewAll }: ReferralListPro
                   <StatusIcon className="h-3 w-3" />
                   {status.label}
                 </div>
-                <div className="text-right">
-                  <p className={cn(
-                    "font-semibold",
-                    referral.status === "active" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"
-                  )}>
-                    {referral.status === "active" ? `+${referral.earnedAmount} TL` : "Bekliyor"}
-                  </p>
-                </div>
+                <p className={cn(
+                  "font-semibold text-sm",
+                  referral.status === "active" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"
+                )}>
+                  {referral.status === "active" ? `+${referral.earnedAmount}₺` : "—"}
+                </p>
               </div>
             </div>
           );

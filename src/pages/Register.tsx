@@ -8,6 +8,7 @@ import { Eye, EyeOff, Phone, Mail, ArrowLeft, CheckCircle2, Shield, Lock, AlertC
 import { toast } from 'sonner';
 import AuthLayout from '@/components/auth/AuthLayout';
 import greenEnergyRegister from '@/assets/green-energy-register.jpg';
+import remusLogo from '@/assets/remus-logo.svg';
 import { findCustomerByPhone, findCustomerByEmail, generateVerificationCode, verifyCode, setCustomerPassword, saveSession, MockCustomer } from '@/lib/mockCustomers';
 import { cn } from '@/lib/utils';
 
@@ -209,8 +210,10 @@ const Register = () => {
         { value: "81", label: "İlde Hizmet" },
       ]}
     >
-      <Card className="w-full max-w-md">
-        {step === 'identify' && (
+      <div className="flex flex-col items-center w-full max-w-md">
+        <img src={remusLogo} alt="Remus Enerji" className="h-12 mb-6" />
+        <Card className="w-full">
+          {step === 'identify' && (
           <>
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Hesap Oluştur</CardTitle>
@@ -409,7 +412,8 @@ const Register = () => {
             </CardContent>
           </>
         )}
-      </Card>
+        </Card>
+      </div>
     </AuthLayout>
   );
 };
