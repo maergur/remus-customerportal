@@ -16,6 +16,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { clearSession } from "@/lib/mockCustomers";
 
 const notifications = [
   {
@@ -92,7 +93,9 @@ export function TopBar() {
   const isComplete = completionPercent === 100;
 
   const handleLogout = () => {
+    clearSession();
     toast.success(language === "tr" ? "Başarıyla çıkış yapıldı" : "Successfully logged out");
+    navigate('/giris');
   };
 
   const handleProfileClick = () => {

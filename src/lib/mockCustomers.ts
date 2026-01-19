@@ -36,6 +36,15 @@ export const mockExistingCustomers: MockCustomer[] = [
     customerNumber: 'MUS009012',
     hasPassword: false,
   },
+  {
+    id: '4',
+    phone: '5321234567',
+    email: 'levent@remusenerji.com',
+    fullName: 'Levent Remus',
+    customerNumber: 'MUS000001',
+    hasPassword: true,
+    password: 'test123',
+  },
 ];
 
 // Helper functions
@@ -85,6 +94,7 @@ export const verifyCode = (identifier: string, code: string): boolean => {
 // Mock password storage (in real app, this would be in database)
 const customerPasswords: Record<string, string> = {
   '2': 'test123', // Fatma already has a password
+  '4': 'test123', // Levent already has a password
 };
 
 export const setCustomerPassword = (customerId: string, password: string): void => {
