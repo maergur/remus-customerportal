@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useInstallation } from "@/contexts/InstallationContext";
 import { 
   User, 
   Mail, 
@@ -13,113 +14,20 @@ import {
   Building2, 
   FileText, 
   Shield, 
-  CheckCircle2, 
-  Circle,
-  Edit3,
   Plus,
-  Zap
+  Zap,
+  Check,
+  Lock,
+  Bell,
+  CreditCard
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-interface ProfileData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  tariff: string;
-  subscriberGroup: string;
-  contractAccepted: boolean;
-  phoneVerified: boolean;
-  addressConfirmed: boolean;
-}
+import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
 
 const Profil = () => {
   const { language } = useLanguage();
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
-  const [completionPercent, setCompletionPercent] = useState(0);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('onboardingData');
-    if (saved) {
-      try {
-        const data = JSON.parse(saved);
-        
-        const profile: ProfileData = {
-          firstName: data.personalInfo?.firstName || '',
-          lastName: data.personalInfo?.lastName || '',
-          email: data.personalInfo?.email || '',
-          phone: data.personalInfo?.phone || '',
-          address: data.addressFromEtso || '',
-          tariff: data.selectedTariff || '',
-          subscriberGroup: data.personalInfo?.subscriberGroup || '',
-          contractAccepted: !!data.contractAccepted,
-          phoneVerified: !!data.phoneVerified,
-          addressConfirmed: !!data.addressConfirmed,
-        };
-        
-        setProfileData(profile);
-
-        // Calculate completion
-        const items = [
-          !!(profile.firstName && profile.lastName && profile.email),
-          profile.phoneVerified,
-          profile.addressConfirmed,
-          !!profile.tariff,
-          profile.contractAccepted,
-        ];
-        const completedCount = items.filter(Boolean).length;
-        setCompletionPercent(Math.round((completedCount / items.length) * 100));
-      } catch {
-        setProfileData(null);
-      }
-    }
-  }, []);
-
-  const subscriptions = [
-    {
-      id: 1,
-      name: language === "tr" ? "Ev Aboneliği" : "Home Subscription",
-      address: "Atatürk Mah. Cumhuriyet Cad. No:42 D:5",
-      tariff: language === "tr" ? "Yeşil Enerji Pro" : "Green Energy Pro",
-      installationNo: "1234567",
-      active: true,
-    },
-  ];
-
-  const profileItems = [
-    {
-      key: 'personalInfo',
-      labelTr: 'Kişisel Bilgiler',
-      labelEn: 'Personal Info',
-      completed: !!(profileData?.firstName && profileData?.lastName && profileData?.email),
-    },
-    {
-      key: 'phone',
-      labelTr: 'Telefon Doğrulama',
-      labelEn: 'Phone Verification',
-      completed: !!profileData?.phoneVerified,
-    },
-    {
-      key: 'address',
-      labelTr: 'Adres Bilgileri',
-      labelEn: 'Address Info',
-      completed: !!profileData?.addressConfirmed,
-    },
-    {
-      key: 'tariff',
-      labelTr: 'Tarife Seçimi',
-      labelEn: 'Tariff Selection',
-      completed: !!profileData?.tariff,
-    },
-    {
-      key: 'contract',
-      labelTr: 'Sözleşme Onayı',
-      labelEn: 'Contract Approval',
-      completed: !!profileData?.contractAccepted,
-    },
-  ];
+  const { installations, selectedInstallation, setSelectedInstallation } = useInstallation();
 
   const subscriberGroupLabels: Record<string, { tr: string; en: string }> = {
     mesken: { tr: "Mesken", en: "Residential" },
@@ -131,37 +39,40 @@ const Profil = () => {
     <DashboardLayout>
       <div className="space-y-6 animate-page-enter">
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              {language === "tr" ? "Profilim" : "My Profile"}
-            </h1>
-            <p className="text-muted-foreground">
-              {language === "tr" ? "Hesap bilgilerinizi ve aboneliklerinizi yönetin" : "Manage your account and subscriptions"}
-            </p>
-          </div>
-          <Link to="/onboarding">
-            <Button variant="outline" className="gap-2">
-              <Plus className="h-4 w-4" />
-              {language === "tr" ? "Yeni Abonelik Ekle" : "Add New Subscription"}
-            </Button>
-          </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">
+            {language === "tr" ? "Profil & Ayarlar" : "Profile & Settings"}
+          </h1>
+          <p className="text-muted-foreground">
+            {language === "tr" ? "Hesap bilgilerinizi ve tercihlerinizi yönetin" : "Manage your account and preferences"}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Profile Info */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Personal Information Card */}
+        {/* Tabs */}
+        <Tabs defaultValue="account" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
+            <TabsTrigger value="account" className="gap-2">
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">{language === "tr" ? "Hesap" : "Account"}</span>
+            </TabsTrigger>
+            <TabsTrigger value="installations" className="gap-2">
+              <Zap className="h-4 w-4" />
+              <span className="hidden sm:inline">{language === "tr" ? "Tesisatlar" : "Installations"}</span>
+            </TabsTrigger>
+            <TabsTrigger value="security" className="gap-2">
+              <Shield className="h-4 w-4" />
+              <span className="hidden sm:inline">{language === "tr" ? "Güvenlik" : "Security"}</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Account Tab */}
+          <TabsContent value="account" className="space-y-6">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
                   {language === "tr" ? "Kişisel Bilgiler" : "Personal Information"}
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Edit3 className="h-4 w-4" />
-                  {language === "tr" ? "Düzenle" : "Edit"}
-                </Button>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -170,7 +81,7 @@ const Profil = () => {
                       {language === "tr" ? "Ad" : "First Name"}
                     </Label>
                     <Input 
-                      value={profileData?.firstName || "Ahmet"} 
+                      value="Ahmet" 
                       readOnly 
                       className="bg-secondary/30"
                     />
@@ -180,7 +91,7 @@ const Profil = () => {
                       {language === "tr" ? "Soyad" : "Last Name"}
                     </Label>
                     <Input 
-                      value={profileData?.lastName || "Yılmaz"} 
+                      value="Yılmaz" 
                       readOnly 
                       className="bg-secondary/30"
                     />
@@ -193,7 +104,7 @@ const Profil = () => {
                     {language === "tr" ? "E-posta" : "Email"}
                   </Label>
                   <Input 
-                    value={profileData?.email || "ahmet@email.com"} 
+                    value="ahmet@email.com" 
                     readOnly 
                     className="bg-secondary/30"
                   />
@@ -203,14 +114,12 @@ const Profil = () => {
                   <Label className="text-muted-foreground text-xs flex items-center gap-2">
                     <Phone className="h-3 w-3" />
                     {language === "tr" ? "Telefon" : "Phone"}
-                    {profileData?.phoneVerified && (
-                      <span className="text-primary text-[10px] bg-primary/10 px-1.5 py-0.5 rounded">
-                        {language === "tr" ? "Doğrulandı" : "Verified"}
-                      </span>
-                    )}
+                    <span className="text-primary text-[10px] bg-primary/10 px-1.5 py-0.5 rounded">
+                      {language === "tr" ? "Doğrulandı" : "Verified"}
+                    </span>
                   </Label>
                   <Input 
-                    value={profileData?.phone || "+90 555 123 4567"} 
+                    value="+90 555 123 4567" 
                     readOnly 
                     className="bg-secondary/30"
                   />
@@ -222,137 +131,227 @@ const Profil = () => {
                     {language === "tr" ? "Abone Grubu" : "Subscriber Group"}
                   </Label>
                   <Input 
-                    value={
-                      profileData?.subscriberGroup 
-                        ? subscriberGroupLabels[profileData.subscriberGroup]?.[language] || profileData.subscriberGroup
-                        : (language === "tr" ? "Mesken" : "Residential")
-                    } 
+                    value={language === "tr" ? "Mesken" : "Residential"} 
                     readOnly 
                     className="bg-secondary/30"
                   />
                 </div>
+
+                <p className="text-xs text-muted-foreground pt-2">
+                  {language === "tr" 
+                    ? "Bilgilerinizi güncellemek için müşteri hizmetleri ile iletişime geçin."
+                    : "Contact customer service to update your information."}
+                </p>
               </CardContent>
             </Card>
 
-            {/* Subscriptions Card */}
+            {/* Preferences */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                  {language === "tr" ? "Bildirim Tercihleri" : "Notification Preferences"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-foreground">{language === "tr" ? "E-posta Bildirimleri" : "Email Notifications"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "tr" ? "Fatura ve kampanya bildirimleri" : "Invoice and campaign notifications"}</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-foreground">{language === "tr" ? "SMS Bildirimleri" : "SMS Notifications"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "tr" ? "Acil durum ve kesinti bildirimleri" : "Emergency and outage notifications"}</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-foreground">{language === "tr" ? "Pazarlama İletişimi" : "Marketing Communications"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "tr" ? "Özel teklifler ve haberler" : "Special offers and news"}</p>
+                  </div>
+                  <Switch />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Installations Tab */}
+          <TabsContent value="installations" className="space-y-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-primary" />
-                  {language === "tr" ? "Aboneliklerim" : "My Subscriptions"}
+                  {language === "tr" ? "Tesisatlarım" : "My Installations"}
                 </CardTitle>
                 <Link to="/onboarding">
                   <Button size="sm" className="gap-2">
                     <Plus className="h-4 w-4" />
-                    {language === "tr" ? "Yeni Abonelik" : "New Subscription"}
+                    {language === "tr" ? "Yeni Tesisat" : "New Installation"}
                   </Button>
                 </Link>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {subscriptions.map((sub) => (
-                  <div 
-                    key={sub.id} 
-                    className="p-4 rounded-xl border border-border bg-secondary/20 hover:bg-secondary/40 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h4 className="font-semibold text-foreground flex items-center gap-2">
-                          {sub.name}
-                          {sub.active && (
-                            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {language === "tr" 
+                    ? "Panelde görüntülemek istediğiniz tesisatı seçin." 
+                    : "Select the installation you want to view in the dashboard."}
+                </p>
+                <div className="space-y-3">
+                  {installations.map((inst) => {
+                    const isSelected = selectedInstallation.id === inst.id;
+                    return (
+                      <button
+                        key={inst.id}
+                        onClick={() => setSelectedInstallation(inst)}
+                        className={cn(
+                          "w-full p-4 rounded-xl border text-left transition-all",
+                          isSelected 
+                            ? "border-primary bg-primary/5 ring-1 ring-primary/20" 
+                            : "border-border bg-secondary/20 hover:bg-secondary/40 hover:border-primary/30"
+                        )}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors",
+                              isSelected ? "border-primary bg-primary" : "border-muted-foreground/30"
+                            )}>
+                              {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-foreground">
+                                {inst.name}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {language === "tr" ? "Tesisat No" : "Installation No"}: {inst.installationNo}
+                              </p>
+                            </div>
+                          </div>
+                          {isSelected && (
+                            <span className="text-[10px] bg-primary text-primary-foreground px-2 py-0.5 rounded-full font-medium">
                               {language === "tr" ? "Aktif" : "Active"}
                             </span>
                           )}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">
-                          {language === "tr" ? "Tesisat No" : "Installation No"}: {sub.installationNo}
-                        </p>
-                      </div>
-                      <Button variant="ghost" size="sm">
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                      <div className="flex items-start gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                        <span className="text-muted-foreground">{sub.address}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-primary" />
-                        <span className="text-foreground font-medium">{sub.tariff}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                        </div>
+                        
+                        <div className="ml-8 space-y-1 text-sm">
+                          <div className="flex items-start gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <span className="text-muted-foreground">{inst.address}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Zap className="h-4 w-4 text-primary flex-shrink-0" />
+                            <span className="text-foreground font-medium">{inst.tariff}</span>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </CardContent>
             </Card>
-          </div>
+          </TabsContent>
 
-          {/* Right Column - Completion & Security */}
-          <div className="space-y-6">
-            {/* Profile Completion Card */}
-            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center justify-between">
-                  <span className="text-base">
-                    {language === "tr" ? "Profil Durumu" : "Profile Status"}
-                  </span>
-                  <span className="text-2xl font-bold text-primary">{completionPercent}%</span>
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lock className="h-5 w-5 text-primary" />
+                  {language === "tr" ? "Şifre & Giriş" : "Password & Login"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Progress value={completionPercent} variant="glow" className="h-2" />
-                
-                <div className="space-y-2">
-                  {profileItems.map((item) => (
-                    <div 
-                      key={item.key}
-                      className={`flex items-center gap-2 text-sm ${item.completed ? 'text-muted-foreground' : 'text-foreground'}`}
-                    >
-                      {item.completed ? (
-                        <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                      ) : (
-                        <Circle className="h-4 w-4 text-muted-foreground/50 flex-shrink-0" />
-                      )}
-                      <span className={item.completed ? 'line-through' : ''}>
-                        {language === "tr" ? item.labelTr : item.labelEn}
-                      </span>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl">
+                  <div>
+                    <p className="font-medium text-foreground">{language === "tr" ? "Şifre" : "Password"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "tr" ? "Son değişiklik: 3 ay önce" : "Last changed: 3 months ago"}</p>
+                  </div>
+                  <Button variant="outline">
+                    {language === "tr" ? "Değiştir" : "Change"}
+                  </Button>
                 </div>
-
-                {completionPercent < 100 && (
-                  <Link to="/onboarding" className="block">
-                    <Button variant="outline" className="w-full mt-2">
-                      {language === "tr" ? "Eksikleri Tamamla" : "Complete Missing Items"}
-                    </Button>
-                  </Link>
-                )}
+                <div className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl">
+                  <div>
+                    <p className="font-medium text-foreground">{language === "tr" ? "İki Faktörlü Doğrulama" : "Two-Factor Authentication"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "tr" ? "Hesabınızı daha güvenli hale getirin" : "Make your account more secure"}</p>
+                  </div>
+                  <Button variant="outline">
+                    {language === "tr" ? "Etkinleştir" : "Enable"}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Security Card */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Shield className="h-5 w-5 text-primary" />
-                  {language === "tr" ? "Güvenlik" : "Security"}
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  {language === "tr" ? "Sözleşmeler" : "Contracts"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start gap-2">
-                  <FileText className="h-4 w-4" />
-                  {language === "tr" ? "Sözleşmelerim" : "My Contracts"}
-                </Button>
-                <Button variant="outline" className="w-full justify-start gap-2">
-                  <Shield className="h-4 w-4" />
-                  {language === "tr" ? "Şifre Değiştir" : "Change Password"}
+                <button className="w-full flex items-center justify-between p-4 bg-secondary/30 rounded-xl hover:bg-secondary/50 transition-colors text-left">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium text-foreground">{language === "tr" ? "Elektrik Satış Sözleşmesi" : "Electricity Sales Agreement"}</p>
+                      <p className="text-sm text-muted-foreground">PDF • 245 KB</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm">
+                    {language === "tr" ? "İndir" : "Download"}
+                  </Button>
+                </button>
+                <button className="w-full flex items-center justify-between p-4 bg-secondary/30 rounded-xl hover:bg-secondary/50 transition-colors text-left">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium text-foreground">{language === "tr" ? "KVKK Aydınlatma Metni" : "Privacy Policy"}</p>
+                      <p className="text-sm text-muted-foreground">PDF • 128 KB</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm">
+                    {language === "tr" ? "İndir" : "Download"}
+                  </Button>
+                </button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5 text-primary" />
+                  {language === "tr" ? "Ödeme Yöntemleri" : "Payment Methods"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                      VISA
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">•••• •••• •••• 4242</p>
+                      <p className="text-sm text-muted-foreground">{language === "tr" ? "Son kullanma: 12/28" : "Expires: 12/28"}</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    {language === "tr" ? "Düzenle" : "Edit"}
+                  </Button>
+                </div>
+                <Button variant="ghost" className="w-full mt-3 gap-2">
+                  <Plus className="h-4 w-4" />
+                  {language === "tr" ? "Yeni Kart Ekle" : "Add New Card"}
                 </Button>
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );

@@ -1,4 +1,4 @@
-import { ArrowLeft, Phone, ExternalLink, ThumbsUp, ThumbsDown } from "lucide-react";
+import { ArrowLeft, Phone, ExternalLink, CheckCircle, MessageSquarePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SupportCategory } from "./SupportCategories";
 
@@ -76,63 +76,49 @@ export const SupportHelpContent = ({
               </p>
             )}
             
-            <div className="flex flex-wrap gap-3">
-              {(helpContent.contactInfo.type === 'distribution' || helpContent.contactInfo.type === 'both') && (
-                <div className="flex-1 min-w-[200px] bg-card rounded-xl p-4 border border-border">
-                  <p className="text-xs text-muted-foreground mb-1">Dağıtım Şirketi</p>
-                  <p className="font-semibold text-foreground">{distributionCompany.name}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Phone className="h-4 w-4 text-red-500" />
-                    <span className="font-bold text-lg text-foreground">{distributionCompany.faultLine}</span>
-                  </div>
-                  <a 
-                    href={distributionCompany.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
-                  >
-                    Web sitesi <ExternalLink className="h-3 w-3" />
-                  </a>
+            {/* Distribution company card - only for distribution or both */}
+            {(helpContent.contactInfo.type === 'distribution' || helpContent.contactInfo.type === 'both') && (
+              <div className="bg-card rounded-xl p-4 border border-border">
+                <p className="text-xs text-muted-foreground mb-1">Dağıtım Şirketi</p>
+                <p className="font-semibold text-foreground">{distributionCompany.name}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <Phone className="h-4 w-4 text-red-500" />
+                  <span className="font-bold text-lg text-foreground">{distributionCompany.faultLine}</span>
                 </div>
-              )}
-              
-              {(helpContent.contactInfo.type === 'remus' || helpContent.contactInfo.type === 'both') && (
-                <div className="flex-1 min-w-[200px] bg-card rounded-xl p-4 border border-border">
-                  <p className="text-xs text-muted-foreground mb-1">Remus Enerji</p>
-                  <p className="font-semibold text-foreground">Müşteri Hizmetleri</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Phone className="h-4 w-4 text-primary" />
-                    <span className="font-bold text-lg text-foreground">0850 123 45 67</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">Hafta içi 09:00 - 18:00</p>
-                </div>
-              )}
-            </div>
+                <a 
+                  href={distributionCompany.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+                >
+                  Web sitesi <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            )}
           </div>
         )}
       </div>
 
       {/* Feedback Section */}
-      <div className="bg-card rounded-2xl border border-border p-6 text-center">
-        <p className="text-foreground font-medium mb-4">Bu içerik size yardımcı oldu mu? 🤔</p>
-        <div className="flex justify-center gap-4">
+      <div className="bg-card rounded-2xl border border-border p-6">
+        <p className="text-foreground font-medium mb-4 text-center">Sorununuz çözüldü mü?</p>
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
           <Button
             variant="outline"
             size="lg"
             onClick={() => onHelpful(true)}
-            className="min-w-[140px] hover:bg-emerald-500/10 hover:border-emerald-500 hover:text-emerald-600"
+            className="min-w-[180px] gap-2 hover:bg-emerald-500/10 hover:border-emerald-500 hover:text-emerald-600"
           >
-            <ThumbsUp className="h-4 w-4 mr-2" />
-            Evet
+            <CheckCircle className="h-4 w-4" />
+            Evet, teşekkürler
           </Button>
           <Button
-            variant="outline"
             size="lg"
             onClick={() => onHelpful(false)}
-            className="min-w-[140px] hover:bg-orange-500/10 hover:border-orange-500 hover:text-orange-600"
+            className="min-w-[180px] gap-2"
           >
-            <ThumbsDown className="h-4 w-4 mr-2" />
-            Hayır
+            <MessageSquarePlus className="h-4 w-4" />
+            Destek talebi oluştur
           </Button>
         </div>
       </div>

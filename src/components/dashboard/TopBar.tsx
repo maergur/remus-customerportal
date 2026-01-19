@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, UserCircle, Menu, Sun, Moon, Languages, CheckCircle2 } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, Menu, Sun, Moon, Languages, CheckCircle2, MapPin, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useInstallation } from "@/contexts/InstallationContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { clearSession } from "@/lib/mockCustomers";
@@ -65,6 +66,7 @@ export function TopBar() {
   const { toggle } = useSidebarContext();
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const { installations, selectedInstallation, setSelectedInstallation } = useInstallation();
   const navigate = useNavigate();
   const unreadCount = notifications.filter(n => n.unread).length;
 
@@ -214,6 +216,57 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Installation Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="hidden sm:flex items-center gap-2 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-3 py-2">
+              <Zap className="h-4 w-4 text-primary" />
+              <div className="text-left">
+                <p className="text-xs text-muted-foreground">{language === "tr" ? "Tesisat" : "Installation"}</p>
+                <p className="text-sm font-medium text-foreground">{selectedInstallation.name}</p>
+              </div>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-72 bg-card border-border shadow-lg z-50">
+            <DropdownMenuLabel className="py-2">
+              <span className="text-sm font-semibold">{language === "tr" ? "Tesisat Seç" : "Select Installation"}</span>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {installations.map((inst) => (
+              <DropdownMenuItem
+                key={inst.id}
+                className="flex items-start gap-3 p-3 cursor-pointer focus:bg-secondary"
+                onClick={() => {
+                  setSelectedInstallation(inst);
+                  toast.success(language === "tr" ? `${inst.name} tesisatına geçildi` : `Switched to ${inst.name}`);
+                }}
+              >
+                <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                  selectedInstallation.id === inst.id ? 'border-primary bg-primary' : 'border-muted-foreground/30'
+                }`}>
+                  {selectedInstallation.id === inst.id && <Check className="h-3 w-3 text-primary-foreground" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">{inst.name}</p>
+                  <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {inst.address.split(',')[0]}
+                  </p>
+                  <p className="text-xs text-muted-foreground">No: {inst.installationNo}</p>
+                </div>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex items-center justify-center gap-2 py-2 cursor-pointer text-primary"
+              onClick={() => navigate('/profil')}
+            >
+              <span className="text-sm">{language === "tr" ? "Tüm Tesisatları Yönet" : "Manage All Installations"}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {/* User Profile Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -223,7 +276,7 @@ export function TopBar() {
               </div>
               <div className="hidden lg:block text-left">
                 <p className="text-sm font-semibold text-foreground">Ahmet Yılmaz</p>
-                <p className="text-xs text-muted-foreground">{language === "tr" ? "Tesisat No: 1234567" : "Installation: 1234567"}</p>
+                <p className="text-xs text-muted-foreground">ahmet@email.com</p>
               </div>
               <ChevronDown className="h-4 w-4 text-muted-foreground hidden lg:block" />
             </button>
@@ -245,12 +298,8 @@ export function TopBar() {
               className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary"
               onClick={handleProfileClick}
             >
-              <UserCircle className="h-4 w-4 text-muted-foreground" />
-              <span>{t("profile")}</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-3 py-3 cursor-pointer focus:bg-secondary">
               <Settings className="h-4 w-4 text-muted-foreground" />
-              <span>{language === "tr" ? "Ayarlar" : "Settings"}</span>
+              <span>{language === "tr" ? "Profil & Ayarlar" : "Profile & Settings"}</span>
             </DropdownMenuItem>
             <DropdownMenuItem 
               className="flex items-center justify-between py-3 cursor-pointer focus:bg-secondary"
