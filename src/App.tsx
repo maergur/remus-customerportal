@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { InstallationProvider } from "./contexts/InstallationContext";
+import { TourProvider } from "./contexts/TourContext";
+import { TourOverlay } from "./components/tour/TourOverlay";
+import { WelcomeModal } from "./components/tour/WelcomeModal";
 import Index from "./pages/Index";
 import TuketimAnalizi from "./pages/TuketimAnalizi";
 import Faturalar from "./pages/Faturalar";
@@ -27,6 +30,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <TourProvider>
+        <TourOverlay />
+        <WelcomeModal />
         <Routes>
           <Route path="/giris" element={<Login />} />
           <Route path="/kayit" element={<Register />} />
@@ -42,6 +48,7 @@ const App = () => (
           <Route path="/profil" element={<Profil />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </TourProvider>
       </BrowserRouter>
     </TooltipProvider>
     </InstallationProvider>

@@ -62,7 +62,7 @@ const Index = () => {
     <DashboardLayout>
       <div className="flex flex-1 flex-col gap-4 animate-page-enter min-h-0">
         {/* Top Row: Hero + Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div data-tour="dashboard-summary" className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2">
             <HeroSection />
           </div>
@@ -77,7 +77,9 @@ const Index = () => {
             {t("quickActions")}
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 flex-1 min-h-0">
-            <InvoiceWidget compact />
+            <div data-tour="invoice-widget">
+              <InvoiceWidget compact />
+            </div>
             <div className="lg:col-span-4 h-full min-h-0">
               <QuickActionsChart />
             </div>

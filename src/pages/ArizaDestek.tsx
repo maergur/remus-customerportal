@@ -132,7 +132,7 @@ const ArizaDestek = () => {
       <div className="space-y-6">
         {/* Header with Başvurularım Button */}
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div data-tour="support">
             <h1 className="text-2xl font-bold text-foreground">Yardım Merkezi</h1>
             <p className="text-muted-foreground">Size nasıl yardımcı olabiliriz?</p>
           </div>

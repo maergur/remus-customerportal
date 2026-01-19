@@ -1,4 +1,4 @@
-import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, Menu, Sun, Moon, Languages, CheckCircle2, MapPin, Check } from "lucide-react";
+import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Settings, LogOut, Menu, Sun, Moon, Languages, CheckCircle2, MapPin, Check, HelpCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -15,6 +15,7 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useInstallation } from "@/contexts/InstallationContext";
+import { useTour } from "@/contexts/TourContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { clearSession } from "@/lib/mockCustomers";
@@ -67,6 +68,7 @@ export function TopBar() {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const { installations, selectedInstallation, setSelectedInstallation } = useInstallation();
+  const { startTour, hasCompletedTour } = useTour();
   const navigate = useNavigate();
   const unreadCount = notifications.filter(n => n.unread).length;
 
@@ -216,16 +218,33 @@ export function TopBar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Tour Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={startTour}
+          className="relative"
+          title={language === "tr" ? "Turu Başlat" : "Start Tour"}
+        >
+          <HelpCircle className="h-5 w-5" />
+          {!hasCompletedTour && (
+            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-primary animate-pulse" />
+          )}
+        </Button>
+
         {/* Installation Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="hidden sm:flex items-center gap-2 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-3 py-2">
+            <button 
+              data-tour="installation-selector"
+              className="hidden sm:flex items-center gap-2.5 bg-secondary/50 hover:bg-secondary/80 border border-border hover:border-primary/30 transition-all rounded-lg px-3 py-2"
+            >
               <Zap className="h-4 w-4 text-primary" />
               <div className="text-left">
-                <p className="text-xs text-muted-foreground">{language === "tr" ? "Tesisat" : "Installation"}</p>
+                <p className="text-[10px] text-muted-foreground">{language === "tr" ? "Tesisat" : "Installation"}</p>
                 <p className="text-sm font-medium text-foreground">{selectedInstallation.name}</p>
               </div>
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72 bg-card border-border shadow-lg z-50">

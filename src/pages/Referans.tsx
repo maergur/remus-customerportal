@@ -27,7 +27,7 @@ const Referans = () => {
         {/* Top Row: Hero + Share Card */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Hero Section */}
-          <div className="lg:col-span-2 relative overflow-hidden rounded-2xl">
+          <div data-tour="referral" className="lg:col-span-2 relative overflow-hidden rounded-2xl">
             {/* Background Image */}
             <div
               className="absolute inset-0 bg-cover bg-center"

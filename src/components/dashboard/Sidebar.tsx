@@ -57,7 +57,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1 mt-2">
+        <nav data-tour="sidebar-nav" className="flex-1 p-4 space-y-1 mt-2">
           {navItems.map((item) => (
             <NavLink
               key={item.label}

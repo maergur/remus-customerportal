@@ -39,7 +39,7 @@ const Profil = () => {
     <DashboardLayout>
       <div className="space-y-6 animate-page-enter">
         {/* Page Header */}
-        <div>
+        <div data-tour="profile">
           <h1 className="text-2xl font-bold text-foreground">
             {language === "tr" ? "Profil & Ayarlar" : "Profile & Settings"}
           </h1>

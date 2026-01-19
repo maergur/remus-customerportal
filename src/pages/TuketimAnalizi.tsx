@@ -41,7 +41,7 @@ const TuketimAnalizi = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
+        <div data-tour="consumption">
           <h1 className="text-2xl font-bold text-foreground">Tüketim Analizi</h1>
           <p className="text-muted-foreground">Enerji tüketiminizi detaylı olarak inceleyin</p>
         </div>
