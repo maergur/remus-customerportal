@@ -71,18 +71,21 @@ const calculateScenarios = (monthlyKwh: number) => {
 
   return [
     {
+      id: 'sabit',
       tariff: 'Yıllık Sabit Fiyat',
       icon: Lock,
       actualBill: formatCurrency(sabitBill),
       note: 'Fiyat sabit, değişmez',
     },
     {
+      id: 'degisken-standart',
       tariff: 'Değişken Standart',
       icon: TrendingUp,
       actualBill: `${formatCurrency(standartMin)} - ${formatCurrency(standartMax)}`,
       note: 'Piyasaya göre ±%15 değişir',
     },
     {
+      id: 'degisken-on-odeme',
       tariff: 'Değişken Ön Ödeme',
       icon: Percent,
       actualBill: `${formatCurrency(onOdemeMin)} - ${formatCurrency(onOdemeMax)}`,
@@ -253,19 +256,36 @@ export const TariffSelectionStep = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {comparisonScenarios.map((scenario, index) => {
                   const Icon = scenario.icon;
+                  const isSelectedTariff = data.selectedTariff === scenario.id;
                   return (
                     <div
                       key={index}
-                      className="bg-background rounded-lg p-4 border border-border/50 transition-all hover:border-primary/30"
+                      className={cn(
+                        "bg-background rounded-lg p-4 border transition-all",
+                        isSelectedTariff 
+                          ? "border-primary ring-2 ring-primary/20 bg-primary/5" 
+                          : "border-border/50 hover:border-primary/30"
+                      )}
                     >
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Icon className="w-4 h-4 text-primary" />
+                        <div className={cn(
+                          "w-8 h-8 rounded-full flex items-center justify-center",
+                          isSelectedTariff ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
+                        )}>
+                          <Icon className="w-4 h-4" />
                         </div>
                         <p className="text-sm font-semibold">{scenario.tariff}</p>
+                        {isSelectedTariff && (
+                          <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full ml-auto">
+                            Seçili
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
-                      <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
+                      <p className={cn(
+                        "text-xl font-bold",
+                        isSelectedTariff ? "text-primary" : "text-foreground"
+                      )}>{scenario.actualBill}</p>
                       <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                     </div>
                   );
