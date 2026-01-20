@@ -133,7 +133,17 @@ export const TariffSelectionStep = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Tarife Değişikliği Bilgilendirmesi - Moved to top */}
+      <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-xl p-3 flex items-center gap-3">
+        <div className="w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900/50 flex items-center justify-center flex-shrink-0">
+          <Info className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+        </div>
+        <p className="text-sm text-orange-800 dark:text-orange-200">
+          <span className="font-medium">1 ay önce bildirmek kaydıyla</span> müşteri portalı üzerinden istediğiniz zaman tarife değişikliği yapabilirsiniz.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
         {tariffs.map((tariff) => {
           const Icon = tariff.icon;
           const isSelected = data.selectedTariff === tariff.id;
@@ -143,8 +153,7 @@ export const TariffSelectionStep = () => {
               key={tariff.id}
               className={cn(
                 'relative cursor-pointer transition-all hover:shadow-lg',
-                isSelected && 'ring-2 ring-primary',
-                tariff.popular && 'border-primary'
+                isSelected && 'ring-2 ring-primary'
               )}
               onClick={() => handleSelectTariff(tariff.id)}
             >
@@ -155,7 +164,7 @@ export const TariffSelectionStep = () => {
                     Değişken PTF
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="bg-secondary text-secondary-foreground border-secondary text-xs">
+                  <Badge variant="outline" className="bg-secondary text-secondary-foreground border-secondary text-xs whitespace-nowrap">
                     Sabit PTF
                   </Badge>
                 )}
@@ -195,15 +204,6 @@ export const TariffSelectionStep = () => {
         })}
       </div>
 
-      {/* Tarife Değişikliği Bilgilendirmesi */}
-      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-start gap-3">
-        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Info className="w-4 h-4 text-primary" />
-        </div>
-        <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">1 ay önce bildirmek kaydıyla</span> müşteri portalı üzerinden istediğiniz zaman tarife değişikliği yapabilirsiniz.
-        </p>
-      </div>
 
       {/* Collapsible Fatura Hesaplayıcı */}
       <Collapsible open={isCalculatorOpen} onOpenChange={setIsCalculatorOpen}>
