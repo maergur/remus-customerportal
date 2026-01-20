@@ -275,11 +275,6 @@ export const TariffSelectionStep = () => {
                           <Icon className="w-4 h-4" />
                         </div>
                         <p className="text-sm font-semibold">{scenario.tariff}</p>
-                        {isSelectedTariff && (
-                          <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full ml-auto">
-                            Seçili
-                          </span>
-                        )}
                       </div>
                       <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
                       <p className={cn(
