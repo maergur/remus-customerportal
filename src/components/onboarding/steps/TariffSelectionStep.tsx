@@ -4,7 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Lock, TrendingUp, Percent, Calculator, Zap, ChevronDown } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Lock, TrendingUp, Percent, Calculator, Zap, ChevronDown, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useState, useMemo, useEffect } from 'react';
@@ -19,6 +20,7 @@ const tariffs = [
     unit: 'TL/kWh',
     icon: Lock,
     popular: true,
+    ptfType: 'sabit' as const,
   },
   {
     id: 'degisken-standart',
@@ -26,11 +28,12 @@ const tariffs = [
     description: 'Piyasa koşullarına göre aylık değişen tarife',
     pricePerKwh: 2.65,
     displayPrice: 'PTF+YEKDEM',
-    unit: '×1.035 marj',
+    unit: '×1.04 marj',
     icon: TrendingUp,
     popular: false,
     varianceMin: 0.85,
     varianceMax: 1.15,
+    ptfType: 'degisken' as const,
   },
   {
     id: 'degisken-on-odeme',
@@ -38,11 +41,12 @@ const tariffs = [
     description: 'Peşin ödemede en avantajlı fiyat',
     pricePerKwh: 2.55,
     displayPrice: 'PTF+YEKDEM',
-    unit: '×1.005-1.02',
+    unit: '×0.99 marj',
     icon: Percent,
     popular: false,
     varianceMin: 0.82,
     varianceMax: 1.10,
+    ptfType: 'degisken' as const,
   },
 ];
 
@@ -144,14 +148,24 @@ export const TariffSelectionStep = () => {
               )}
               onClick={() => handleSelectTariff(tariff.id)}
             >
-              {tariff.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full">
+              {/* PTF Type Badge */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex gap-1">
+                {tariff.ptfType === 'degisken' ? (
+                  <Badge variant="outline" className="bg-accent/50 text-accent-foreground border-accent text-xs">
+                    Değişken PTF
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="bg-secondary text-secondary-foreground border-secondary text-xs">
+                    Sabit PTF
+                  </Badge>
+                )}
+                {tariff.popular && (
+                  <Badge className="bg-primary text-primary-foreground text-xs">
                     Popüler
-                  </span>
-                </div>
-              )}
-              <CardHeader className="text-center pb-2">
+                  </Badge>
+                )}
+              </div>
+              <CardHeader className="text-center pb-2 pt-6">
                 <div className={cn(
                   'mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-2',
                   isSelected ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
@@ -179,6 +193,16 @@ export const TariffSelectionStep = () => {
             </Card>
           );
         })}
+      </div>
+
+      {/* Tarife Değişikliği Bilgilendirmesi */}
+      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-start gap-3">
+        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Info className="w-4 h-4 text-primary" />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">1 ay önce bildirmek kaydıyla</span> müşteri portalı üzerinden istediğiniz zaman tarife değişikliği yapabilirsiniz.
+        </p>
       </div>
 
       {/* Collapsible Fatura Hesaplayıcı */}
