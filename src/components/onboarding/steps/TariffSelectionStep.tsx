@@ -245,7 +245,7 @@ export const TariffSelectionStep = () => {
                   type="number"
                   value={monthlyKwh}
                   onChange={(e) => handleKwhChange(e.target.value)}
-                  className="w-20 h-8 text-right pr-2 font-semibold"
+                  className="w-20 h-8 text-right pr-2 font-semibold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   min={0}
                   max={10000}
                 />
