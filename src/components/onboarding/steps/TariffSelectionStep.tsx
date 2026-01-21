@@ -235,7 +235,7 @@ export const TariffSelectionStep = () => {
           <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
             <CardContent className="pt-0">
               {/* kWh Input */}
-              <div className="flex items-center justify-center gap-2 bg-background rounded-lg p-3 border border-border mb-4">
+              <div className="flex items-center justify-end gap-2 bg-background rounded-lg p-3 border border-border mb-4">
                 <Zap className="w-4 h-4 text-primary" />
                 <Label htmlFor="kwh-input" className="text-sm font-medium whitespace-nowrap">
                   Aylık Tüketim:
