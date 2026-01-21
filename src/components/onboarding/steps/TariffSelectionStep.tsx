@@ -235,9 +235,9 @@ export const TariffSelectionStep = () => {
           <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
             <CardContent className="pt-0">
               {/* kWh Input */}
-              <div className="flex items-center justify-end gap-2 bg-background rounded-lg p-3 border border-border mb-4">
+              <div className="flex items-center justify-end gap-1.5 mb-4">
                 <Zap className="w-4 h-4 text-primary" />
-                <Label htmlFor="kwh-input" className="text-sm font-medium whitespace-nowrap">
+                <Label htmlFor="kwh-input" className="text-sm font-medium">
                   Aylık Tüketim:
                 </Label>
                 <Input
@@ -245,7 +245,7 @@ export const TariffSelectionStep = () => {
                   type="number"
                   value={monthlyKwh}
                   onChange={(e) => handleKwhChange(e.target.value)}
-                  className="w-24 h-8 text-right pr-2 font-semibold"
+                  className="w-20 h-8 text-right pr-2 font-semibold"
                   min={0}
                   max={10000}
                 />
