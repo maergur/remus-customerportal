@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrendingUp, AlertCircle, Zap, ChevronRight, Gift, Copy, Check, Lightbulb, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine } from "recharts";
-import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast as sonnerToast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 // Current month index (December = 11)
 const currentMonthIndex = 11;
@@ -68,17 +67,19 @@ const savingsTips = [
 
 export function QuickActions() {
   const { language, t } = useLanguage();
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const inviteCode = "REMUS2026";
 
+  // Show savings tip toast - dismiss on unmount so it won't appear on login page
   useEffect(() => {
     const tipIndex = Math.floor(Math.random() * savingsTips.length);
     const tip = savingsTips[tipIndex];
+    let toastId: string | undefined;
     
     const timer = setTimeout(() => {
-      toast({
+      const { id } = toast({
         title: language === "tr" ? "Tasarruf İpucu" : "Savings Tip",
         description: language === "tr" ? tip.tr : tip.en,
         duration: 30000,
@@ -92,9 +93,16 @@ export function QuickActions() {
           </ToastAction>
         ),
       });
+      toastId = id;
     }, 2000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      // Dismiss toast when component unmounts (e.g., navigating to login)
+      if (toastId) {
+        dismiss(toastId);
+      }
+    };
   }, []);
 
   const handleCopy = async (e: React.MouseEvent) => {

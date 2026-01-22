@@ -200,10 +200,10 @@ const Register = () => {
         </svg>
       }
       title="Geleceğe birlikte adım atın"
-      subtitle="Sürdürülebilir enerji ile tasarrufun keyfini çıkarın"
+      subtitle="Sürdürülebilir enerji ile çevreyi koruyun"
       topStats={[
-        { label: "CO₂ Tasarrufu", value: "15.000+ ton" },
         { label: "Yeşil Enerji Üretimi", value: "50 MW+" },
+        { label: "Yenilenebilir Kaynak", value: "%100" },
       ]}
       bottomStats={[
         { value: "10+", label: "Yıllık Deneyim" },
