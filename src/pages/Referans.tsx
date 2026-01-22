@@ -7,8 +7,8 @@ import { ShareCard } from "@/components/referral/ShareCard";
 import { ContestCard } from "@/components/referral/ContestCard";
 import { ReferralList } from "@/components/referral/ReferralList";
 
-// Hero image - man and woman friends/couple sharing moment
-const referralHero = "https://images.unsplash.com/photo-1543269865-cbf427effbad";
+// Hero image - two people looking at phone (referral sharing theme)
+const referralHero = "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&q=80";
 
 const Referans = () => {
   const {

@@ -72,6 +72,15 @@ export const mockExistingCustomers: MockCustomer[] = [
     hasPassword: true,
     password: 'test123',
   },
+  {
+    id: '8',
+    phone: '5364445566',
+    email: 'hande@remusenerji.com',
+    fullName: 'Hande Remus',
+    customerNumber: 'MUS000005',
+    hasPassword: true,
+    password: 'test123',
+  },
 ];
 
 // Helper functions
@@ -125,6 +134,7 @@ const customerPasswords: Record<string, string> = {
   '5': 'test123', // Kerem already has a password
   '6': 'test123', // Barış already has a password
   '7': 'test123', // Batu already has a password
+  '8': 'test123', // Hande already has a password
 };
 
 export const setCustomerPassword = (customerId: string, password: string): void => {
