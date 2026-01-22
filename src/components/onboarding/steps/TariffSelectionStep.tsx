@@ -4,7 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Lock, TrendingUp, Percent, Calculator, Zap, ChevronDown } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Lock, TrendingUp, Percent, Calculator, Zap, ChevronDown, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useState, useMemo, useEffect } from 'react';
@@ -19,6 +20,7 @@ const tariffs = [
     unit: 'TL/kWh',
     icon: Lock,
     popular: true,
+    ptfType: 'sabit' as const,
   },
   {
     id: 'degisken-standart',
@@ -26,11 +28,12 @@ const tariffs = [
     description: 'Piyasa koşullarına göre aylık değişen tarife',
     pricePerKwh: 2.65,
     displayPrice: 'PTF+YEKDEM',
-    unit: '×1.035 marj',
+    unit: '×1.04 marj',
     icon: TrendingUp,
     popular: false,
     varianceMin: 0.85,
     varianceMax: 1.15,
+    ptfType: 'degisken' as const,
   },
   {
     id: 'degisken-on-odeme',
@@ -38,11 +41,12 @@ const tariffs = [
     description: 'Peşin ödemede en avantajlı fiyat',
     pricePerKwh: 2.55,
     displayPrice: 'PTF+YEKDEM',
-    unit: '×1.005-1.02',
+    unit: '×0.99 marj',
     icon: Percent,
     popular: false,
     varianceMin: 0.82,
     varianceMax: 1.10,
+    ptfType: 'degisken' as const,
   },
 ];
 
@@ -67,18 +71,21 @@ const calculateScenarios = (monthlyKwh: number) => {
 
   return [
     {
+      id: 'sabit',
       tariff: 'Yıllık Sabit Fiyat',
       icon: Lock,
       actualBill: formatCurrency(sabitBill),
       note: 'Fiyat sabit, değişmez',
     },
     {
+      id: 'degisken-standart',
       tariff: 'Değişken Standart',
       icon: TrendingUp,
       actualBill: `${formatCurrency(standartMin)} - ${formatCurrency(standartMax)}`,
       note: 'Piyasaya göre ±%15 değişir',
     },
     {
+      id: 'degisken-on-odeme',
       tariff: 'Değişken Ön Ödeme',
       icon: Percent,
       actualBill: `${formatCurrency(onOdemeMin)} - ${formatCurrency(onOdemeMax)}`,
@@ -129,7 +136,17 @@ export const TariffSelectionStep = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Tarife Değişikliği Bilgilendirmesi - Moved to top */}
+      <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-xl p-3 flex items-center gap-3">
+        <div className="w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900/50 flex items-center justify-center flex-shrink-0">
+          <Info className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+        </div>
+        <p className="text-sm text-orange-800 dark:text-orange-200">
+          <span className="font-medium">1 ay önce bildirmek kaydıyla</span> müşteri portalı üzerinden istediğiniz zaman tarife değişikliği yapabilirsiniz.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
         {tariffs.map((tariff) => {
           const Icon = tariff.icon;
           const isSelected = data.selectedTariff === tariff.id;
@@ -139,19 +156,28 @@ export const TariffSelectionStep = () => {
               key={tariff.id}
               className={cn(
                 'relative cursor-pointer transition-all hover:shadow-lg',
-                isSelected && 'ring-2 ring-primary',
-                tariff.popular && 'border-primary'
+                isSelected && 'ring-2 ring-primary'
               )}
               onClick={() => handleSelectTariff(tariff.id)}
             >
-              {tariff.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full">
+              {/* PTF Type Badge */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex gap-1">
+                {tariff.ptfType === 'degisken' ? (
+                  <Badge variant="outline" className="bg-accent/50 text-accent-foreground border-accent text-xs">
+                    Değişken PTF
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="bg-secondary text-secondary-foreground border-secondary text-xs whitespace-nowrap">
+                    Sabit PTF
+                  </Badge>
+                )}
+                {tariff.popular && (
+                  <Badge className="bg-primary text-primary-foreground text-xs">
                     Popüler
-                  </span>
-                </div>
-              )}
-              <CardHeader className="text-center pb-2">
+                  </Badge>
+                )}
+              </div>
+              <CardHeader className="text-center pb-2 pt-6">
                 <div className={cn(
                   'mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-2',
                   isSelected ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'
@@ -181,6 +207,7 @@ export const TariffSelectionStep = () => {
         })}
       </div>
 
+
       {/* Collapsible Fatura Hesaplayıcı */}
       <Collapsible open={isCalculatorOpen} onOpenChange={setIsCalculatorOpen}>
         <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
@@ -208,9 +235,9 @@ export const TariffSelectionStep = () => {
           <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
             <CardContent className="pt-0">
               {/* kWh Input */}
-              <div className="flex items-center justify-center gap-2 bg-background rounded-lg p-3 border border-border mb-4">
+              <div className="flex items-center justify-end gap-1.5 mb-4">
                 <Zap className="w-4 h-4 text-primary" />
-                <Label htmlFor="kwh-input" className="text-sm font-medium whitespace-nowrap">
+                <Label htmlFor="kwh-input" className="text-sm font-medium">
                   Aylık Tüketim:
                 </Label>
                 <Input
@@ -218,7 +245,7 @@ export const TariffSelectionStep = () => {
                   type="number"
                   value={monthlyKwh}
                   onChange={(e) => handleKwhChange(e.target.value)}
-                  className="w-24 h-8 text-center font-semibold"
+                  className="w-20 h-8 text-right pr-2 font-semibold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   min={0}
                   max={10000}
                 />
@@ -229,19 +256,31 @@ export const TariffSelectionStep = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {comparisonScenarios.map((scenario, index) => {
                   const Icon = scenario.icon;
+                  const isSelectedTariff = data.selectedTariff === scenario.id;
                   return (
                     <div
                       key={index}
-                      className="bg-background rounded-lg p-4 border border-border/50 transition-all hover:border-primary/30"
+                      className={cn(
+                        "bg-background rounded-lg p-4 border transition-all",
+                        isSelectedTariff 
+                          ? "border-primary ring-2 ring-primary/20 bg-primary/5" 
+                          : "border-border/50 hover:border-primary/30"
+                      )}
                     >
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Icon className="w-4 h-4 text-primary" />
+                        <div className={cn(
+                          "w-8 h-8 rounded-full flex items-center justify-center",
+                          isSelectedTariff ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
+                        )}>
+                          <Icon className="w-4 h-4" />
                         </div>
                         <p className="text-sm font-semibold">{scenario.tariff}</p>
                       </div>
                       <p className="text-xs text-muted-foreground mb-1">Tahmini Aylık Fatura</p>
-                      <p className="text-xl font-bold text-foreground">{scenario.actualBill}</p>
+                      <p className={cn(
+                        "text-xl font-bold",
+                        isSelectedTariff ? "text-primary" : "text-foreground"
+                      )}>{scenario.actualBill}</p>
                       <p className="text-xs text-muted-foreground mt-2">{scenario.note}</p>
                     </div>
                   );
