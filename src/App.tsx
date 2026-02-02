@@ -16,6 +16,7 @@ import Referans from "./pages/Referans";
 import Onboarding from "./pages/Onboarding";
 import Ipuclari from "./pages/Ipuclari";
 import Profil from "./pages/Profil";
+import PtfTahminleme from "./pages/PtfTahminleme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/faturalar" element={<Faturalar />} />
           <Route path="/ariza-destek" element={<ArizaDestek />} />
           <Route path="/tarifeler" element={<Tarifeler />} />
+          <Route path="/ptf-tahminleme" element={<PtfTahminleme />} />
           <Route path="/referans" element={<Referans />} />
           <Route path="/ipuclari" element={<Ipuclari />} />
           <Route path="/profil" element={<Profil />} />

@@ -1,4 +1,4 @@
-import { Home, BarChart3, FileText, AlertTriangle, Zap, X, Gift } from "lucide-react";
+import { Home, BarChart3, FileText, AlertTriangle, Zap, X, Gift, TrendingUp } from "lucide-react";
 import remusLogo from "@/assets/remus-logo.svg";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/NavLink";
@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
   { icon: FileText, label: "Faturalar & Ödemeler", href: "/faturalar" },
   { icon: AlertTriangle, label: "Arıza & Destek", href: "/ariza-destek" },
   { icon: Zap, label: "Tarifeler", href: "/tarifeler" },
+  { icon: TrendingUp, label: "Tahminleme", href: "/ptf-tahminleme" },
   { icon: Gift, label: "Arkadaşını Getir", href: "/referans" },
 ];
 export function Sidebar() {
