@@ -13,12 +13,23 @@ export interface InvoiceMetadata {
 }
 
 export interface InvoiceSummary {
-  ptfAgirlikliOrtalama: number;
   toplamTuketim: number;
   ptfMaliyet: number;
+  ptfBirimFiyat: number;
+  yekdemBirimFiyat: number;
+  yekdemMahsup: number;
   marj: number;
   yekdem: number;
-  toplamEnerjiMaliyeti: number;
+  uretimMahsuplasma: number;
+  totalEnerji: number;
+  yekDahilBirimFiyat: number;
+  dagitimBedeli: number;
+  gucBedeli: number;
+  gucAsimCezasi: number;
+  reaktifCezasi: number;
+  fonVeEkVergiler: number;
+  kdv: number;
+  toplam: number;
 }
 
 export interface InvoiceDayData {
@@ -43,12 +54,23 @@ export const invoiceMetadata: InvoiceMetadata = {
 };
 
 export const invoiceSummary: InvoiceSummary = {
-  ptfAgirlikliOrtalama: 2894.92,
-  toplamTuketim: 149.7,
+  toplamTuketim: 149.70,
   ptfMaliyet: 439.99,
+  ptfBirimFiyat: 2894.92,
+  yekdemBirimFiyat: 274.89,
+  yekdemMahsup: 0.00,
   marj: 24.06,
   yekdem: 41.15,
-  toplamEnerjiMaliyeti: 636.55,
+  uretimMahsuplasma: 0.00,
+  totalEnerji: 505.20,
+  yekDahilBirimFiyat: 3374.74,
+  dagitimBedeli: 281.05,
+  gucBedeli: 0.00,
+  gucAsimCezasi: 0.00,
+  reaktifCezasi: 0.00,
+  fonVeEkVergiler: 25.26,
+  kdv: 162.30,
+  toplam: 973.81,
 };
 
 export const invoiceDailyData: InvoiceDayData[] = [

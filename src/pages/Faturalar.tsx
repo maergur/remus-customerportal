@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { FileText, Download, CreditCard, CheckCircle, Clock, AlertCircle, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FaturaDetayDialog from "@/components/fatura/FaturaDetayDialog";
 
 const invoices = [
   { id: "FAT-2024-012", period: "Aralık 2024", amount: 342.50, status: "unpaid", dueDate: "25 Ara 2024" },
@@ -14,12 +13,10 @@ const invoices = [
 ];
 
 const Faturalar = () => {
-  const [detayOpen, setDetayOpen] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState<{ id: string; period: string } | null>(null);
+  const navigate = useNavigate();
 
   const openDetay = (invoice: { id: string; period: string }) => {
-    setSelectedInvoice(invoice);
-    setDetayOpen(true);
+    navigate(`/fatura-detay?id=${encodeURIComponent(invoice.id)}&period=${encodeURIComponent(invoice.period)}`);
   };
 
   return (
@@ -172,15 +169,6 @@ const Faturalar = () => {
           </div>
         </div>
       </div>
-
-      {selectedInvoice && (
-        <FaturaDetayDialog
-          open={detayOpen}
-          onOpenChange={setDetayOpen}
-          invoiceId={selectedInvoice.id}
-          invoicePeriod={selectedInvoice.period}
-        />
-      )}
     </DashboardLayout>
   );
 };

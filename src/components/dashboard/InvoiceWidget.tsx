@@ -103,7 +103,7 @@ const InvoiceWidget = ({
               {t("payNow")}
             </Button>
             <Button variant="outline" className="w-full" size="sm" asChild>
-              <Link to="/faturalar">{t("details")}</Link>
+              <Link to="/fatura-detay">{t("details")}</Link>
             </Button>
           </div>
         </div>
