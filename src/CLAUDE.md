@@ -11,4 +11,11 @@
 | #220 | 11:51 AM | 🟣 | Added PTF weekly predictions route to application | ~173 |
 | #215 | 11:50 AM | 🔵 | Customer portal routing structure and page patterns | ~311 |
 | #192 | 11:21 AM | 🔵 | Customer Portal Application Routing and Context Architecture | ~376 |
+
+### Feb 5, 2026
+
+| ID | Time | T | Title | Read |
+|----|------|---|-------|------|
+| #679 | 4:09 PM | 🔵 | Complete Codebase Exploration Completed | ~512 |
+| #676 | 4:08 PM | 🔵 | Application Architecture and Routing Structure | ~376 |
 </claude-mem-context>

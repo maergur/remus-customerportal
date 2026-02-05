@@ -7,5 +7,48 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #195 | 11:22 AM | 🔵 | Profile Page with Tabbed Interface for Account Management | ~400 |
+| #283 | 4:24 PM | ✅ | Weekly Summary Text Size Increased | ~251 |
+| #282 | 4:18 PM | ✅ | Increased Chart Heights with Responsive Breakpoints | ~269 |
+| #275 | 12:59 PM | ✅ | Reduced chart heights from h-80 to h-64 for more compact layout | ~271 |
+| #274 | 12:58 PM | 🟣 | Comprehensive UX redesign with insights, tooltips, trends, and compact spacing | ~675 |
+| #273 | " | ✅ | Reduced Gap Spacing Between Metric Cards | ~240 |
+| #272 | 12:54 PM | 🔄 | Major UI redesign with enhanced metrics and insights banner | ~705 |
+| #268 | 12:47 PM | 🟣 | Enhanced metric cards with icons, tooltips, and improved layout | ~408 |
+| #265 | 12:37 PM | ✅ | Added UI tooltip and icon imports for enhanced interactivity | ~244 |
+| #264 | 12:36 PM | 🔵 | Current Metric Cards Include Predicted PTF Card | ~284 |
+| #262 | 12:34 PM | 🔄 | Restructured PTF metrics to show hourly, weekly, monthly, and predicted values | ~359 |
+| #261 | 12:32 PM | ✅ | Metric Cards Restructured to Show Hourly, Weekly, and Monthly PTF | ~249 |
+| #259 | 12:18 PM | 🟣 | Implemented drag-based gradient range slider component with mouse tracking | ~507 |
+| #260 | " | 🔄 | Replaced inline slider implementations with reusable GradientRangeSlider component | ~329 |
+| #253 | 12:14 PM | 🔄 | Extracted gradient range slider into reusable component with drag functionality | ~456 |
+| #247 | 12:09 PM | 🟣 | Implemented custom color-mapped range slider for dialog view | ~432 |
+| #246 | " | 🟣 | Replaced slider with custom gradient-based range picker | ~468 |
+| #245 | 12:06 PM | 🔄 | Removed unused X icon import from lucide-react | ~204 |
+| #241 | " | 🟣 | Implemented price range slider filter for heatmap visualization | ~324 |
+| #242 | " | 🟣 | Implemented fullscreen dialog with expand button for heatmap | ~331 |
+| #243 | " | ✅ | Enhanced chart section titles with increased font weight and size | ~189 |
+| #240 | 12:05 PM | 🟣 | Implemented interactive heatmap with price range filtering and fullscreen dialog | ~517 |
+| #239 | " | 🟣 | Added interactive price range filter and fullscreen heatmap view | ~430 |
+| #237 | 12:03 PM | ✅ | Enhanced metric card title visibility with improved typography | ~273 |
+| #236 | " | ✅ | Added UI component imports for enhanced interactivity | ~275 |
+| #233 | 12:00 PM | 🟣 | Added monthly PTF tab trigger to navigation | ~228 |
+| #232 | " | 🟣 | Added monthly PTF data generator for long-term trend analysis | ~351 |
+| #226 | 11:53 AM | 🟣 | Created comprehensive PTF prediction page with heatmap visualization | ~515 |
+| #200 | 11:22 AM | 🔵 | Dashboard Index Page with Authentication Guard and Onboarding Flow | ~464 |
+| #199 | " | 🔵 | Invoice Management and Payment History Page | ~473 |
+| #195 | " | 🔵 | Profile Page with Tabbed Interface for Account Management | ~400 |
+| #194 | " | 🔵 | Tariff Comparison Page Implementation | ~436 |
+| #191 | 11:21 AM | 🔵 | PTF-Based Tariff Pricing Structure | ~360 |
+| #190 | " | 🔵 | Consumption Analysis Page with Energy Usage Forecasting | ~356 |
+| #189 | " | 🔵 | PTF and Tariff-Related Features Located | ~266 |
+
+### Feb 5, 2026
+
+| ID | Time | T | Title | Read |
+|----|------|---|-------|------|
+| #682 | 4:12 PM | ⚖️ | Invoice Details Feature Implementation Plan Completed | ~710 |
+| #681 | 4:10 PM | 🔵 | Detailed Heatmap Implementation Pattern Extraction Complete | ~525 |
+| #679 | 4:09 PM | 🔵 | Complete Codebase Exploration Completed | ~512 |
+| #665 | 4:04 PM | 🔵 | PTF Forecasting Page with Heatmap Implementation | ~514 |
+| #664 | " | 🔵 | Current Invoice Page Implementation | ~378 |
 </claude-mem-context>
