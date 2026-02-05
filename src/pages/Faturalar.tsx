@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { FileText, Download, CreditCard, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { FileText, Download, CreditCard, CheckCircle, Clock, AlertCircle, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import FaturaDetayDialog from "@/components/fatura/FaturaDetayDialog";
 
 const invoices = [
   { id: "FAT-2024-012", period: "Aralık 2024", amount: 342.50, status: "unpaid", dueDate: "25 Ara 2024" },
@@ -12,6 +14,14 @@ const invoices = [
 ];
 
 const Faturalar = () => {
+  const [detayOpen, setDetayOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<{ id: string; period: string } | null>(null);
+
+  const openDetay = (invoice: { id: string; period: string }) => {
+    setSelectedInvoice(invoice);
+    setDetayOpen(true);
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -86,10 +96,16 @@ const Faturalar = () => {
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-lg font-bold text-foreground">₺{invoice.amount.toFixed(2)}</p>
-                <Button variant="ghost" size="sm">
-                  <Download className="h-4 w-4 mr-1" />
-                  PDF
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" onClick={() => openDetay(invoice)}>
+                    <Eye className="h-4 w-4 mr-1" />
+                    Detay
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <Download className="h-4 w-4 mr-1" />
+                    PDF
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -138,10 +154,16 @@ const Faturalar = () => {
                       {invoice.status === "paid" ? invoice.paidDate : invoice.dueDate}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Button variant="ghost" size="sm">
-                        <Download className="h-4 w-4 mr-1" />
-                        PDF
-                      </Button>
+                      <div className="flex items-center justify-end gap-1">
+                        <Button variant="ghost" size="sm" onClick={() => openDetay(invoice)}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          Detay
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Download className="h-4 w-4 mr-1" />
+                          PDF
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -150,6 +172,15 @@ const Faturalar = () => {
           </div>
         </div>
       </div>
+
+      {selectedInvoice && (
+        <FaturaDetayDialog
+          open={detayOpen}
+          onOpenChange={setDetayOpen}
+          invoiceId={selectedInvoice.id}
+          invoicePeriod={selectedInvoice.period}
+        />
+      )}
     </DashboardLayout>
   );
 };
