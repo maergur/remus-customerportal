@@ -135,14 +135,14 @@ const Login = () => {
         </svg>
       }
       title="Enerjinizi akıllıca yönetin"
-      subtitle="Tüketiminizi takip edin, kontrol sizde"
+      subtitle="Tüketiminizi takip edin, kontrol sizde olsun!"
       topStats={[
-        { label: "Aktif Müşteri", value: "125.000+" },
-        { label: "Yenilenebilir Kaynak", value: "%100" },
+        { label: "Yenilenebilir Enerji", value: "%100" },
+        { label: "Mutlu Müşteri", value: "10.000+" },
       ]}
       bottomStats={[
         { value: "7/24", label: "Destek Hizmeti" },
-        { value: "4.8★", label: "Müşteri Memnuniyeti" },
+        { value: "0₺", label: "Gizli Maliyet" },
       ]}
     >
       <div className="flex flex-col items-center w-full max-w-md">
