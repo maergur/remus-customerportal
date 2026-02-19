@@ -252,12 +252,12 @@ const KeyValueRow = ({
   emphasis?: boolean;
 }) => (
   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5">
-    <span className={`text-xs truncate ${emphasis ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+    <span className={`text-sm truncate ${emphasis ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
       {label}
     </span>
     <span
-      className={`text-xs font-mono tabular-nums whitespace-nowrap text-right ${
-        emphasis ? "text-foreground font-semibold" : "text-foreground"
+      className={`text-sm font-mono tabular-nums whitespace-nowrap text-right ${
+        emphasis ? "text-foreground font-bold" : "text-foreground font-medium"
       }`}
     >
       {value}
@@ -331,22 +331,22 @@ const FaturaDetay = () => {
         </div>
 
         {/* Metadata */}
-          <div className="bg-card rounded-2xl border border-border px-4 py-3 sm:px-5 sm:py-4">
+        <div className="bg-card rounded-2xl border border-border px-4 py-3 sm:px-5 sm:py-4">
           <div className="grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-4">
             <div>
-              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Abonelik</p>
+              <p className="text-xs text-muted-foreground">Abonelik</p>
               <p className="text-sm font-medium text-foreground">{invoiceMetadata.abonelikAdi}</p>
             </div>
             <div>
-              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Tesisat No</p>
+              <p className="text-xs text-muted-foreground">Tesisat No</p>
               <p className="text-sm font-medium text-foreground">{invoiceMetadata.tesisatNo}</p>
             </div>
             <div>
-              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">YEKDEM türü</p>
+              <p className="text-xs text-muted-foreground">YEKDEM türü</p>
               <p className="text-sm font-medium text-foreground">{invoiceMetadata.yekdemTuru}</p>
             </div>
             <div>
-              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Dönem</p>
+              <p className="text-xs text-muted-foreground">Dönem</p>
               <p className="text-sm font-medium text-foreground">{invoiceMetadata.donem}</p>
             </div>
           </div>
@@ -357,7 +357,7 @@ const FaturaDetay = () => {
           {/* Card header: toplam fatura üst sağda */}
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+              <p className="text-sm font-semibold text-foreground">
                 Fatura kalemleri
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -366,7 +366,7 @@ const FaturaDetay = () => {
             </div>
             <div className="text-right space-y-0.5 shrink-0">
               <p className="text-xs text-muted-foreground">Toplam fatura</p>
-              <p className="text-2xl font-bold text-primary leading-tight">
+              <p className="text-xl font-bold text-primary leading-tight">
                 {fmtTl(invoiceSummary.toplam)}
               </p>
               <p className="text-xs text-muted-foreground">
@@ -387,7 +387,7 @@ const FaturaDetay = () => {
 
             {/* Aside: compact unit prices künye */}
             <div className="w-full lg:max-w-xs space-y-2">
-              <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+              <p className="text-sm font-semibold text-foreground">
                 Birim fiyat özet
               </p>
               <div className="rounded-xl bg-secondary/40 border border-border px-3 py-2.5 space-y-1.5">
