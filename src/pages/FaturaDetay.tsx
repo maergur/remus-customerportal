@@ -242,6 +242,29 @@ const SummaryCard = ({ label, value, tooltip }: { label: string; value: string; 
   </div>
 );
 
+const KeyValueRow = ({
+  label,
+  value,
+  emphasis = false,
+}: {
+  label: string;
+  value: string;
+  emphasis?: boolean;
+}) => (
+  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5">
+    <span className={`text-xs truncate ${emphasis ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+      {label}
+    </span>
+    <span
+      className={`text-xs font-mono tabular-nums whitespace-nowrap text-right ${
+        emphasis ? "text-foreground font-semibold" : "text-foreground"
+      }`}
+    >
+      {value}
+    </span>
+  </div>
+);
+
 const FaturaDetay = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -249,7 +272,7 @@ const FaturaDetay = () => {
   const invoicePeriod = searchParams.get("period") || "Ocak 2026";
 
   const [activeMetric, setActiveMetric] = useState<HeatmapMetric>("ptf");
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   const [ptfRange, setPtfRange] = useState<[number, number]>(() => getMetricRange("ptf"));
   const [consumptionRange, setConsumptionRange] = useState<[number, number]>(() => getMetricRange("consumption"));
@@ -265,12 +288,30 @@ const FaturaDetay = () => {
   const [metricMin, metricMax] = useMemo(() => getMetricRange(activeMetric), [activeMetric]);
 
   const fmt = (n: number, d = 2) => n.toLocaleString("tr-TR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const fmtTl = (n: number) => `₺${fmt(n)}`;
+  const perMwhFromConsumption = (amountTl: number) =>
+    invoiceSummary.toplamTuketim > 0 && amountTl > 0 ? (amountTl / invoiceSummary.toplamTuketim) * 1000 : null;
+
+  const cezaToplam = invoiceSummary.gucAsimCezasi + invoiceSummary.reaktifCezasi;
+
+  const invoiceItems = [
+    { label: "PTF bedeli", value: invoiceSummary.ptfMaliyet },
+    { label: "YEKDEM bedeli", value: invoiceSummary.yekdem },
+    { label: "YEKDEM mahsuplaşma", value: invoiceSummary.yekdemMahsup },
+    { label: "Marj bedeli", value: invoiceSummary.marj },
+    { label: "Dağıtım bedeli", value: invoiceSummary.dagitimBedeli },
+    { label: "Güç bedeli", value: invoiceSummary.gucBedeli },
+    { label: "Güç aşım cezası", value: invoiceSummary.gucAsimCezasi },
+    { label: "Reaktif ceza", value: invoiceSummary.reaktifCezasi },
+    { label: "Fon ve ek vergiler", value: invoiceSummary.fonVeEkVergiler },
+    { label: "KDV", value: invoiceSummary.kdv },
+  ];
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <button
             onClick={() => navigate("/faturalar")}
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -278,172 +319,113 @@ const FaturaDetay = () => {
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm">Faturalara Dön</span>
           </button>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Fatura Detayı</h1>
-            <p className="text-muted-foreground">{invoiceId} / {invoicePeriod}</p>
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1.5 sm:gap-3">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Fatura Detayı</h1>
+              <p className="text-sm text-muted-foreground">{invoiceId} / {invoicePeriod}</p>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Piyasa Anlaşması: <span className="font-medium text-foreground">{invoiceMetadata.piyasaAnlasmasi}</span>
+            </p>
           </div>
         </div>
 
         {/* Metadata */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div>
-            <p className="text-xs text-muted-foreground">Abonelik</p>
-            <p className="text-sm font-medium text-foreground">{invoiceMetadata.abonelikAdi}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Tesisat No</p>
-            <p className="text-sm font-medium text-foreground">{invoiceMetadata.tesisatNo}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">YEKDEM Türü</p>
-            <p className="text-sm font-medium text-foreground">{invoiceMetadata.yekdemTuru}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Dönem</p>
-            <p className="text-sm font-medium text-foreground">{invoiceMetadata.donem}</p>
+          <div className="bg-card rounded-2xl border border-border px-4 py-3 sm:px-5 sm:py-4">
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 sm:gap-4">
+            <div>
+              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Abonelik</p>
+              <p className="text-sm font-medium text-foreground">{invoiceMetadata.abonelikAdi}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Tesisat No</p>
+              <p className="text-sm font-medium text-foreground">{invoiceMetadata.tesisatNo}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">YEKDEM türü</p>
+              <p className="text-sm font-medium text-foreground">{invoiceMetadata.yekdemTuru}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted-foreground tracking-[0.02em]">Dönem</p>
+              <p className="text-sm font-medium text-foreground">{invoiceMetadata.donem}</p>
+            </div>
           </div>
         </div>
 
-        {/* Summary Cards + Formula Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Left: Summary cards */}
-          <div className="grid grid-cols-2 gap-3 content-start">
-            <SummaryCard
-              label="Toplam Tüketim"
-              value={`${fmt(invoiceSummary.toplamTuketim)} kWh`}
-              tooltip="Dönem içi toplam elektrik tüketimi"
-            />
-            <SummaryCard
-              label="YEK Dahil Birim Fiyat"
-              value={`${fmt(invoiceSummary.yekDahilBirimFiyat)} TL/MWh`}
-              tooltip="YEKDEM dahil ağırlıklı ortalama birim fiyat"
-            />
-            <SummaryCard
-              label="Total Enerji"
-              value={`₺${fmt(invoiceSummary.totalEnerji)}`}
-              tooltip="PTF + Uzlaştırma + YEK + YEKMahsup + YekGDDK"
-            />
-            <SummaryCard
-              label="Dağıtım Bedeli"
-              value={`₺${fmt(invoiceSummary.dagitimBedeli)}`}
-              tooltip="Elektrik dağıtım şebekesi kullanım bedeli"
-            />
-            <SummaryCard
-              label="KDV"
-              value={`₺${fmt(invoiceSummary.kdv)}`}
-              tooltip={`Katma değer vergisi (${invoiceMetadata.kdvOrani})`}
-            />
-            <SummaryCard
-              label="Toplam"
-              value={`₺${fmt(invoiceSummary.toplam)}`}
-              tooltip="Tüm kalemler dahil toplam fatura tutarı"
-            />
+        {/* Details: main invoice items + compact unit prices künye */}
+        <div className="bg-card rounded-2xl border border-border p-4 lg:p-5 space-y-4">
+          {/* Card header: toplam fatura üst sağda */}
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+                Fatura kalemleri
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Kalem bazlı maliyet dağılımı
+              </p>
+            </div>
+            <div className="text-right space-y-0.5 shrink-0">
+              <p className="text-xs text-muted-foreground">Toplam fatura</p>
+              <p className="text-2xl font-bold text-primary leading-tight">
+                {fmtTl(invoiceSummary.toplam)}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {fmt(invoiceSummary.toplamTuketim)} kWh
+              </p>
+            </div>
           </div>
 
-          {/* Right: Collapsible formula breakdown */}
-          <div className="bg-secondary/50 rounded-xl p-4 border border-border">
-            <div className="flex items-center gap-2 mb-3">
-              <p className="text-xs font-semibold text-foreground">Maliyet / Birim Fiyat Hesap</p>
-              <span className="text-[10px] text-muted-foreground bg-accent px-1.5 py-0.5 rounded-md font-mono">
-                (PTF + YEKDEM) × Marj
-              </span>
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+            {/* Main: invoice items */}
+            <div className="flex-1">
+              <div className="rounded-xl border border-border px-4 py-3 space-y-2">
+                {invoiceItems.map((it) => (
+                  <KeyValueRow key={it.label} label={it.label} value={fmtTl(it.value)} />
+                ))}
+              </div>
             </div>
-            <div className="space-y-1 text-sm font-mono">
-              {/* Always visible: key items */}
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground text-xs">Tüketim (kWh)</span>
-                <span className="text-foreground text-xs font-semibold">{fmt(invoiceSummary.toplamTuketim)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground text-xs">PTF Maliyet (TL)</span>
-                <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.ptfMaliyet)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-foreground text-xs font-bold">PTF Birim Fiyat (TL/MWh)</span>
-                <span className="text-foreground text-xs font-bold">{fmt(invoiceSummary.ptfBirimFiyat)}</span>
-              </div>
-              <div className="border-t border-border my-1" />
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground text-xs">Total Enerji (TL)</span>
-                <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.totalEnerji)}</span>
-              </div>
-              <div className="flex justify-between items-center bg-primary/10 rounded px-1 py-0.5">
-                <span className="text-primary text-xs font-bold">YEK Dahil Birim Fiyat</span>
-                <span className="text-primary text-xs font-bold">{fmt(invoiceSummary.yekDahilBirimFiyat)}</span>
-              </div>
-              <div className="border-t-2 border-foreground/20 my-1" />
-              <div className="flex justify-between items-center">
-                <span className="text-foreground text-xs font-bold">Toplam (TL)</span>
-                <span className="text-primary text-sm font-bold">₺{fmt(invoiceSummary.toplam)}</span>
-              </div>
 
-              {/* Collapsible details */}
-              {showDetails && (
-                <div className="space-y-1 pt-2 border-t border-border mt-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-foreground text-xs font-bold">Yekdem Birim Fiyat (TL/MWh)</span>
-                    <span className="text-foreground text-xs font-bold">{fmt(invoiceSummary.yekdemBirimFiyat)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Yekdem Mahsup (TL)</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.yekdemMahsup)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">
-                      <span className="text-amber-500 font-bold mr-1">×</span>Marj (TL)
-                    </span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.marj)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">
-                      <span className="text-blue-500 font-bold mr-1">+</span>YEKDEM (TL)
-                    </span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.yekdem)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Üretim Mahsuplaşma (TL)</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.uretimMahsuplasma)}</span>
-                  </div>
-                  <div className="border-t border-border my-1" />
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Dağıtım Bedeli</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.dagitimBedeli)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Güç Bedeli</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.gucBedeli)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Güç Aşım Cezası</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.gucAsimCezasi)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">Reaktif Cezası</span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.reaktifCezasi)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">
-                      <span className="text-amber-500 font-bold mr-1">+</span>Fon ve Ek Vergiler
-                    </span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.fonVeEkVergiler)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-xs">
-                      <span className="text-amber-500 font-bold mr-1">+</span>KDV ({invoiceMetadata.kdvOrani})
-                    </span>
-                    <span className="text-foreground text-xs font-semibold">₺{fmt(invoiceSummary.kdv)}</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Toggle button */}
-              <button
-                onClick={() => setShowDetails(!showDetails)}
-                className="flex items-center justify-center gap-1 w-full pt-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span>{showDetails ? "Gizle" : "Tüm kalemleri göster"}</span>
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showDetails ? "rotate-180" : ""}`} />
-              </button>
+            {/* Aside: compact unit prices künye */}
+            <div className="w-full lg:max-w-xs space-y-2">
+              <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+                Birim fiyat özet
+              </p>
+              <div className="rounded-xl bg-secondary/40 border border-border px-3 py-2.5 space-y-1.5">
+                <KeyValueRow
+                  label="PTF birim fiyat"
+                  value={`${fmt(invoiceSummary.ptfBirimFiyat)} TL/MWh`}
+                  emphasis
+                />
+                <KeyValueRow
+                  label="YEKDEM birim fiyat"
+                  value={`${fmt(invoiceSummary.yekdemBirimFiyat)} TL/MWh`}
+                  emphasis
+                />
+                <KeyValueRow
+                  label="Dağıtım birim fiyat"
+                  value={
+                    perMwhFromConsumption(invoiceSummary.dagitimBedeli) == null
+                      ? "—"
+                      : `${fmt(perMwhFromConsumption(invoiceSummary.dagitimBedeli) ?? 0)} TL/MWh`
+                  }
+                />
+                <KeyValueRow
+                  label="Güç birim fiyat"
+                  value={
+                    perMwhFromConsumption(invoiceSummary.gucBedeli) == null
+                      ? "—"
+                      : `${fmt(perMwhFromConsumption(invoiceSummary.gucBedeli) ?? 0)} TL/MWh`
+                  }
+                />
+                <KeyValueRow
+                  label="Ceza birim fiyat"
+                  value={
+                    perMwhFromConsumption(cezaToplam) == null
+                      ? "—"
+                      : `${fmt(perMwhFromConsumption(cezaToplam) ?? 0)} TL/MWh`
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -20,7 +20,6 @@ export interface InvoiceSummary {
   yekdemMahsup: number;
   marj: number;
   yekdem: number;
-  uretimMahsuplasma: number;
   totalEnerji: number;
   yekDahilBirimFiyat: number;
   dagitimBedeli: number;
@@ -61,7 +60,6 @@ export const invoiceSummary: InvoiceSummary = {
   yekdemMahsup: 0.00,
   marj: 24.06,
   yekdem: 41.15,
-  uretimMahsuplasma: 0.00,
   totalEnerji: 505.20,
   yekDahilBirimFiyat: 3374.74,
   dagitimBedeli: 281.05,
