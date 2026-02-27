@@ -1,38 +1,46 @@
-import { Tv, ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/LanguageContext";
-import digiturk from "@/assets/digiturk-campaign.jpg";
+import irecBanner from "@/assets/irec-banner.png";
 
 export function HeroSection() {
-  const { t } = useLanguage();
-  
   return (
     <section className="relative overflow-hidden rounded-2xl h-full min-h-[200px]">
-      {/* Background Image */}
-      <div 
+      {/* Background image */}
+      <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${digiturk})` }}
+        style={{ backgroundImage: `url(${irecBanner})` }}
       />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a2e]/95 via-[#1a1a2e]/80 to-transparent" />
+
+      {/* Dark overlay so text stays readable */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-start p-6 md:p-8">
-        <div className="max-w-md">
-          <div className="inline-flex items-center gap-2 bg-[#ff6b00]/20 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-medium text-white mb-3">
-            <Tv className="h-4 w-4" />
-            <span>{t("digiturk")}</span>
+      <div className="relative z-10 h-full flex flex-col justify-between p-6 md:p-8">
+        <div className="max-w-sm">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-emerald-400/20 backdrop-blur-sm border border-emerald-400/30 rounded-full px-3 py-1 text-xs font-semibold text-emerald-200 mb-4">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>I-REC Uluslararası Yeşil Enerji Sertifikası</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-            {t("digiturk2MonthsFree")}
+
+          <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-2">
+            Enerjinizi Sertifikalandırın,<br />
+            <span className="text-emerald-300">Farkınızı Kanıtlayın</span>
           </h2>
-          <p className="text-white/90 text-sm md:text-base mb-4">
-            {t("digiturkDesc")}
+
+          <p className="text-white/75 text-sm md:text-base max-w-sm">
+            I-REC sertifikası ile tüketiminizin yenilenebilir kaynaklardan karşılandığını uluslararası geçerlilikte belgeleyin.
           </p>
-          <Button variant="hero" size="lg" className="group bg-[#ff6b00] hover:bg-[#ff6b00]/90 text-white border-none">
-            {t("applyNow")}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            variant="hero"
+            size="lg"
+            className="group bg-orange-500 hover:bg-orange-400 text-white border-none shadow-lg shadow-orange-900/40"
+          >
+            Sertifikaya Başvur
+            <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
       </div>
