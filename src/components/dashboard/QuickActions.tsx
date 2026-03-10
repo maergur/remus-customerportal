@@ -72,8 +72,13 @@ export function QuickActions() {
   const [copied, setCopied] = useState(false);
   const inviteCode = "REMUS2026";
 
-  // Show savings tip toast - dismiss on unmount so it won't appear on login page
+  // Show savings tip toast only if energy profile is complete
   useEffect(() => {
+    const userProfile = localStorage.getItem('userProfile');
+    const isProfileComplete = userProfile && Object.keys(JSON.parse(userProfile)).length >= 7;
+    
+    if (!isProfileComplete) return;
+
     const tipIndex = Math.floor(Math.random() * savingsTips.length);
     const tip = savingsTips[tipIndex];
     let toastId: string | undefined;
@@ -98,7 +103,6 @@ export function QuickActions() {
 
     return () => {
       clearTimeout(timer);
-      // Dismiss toast when component unmounts (e.g., navigating to login)
       if (toastId) {
         dismiss(toastId);
       }
