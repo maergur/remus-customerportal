@@ -2,6 +2,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { HeroSection } from "@/components/dashboard/HeroSection";
 import { QuickActions, QuickActionsChart } from "@/components/dashboard/QuickActions";
 import { InvoiceWidget } from "@/components/dashboard/InvoiceWidget";
+import { OnboardingFlow } from "@/components/OnboardingFlow";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ApplicationStatus } from "@/contexts/OnboardingContext";
 import { getSession } from "@/lib/mockCustomers";
@@ -12,6 +13,7 @@ const Index = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     // First check if user has an active session
@@ -46,6 +48,21 @@ const Index = () => {
       return;
     }
   }, [navigate]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    
+    const userProfile = localStorage.getItem('userProfile');
+    const hasSeenOnboarding = localStorage.getItem('hasSeenEnergyProfilePrompt');
+    
+    if (!userProfile && !hasSeenOnboarding) {
+      const timer = setTimeout(() => {
+        setShowOnboarding(true);
+        localStorage.setItem('hasSeenEnergyProfilePrompt', 'true');
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
   // Show loading while checking status
   if (isLoading) {
@@ -86,6 +103,11 @@ const Index = () => {
           </div>
         </section>
       </div>
+
+      <OnboardingFlow
+        open={showOnboarding}
+        onOpenChange={setShowOnboarding}
+      />
     </DashboardLayout>
   );
 };

@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useInstallation } from "@/contexts/InstallationContext";
+import { OnboardingFlow } from "@/components/OnboardingFlow";
 import { 
   User, 
+  Users,
   Mail, 
   Phone, 
   MapPin, 
@@ -19,15 +21,96 @@ import {
   Check,
   Lock,
   Bell,
-  CreditCard
+  CreditCard,
+  Home,
+  Flame,
+  Sparkles,
+  Sunrise,
+  Car,
+  Heart,
+  Pencil
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
+import { useState, useEffect } from "react";
+
+interface UserProfile {
+  householdSize?: string;
+  homeSize?: string;
+  heatingType?: string;
+  interests?: string[];
+  peakUsage?: string;
+  electricVehicle?: string;
+  choiceReason?: string[];
+}
+
+const profileLabels: Record<string, { tr: string; en: string; icon: typeof User }> = {
+  householdSize: { tr: "Hane Büyüklüğü", en: "Household Size", icon: Users },
+  homeSize: { tr: "Ev Büyüklüğü", en: "Home Size", icon: Home },
+  heatingType: { tr: "Isınma Tipi", en: "Heating Type", icon: Flame },
+  interests: { tr: "İlgi Alanları", en: "Interests", icon: Sparkles },
+  peakUsage: { tr: "Yoğun Tüketim", en: "Peak Usage", icon: Sunrise },
+  electricVehicle: { tr: "Elektrikli Araç", en: "Electric Vehicle", icon: Car },
+  choiceReason: { tr: "Tercih Sebebi", en: "Choice Reason", icon: Heart },
+};
+
+const valueLabels: Record<string, { tr: string; en: string }> = {
+  '1': { tr: '1 kişi', en: '1 person' },
+  '2': { tr: '2 kişi', en: '2 people' },
+  '3-4': { tr: '3-4 kişi', en: '3-4 people' },
+  '5+': { tr: '5+ kişi', en: '5+ people' },
+  '<75': { tr: "75m²'ye kadar", en: 'Up to 75m²' },
+  '75-120': { tr: '75-120m²', en: '75-120m²' },
+  '120-200': { tr: '120-200m²', en: '120-200m²' },
+  '200+': { tr: '200m²+', en: '200m²+' },
+  'gas': { tr: 'Doğalgaz', en: 'Natural Gas' },
+  'electric': { tr: 'Elektrikli ısıtıcı', en: 'Electric Heater' },
+  'heatpump': { tr: 'Isı pompası/Klima', en: 'Heat Pump/AC' },
+  'other': { tr: 'Diğer', en: 'Other' },
+  'reduce-bill': { tr: 'Fatura düşürme', en: 'Reduce bill' },
+  'ptf-optimize': { tr: 'PTF optimizasyonu', en: 'PTF optimization' },
+  'solar': { tr: 'Güneş paneli', en: 'Solar panel' },
+  'carbon': { tr: 'Karbon takibi', en: 'Carbon tracking' },
+  'day': { tr: 'Gündüz', en: 'Daytime' },
+  'night': { tr: 'Gece', en: 'Nighttime' },
+  'balanced': { tr: 'Dengeli', en: 'Balanced' },
+  'unknown': { tr: 'Bilmiyorum', en: "Don't know" },
+  'daily': { tr: 'Evet, her gün', en: 'Yes, daily' },
+  'sometimes': { tr: 'Evet, ara sıra', en: 'Yes, sometimes' },
+  'planned': { tr: 'Planlıyorum', en: 'Planning to' },
+  'no': { tr: 'Hayır', en: 'No' },
+  'innovation': { tr: 'Yenilikçi teknoloji', en: 'Innovation' },
+  'price': { tr: 'Uygun fiyat', en: 'Good price' },
+  'trust': { tr: 'Güvenilirlik', en: 'Reliability' },
+  'support': { tr: 'Müşteri desteği', en: 'Customer support' },
+};
 
 const Profil = () => {
   const { language } = useLanguage();
   const { installations, selectedInstallation, setSelectedInstallation } = useInstallation();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('userProfile');
+    if (saved) {
+      try {
+        setUserProfile(JSON.parse(saved));
+      } catch {
+        setUserProfile(null);
+      }
+    }
+  }, [showOnboarding]);
+
+  const getValueLabel = (value: string | string[]) => {
+    if (Array.isArray(value)) {
+      return value.map(v => valueLabels[v]?.[language] || v).join(', ');
+    }
+    return valueLabels[value]?.[language] || value;
+  };
+
+  const profileEntries = userProfile ? Object.entries(userProfile) : [];
 
   const subscriberGroupLabels: Record<string, { tr: string; en: string }> = {
     mesken: { tr: "Mesken", en: "Residential" },
@@ -142,6 +225,67 @@ const Profil = () => {
                     ? "Bilgilerinizi güncellemek için müşteri hizmetleri ile iletişime geçin."
                     : "Contact customer service to update your information."}
                 </p>
+              </CardContent>
+            </Card>
+
+            {/* Energy Profile */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-primary" />
+                  {language === "tr" ? "Enerji Profilim" : "My Energy Profile"}
+                </CardTitle>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="gap-2"
+                  onClick={() => setShowOnboarding(true)}
+                >
+                  <Pencil className="h-4 w-4" />
+                  {userProfile ? (language === "tr" ? "Düzenle" : "Edit") : (language === "tr" ? "Tamamla" : "Complete")}
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {profileEntries.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {profileEntries.map(([key, value]) => {
+                      const config = profileLabels[key];
+                      if (!config) return null;
+                      const Icon = config.icon;
+                      return (
+                        <div key={key} className="flex items-start gap-3 p-3 bg-secondary/30 rounded-lg">
+                          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Icon className="h-4 w-4 text-primary" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs text-muted-foreground">{config[language]}</p>
+                            <p className="text-sm font-medium text-foreground truncate">
+                              {getValueLabel(value)}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Zap className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      {language === "tr" ? "Enerji profilinizi oluşturun" : "Create your energy profile"}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
+                      {language === "tr" 
+                        ? "Size özel tasarruf önerileri ve içgörüler sunabilmemiz için birkaç soruya cevap verin."
+                        : "Answer a few questions so we can provide personalized savings tips and insights."}
+                    </p>
+                    <Button onClick={() => setShowOnboarding(true)} className="gap-2">
+                      <Sparkles className="h-4 w-4" />
+                      {language === "tr" ? "Profili Oluştur" : "Create Profile"}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -352,6 +496,11 @@ const Profil = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <OnboardingFlow
+          open={showOnboarding}
+          onOpenChange={setShowOnboarding}
+        />
       </div>
     </DashboardLayout>
   );

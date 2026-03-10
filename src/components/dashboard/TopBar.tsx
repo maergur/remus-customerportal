@@ -2,6 +2,7 @@ import { Search, Bell, User, ChevronDown, Zap, FileText, AlertTriangle, Gift, Se
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { OnboardingFlow } from "@/components/OnboardingFlow";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { clearSession } from "@/lib/mockCustomers";
 
-const notifications = [
+const essentialNotifications = [
   {
     id: 1,
     icon: FileText,
@@ -51,6 +52,9 @@ const notifications = [
     time: { tr: "2 gün önce", en: "2 days ago" },
     unread: false,
   },
+];
+
+const tipNotifications = [
   {
     id: 4,
     icon: Zap,
@@ -63,6 +67,18 @@ const notifications = [
   },
 ];
 
+const energyProfileNotification = {
+  id: 0,
+  icon: Zap,
+  iconColor: "text-primary",
+  iconBg: "bg-primary/10",
+  title: { tr: "Seni tanımak istiyoruz 👋", en: "We'd like to know you 👋" },
+  description: { tr: "2 dakika ayır, kişisel tasarruf önerileri al", en: "2 min for personalized savings tips" },
+  time: { tr: "Şimdi", en: "Now" },
+  unread: true,
+  isProfilePrompt: true,
+};
+
 export function TopBar() {
   const { toggle } = useSidebarContext();
   const { theme, toggleTheme } = useTheme();
@@ -70,31 +86,36 @@ export function TopBar() {
   const { installations, selectedInstallation, setSelectedInstallation } = useInstallation();
   const { startTour, hasCompletedTour } = useTour();
   const navigate = useNavigate();
-  const unreadCount = notifications.filter(n => n.unread).length;
 
-  const [completionPercent, setCompletionPercent] = useState(0);
+  const [completionPercent, setCompletionPercent] = useState(60);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('onboardingData');
-    if (saved) {
+    const basePercent = 60;
+    const energyProfileWeight = 40;
+    const totalQuestions = 7;
+    
+    const userProfile = localStorage.getItem('userProfile');
+    if (userProfile) {
       try {
-        const data = JSON.parse(saved);
-        const items = [
-          !!(data.personalInfo?.firstName && data.personalInfo?.lastName && data.personalInfo?.email),
-          !!data.phoneVerified,
-          !!data.addressConfirmed,
-          !!data.selectedTariff,
-          !!data.contractAccepted,
-        ];
-        const completed = items.filter(Boolean).length;
-        setCompletionPercent(Math.round((completed / items.length) * 100));
+        const profile = JSON.parse(userProfile);
+        const answeredQuestions = Object.keys(profile).length;
+        const energyPercent = Math.round((answeredQuestions / totalQuestions) * energyProfileWeight);
+        setCompletionPercent(basePercent + energyPercent);
       } catch {
-        setCompletionPercent(0);
+        setCompletionPercent(basePercent);
       }
+    } else {
+      setCompletionPercent(basePercent);
     }
-  }, []);
+  }, [showOnboarding]);
 
   const isComplete = completionPercent === 100;
+  
+  const notifications = isComplete 
+    ? [...essentialNotifications, ...tipNotifications]
+    : [energyProfileNotification, ...essentialNotifications];
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   const handleLogout = () => {
     clearSession();
@@ -139,27 +160,27 @@ export function TopBar() {
       <div className="flex items-center gap-2 lg:gap-3">
         {/* Profile Completion Bar */}
         <button 
-          onClick={handleProfileClick}
-          className="hidden sm:flex items-center gap-2 bg-secondary/50 hover:bg-secondary/80 transition-colors rounded-lg px-3 py-2 flex-shrink-0"
+          onClick={() => setShowOnboarding(true)}
+          className="hidden sm:flex items-center gap-2.5 bg-secondary/60 hover:bg-secondary/90 border border-border hover:border-primary/30 transition-all rounded-lg px-3 py-2 flex-shrink-0"
         >
-          {isComplete ? (
-            <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-          ) : (
-            <div className="h-4 w-4 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0">
-              <span className="text-[8px] font-bold text-primary">{Math.round(completionPercent / 20)}</span>
-            </div>
-          )}
-          <span className="text-sm text-foreground whitespace-nowrap hidden lg:inline">
-            {isComplete 
-              ? (language === "tr" ? "Profil Tamamlandı" : "Profile Complete")
-              : (language === "tr" ? "Profilimi Tamamla" : "Complete Profile")
+          <span className="text-sm font-medium text-foreground whitespace-nowrap">
+            {isComplete
+              ? (language === "tr" ? "Enerji Profilim" : "My Energy Profile")
+              : (language === "tr" ? "Enerji Profilini Tamamla!" : "Complete Energy Profile!")
             }
           </span>
-          <div className="w-16 lg:w-20">
-            <Progress value={completionPercent} variant="glow" className="h-1.5" />
+          <div className="w-20 lg:w-24">
+            <Progress value={completionPercent} variant={isComplete ? "default" : "glow"} className="h-2" />
           </div>
-          <span className="text-xs font-bold text-primary">{completionPercent}%</span>
+          <span className="text-xs font-bold text-primary">
+            {completionPercent}%
+          </span>
         </button>
+
+        <OnboardingFlow
+          open={showOnboarding}
+          onOpenChange={setShowOnboarding}
+        />
 
         {/* Theme Toggle */}
         <Button variant="ghost" size="icon" onClick={toggleTheme}>
@@ -192,6 +213,11 @@ export function TopBar() {
                 <DropdownMenuItem 
                   key={notification.id} 
                   className={`flex items-start gap-3 p-3 cursor-pointer focus:bg-secondary ${notification.unread ? 'bg-primary/5' : ''}`}
+                  onClick={() => {
+                    if ('isProfilePrompt' in notification && notification.isProfilePrompt) {
+                      setShowOnboarding(true);
+                    }
+                  }}
                 >
                   <div className={`h-10 w-10 rounded-xl ${notification.iconBg} flex items-center justify-center shrink-0`}>
                     <notification.icon className={`h-5 w-5 ${notification.iconColor}`} />
